@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	{
 		::capnp::MallocMessageBuilder message;
 		Request::Builder request = message.initRoot<Request>();
-		Request::Login::Reader login = message.getLogin();
+		Request::Login::Builder login = request.initLogin();
 		login.setTeam(username);
 		login.setHash(hash);
 		
