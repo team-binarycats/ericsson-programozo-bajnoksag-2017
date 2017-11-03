@@ -67,7 +67,7 @@ clean-proto-src:
 .PHONY: clean-proto-obj
 mostlyclean: clean-proto-obj
 clean-proto-obj:
-	-rm -f $(PROTOOBJDIR)/*
+	-rm -f $(PROTOOBJDIR)/*.o
 
 ##############
 # Main program
@@ -105,7 +105,7 @@ executable: $(EXECUTABLE)
 .PHONY: clean-obj clean-out clean-executable
 mostlyclean: clean-obj clean-out clean-executable
 clean-obj:
-	-rm -f $(OBJDIR)/*
+	-rm -f $(OBJDIR)/*.o
 clean-out:
 	-rm -f $(OUTDIR)/*
 clean-executable:
