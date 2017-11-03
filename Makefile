@@ -20,10 +20,10 @@ check: all
 all:
 
 .PHONY: mostlyclean
-mostlyclean: clean
+mostlyclean:
 
 .PHONY: clean
-clean:
+clean: mostlyclean
 
 ######################
 # Cap'n Proto handling
