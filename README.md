@@ -1,0 +1,2 @@
+## Compilation
+Something like `make CXXFLAGS="-I $HOME/Downloads/capnproto/c++/src $(for f in c++.capnp.c++ blob.c++ arena.c++ layout.c++ list.c++ any.c++ message.c++ schema.capnp.c++ serialize.c++ serialize-packed.c++; do echo $HOME/Downloads/capnproto/c++/src/capnp/$f; done | tr "\n" " ")" CAPNP=$HOME/Downloads/capnproto/build/c++/src/capnp/capnp CAPNPC=/home/led/Downloads/capnproto/build/c++/src/capnp/capnpc-c++`
