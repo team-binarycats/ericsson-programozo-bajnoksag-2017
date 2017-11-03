@@ -1,8 +1,12 @@
 # Ericsson Programozói Bajnokság 2017
 ## Building
-This package uses the CMake build system (check out the autotools branch for autotools), so compilation is very easy:
+This package uses the CMake build system
+(check out the autotools branch for autotools, cmake for CMake, and make for GNU make based toolchains)
+so compilation is very easy:
+
 - mkdir build
 - ( cd build && cmake .. )
+
 ### Prerequisites
 - Standard development environment
 	- `sudo apt install build-essential cmake` (Note: As of writing only `g++` and `cmake` is required really)
