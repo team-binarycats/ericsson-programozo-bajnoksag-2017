@@ -1,6 +1,8 @@
 # Ericsson Programozói Bajnokság 2017
 ## Building
-This package uses the autotools build system (check out the cmake branch for CMake), so compilation is very easy:
+This package uses the autotools build system
+(check out the autotools branch for autotools, cmake for CMake, and make for GNU make based toolchains)
+so compilation is very easy:
 
 - `./configure`
 - `make`
