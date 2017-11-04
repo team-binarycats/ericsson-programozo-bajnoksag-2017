@@ -2,7 +2,9 @@ FROM lezsakdomi/capnproto-cplusplus
 
 ARG MAKEFLAGS=""
 ARG TARGET=""
+ARG WORKDIR="/src"
 
-COPY . .
+COPY . $WORKDIR
+WORKDIR $WORKDIR
 
 RUN make $MAKEFLAGS $TARGET
