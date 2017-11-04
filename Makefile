@@ -98,18 +98,18 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
-LINK_FLAGS = $(patsubst %,-l%,$(LIB)) $(OPTIONS) $(LINK_OPTIONS)
-COMPILE_FLAGS = $(OPTIONS) $(COMPILE_OPTIONS)
+LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
+COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
 
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -pv $(dir $@)
 	@echo Linking...
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $(LINK_FLAGS) $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LINK_FLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
 	@mkdir -pv $(dir $@)
 	@echo Compiling $@...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
 
 
 .PHONY: executable
