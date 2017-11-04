@@ -133,9 +133,13 @@ clean-executable:
 
 SERVER_HOST = ecovpn.dyndns.org
 SERVER_PORT = 11223
+RUN_SOCKET = /dev/tcp/$(SERVER_HOST)/$(SERVER_PORT)
+
 TEAM_USERNAME = binary_cats
 TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
+RUN_CAT_OPTIONS = 
+RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c "exec 3<>/dev/tcp/$(SERVER_HOST)/$(SERVER_PORT); $< $(TEAM_USERNAME) $(TEAM_HASH) >&3; cat <&3"
+	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) >&3; cat $(RUN_CAT_OPTIONS) <&3'
