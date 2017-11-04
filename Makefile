@@ -85,6 +85,7 @@ OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
 STD := c++11
 PROGRAM_NAME := client
+
 LINK_OPTIONS := -Wall -Wextra
 COMPILE_OPTIONS := 
 
