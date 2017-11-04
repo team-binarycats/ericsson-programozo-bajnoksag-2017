@@ -1,3 +1,7 @@
 FROM lezsakdomi/capnproto-cplusplus
+
 COPY . .
-RUN make || make
+
+ARG MAKEFLAGS=""
+ARG TARGET=""
+RUN make $MAKEFLAGS $TARGET
