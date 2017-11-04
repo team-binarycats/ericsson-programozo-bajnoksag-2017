@@ -14,7 +14,7 @@ Technically:
 export capnp_repo=`mktemp -d` #DON'T follow this line as-is
 git clone https://github.com/capnproto/capnproto $capnp_repo
 ( cd $capnp_repo && mkdir build && cd $_ && cmake .. && make )
-make CXXFLAGS="-I$capnp_repo/c++/src" LINK_FLAGS="$(for f in c++.capnp.c++ blob.c++ arena.c++ layout.c++ list.c++ any.c++ message.c++ schema.capnp.c++ serialize.c++ serialize-packed.c++; do echo $capnp_repo/c++/src/capnp/$f; done | tr "\n" " ")" CAPNP=$capnp_repo/build/c++/src/capnp/capnp CAPNPC=$capnp_repo/build/c++/src/capnp/capnpc-c++
+make CXXFLAGS="-I$capnp_repo/c++/src" LINK_FLAGS="$(for f in c++.capnp.c++ blob.c++ arena.c++ layout.c++ list.c++ any.c++ message.c++ schema.capnp.c++ serialize.c++ serialize-packed.c++ kj/{array.c++,common.c++,debug.c++,exception.c++,io.c++,memory.c++,mutex.c++,string.c++,thread.c++,main.c++,arena.c++,test-helpers.c++}; do echo $capnp_repo/c++/src/capnp/$f; done | tr "\n" " ")" CAPNP=$capnp_repo/build/c++/src/capnp/capnp CAPNPC=$capnp_repo/build/c++/src/capnp/capnpc-c++
 ```
 
 ### Prerequisites
