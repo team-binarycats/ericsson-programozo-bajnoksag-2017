@@ -18,7 +18,7 @@ Please note that it mostly still doesn't work.
 - Standard development environment
 	- `sudo apt install build-essential cmake` (Note: As of writing only `g++` and `cmake` is required really)
 - Cap'n Proto
-	- `sudo apt install capnproto`, _or_
+	- `sudo apt install capnproto libcapnp-dev`, _or_
 	- `git clone https://github.com/capnproto/capnproto`
 	- `cd capnproto`
 	- `mkdir build`
