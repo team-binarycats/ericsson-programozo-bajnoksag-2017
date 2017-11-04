@@ -124,3 +124,15 @@ clean-out:
 	-rm -f $(OUTDIR)/*
 clean-executable:
 	-rm -f $(EXECUTABLE)
+
+###############
+# Misc commands
+
+SERVER_HOST = ecovpn.dyndns.org
+SERVER_PORT = 11223
+TEAM_USERNAME = binary_cats
+TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
+
+.PHONY: run
+run: $(EXECUTABLE)
+	bash -c "exec 3<>/dev/tcp/$(SERVER_HOST)/$(SERVER_PORT); $< $(TEAM_USERNAME) $(TEAM_HASH) >&3; cat <&3"
