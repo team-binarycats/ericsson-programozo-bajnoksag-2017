@@ -1,1 +1,1 @@
-from lezsakdomi/capnproto-cplusplus
+FROM lezsakdomi/capnproto-cplusplus
