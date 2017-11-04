@@ -83,6 +83,7 @@ clean-proto-obj:
 SRC := main.cpp
 OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
+LIB := capnp
 STD := c++11
 PROGRAM_NAME := client
 
@@ -97,7 +98,7 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
-LINK_FLAGS = $(OPTIONS) $(LINK_OPTIONS)
+LINK_FLAGS = $(patsubst %,-l%,$(LIB)) $(OPTIONS) $(LINK_OPTIONS)
 COMPILE_FLAGS = $(OPTIONS) $(COMPILE_OPTIONS)
 
 $(EXECUTABLE): $(OBJECTS)
