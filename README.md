@@ -14,7 +14,7 @@ Technically:
 export capnp_repo=`mktemp -d` #DON'T follow this line as-is
 git clone https://github.com/capnproto/capnproto $capnp_repo
 ( cd $capnp_repo && mkdir build && cd $_ && cmake .. && make )
-make CXXFLAGS="-I$capnp_repo/c++/src" LINK_FLAGS="$(echo $capnp_repo/build/c++/src/{capnp/CMakeFiles/capnp.dir,kj/CMakeFiles/kj.dir}/*.o)" CAPNP=$capnp_repo/build/c++/src/capnp/capnp CAPNPC=$capnp_repo/build/c++/src/capnp/capnpc-c++
+make CXXFLAGS="-I$capnp_repo/c++/src" LINK_FLAGS="-pthread $(echo $capnp_repo/build/c++/src/{capnp/CMakeFiles/capnp.dir,kj/CMakeFiles/kj.dir}/*.o)" CAPNP=$capnp_repo/build/c++/src/capnp/capnp CAPNPC=$capnp_repo/build/c++/src/capnp/capnpc-c++
 ```
 
 ### Prerequisites
