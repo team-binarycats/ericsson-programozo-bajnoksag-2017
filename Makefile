@@ -44,6 +44,9 @@ CAPNP_FLAGS = -o$(CAPNPC) $(CAPNP_OPTIONS)
 PROTO_COMPILE_OPTIONS := 
 PROTO_COMPILE_FLAGS = --std=c++11 $(PROTO_COMPILE_OPTIONS)
 
+.SECONDARY: $(PROTOS_SOURCES) $(PROTOS_HEADERS)
+.SECONDARY: $(PROTO_OBJECTS)
+
 .PHONY: $(PROTODIR)/%.capnp.h
 $(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp $(PROTODIR)/%.capnp.c++
 	@[ -f $@ -a ! $@ -ot $< ] || (echo "Error: $@ doesn't seems to got generated. Please run make $@ -B manually!"; false)
