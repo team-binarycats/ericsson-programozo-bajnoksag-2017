@@ -77,6 +77,8 @@ OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
 STD := c++11
 PROGRAM_NAME := client
+LINK_FLAGS := -Wall -Wextra
+COMPILE_FLAGS := 
 
 OBJDIR := obj
 OUTDIR := bin
@@ -90,12 +92,12 @@ EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -pv $(dir $@)
 	@echo Linking...
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) -Wall -Wextra --std=$(STD) $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $(LINK_FLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
 	@mkdir -pv $(dir $@)
 	@echo Compiling $@...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
 
 
 .PHONY: executable
