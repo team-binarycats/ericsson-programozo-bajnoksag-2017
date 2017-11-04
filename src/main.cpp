@@ -7,7 +7,7 @@
 //#include "Bugfix.capnp.h"
 
 #include <capnp/message.h>
-#include <capnp/serialize-packed.h>
+#include <capnp/serialize.h>
 
 #include <iostream>
 
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 		login.setTeam(username);
 		login.setHash(hash);
 		
-		::capnp::writePackedMessageToFd(1, message);
+		::capnp::writeMessageToFd(1, message);
 	}
 
 	return 0;
