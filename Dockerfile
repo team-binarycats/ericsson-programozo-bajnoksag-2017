@@ -1,4 +1,4 @@
-FROM lezsakdomi/capnproto-cplusplus
+FROM lezsakdomi/capnproto-cplusplus:buildpack
 
 ARG MAKEFLAGS=""
 ARG TARGET=""
