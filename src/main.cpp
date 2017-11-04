@@ -16,14 +16,14 @@ using namespace ericsson2017::protocol::test;
 char* hash;
 char* username;
 int main(int argc, char* argv[]) {
-	if (argc != 4) {
+	if (argc != 3) {
 		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
 		return 1;
 	} else {
-		username = argv[2];
+		username = argv[1];
 		std::cerr<<"Using username "<<username<<std::endl;
 
-		hash = argv[3];
+		hash = argv[2];
 		std::cerr<<"Using hash "<<hash<<std::endl;
 	}
 
