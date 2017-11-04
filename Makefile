@@ -38,6 +38,11 @@ PROTOS_OBJECTS = $(addprefix $(PROTOOBJDIR)/,$(PROTOS_OBJ))
 
 CAPNP := capnp
 CAPNPC := c++
+CAPNP_OPTIONS := 
+CAPNP_FLAGS = -o$(CAPNPC) $(CAPNP_OPTIONS)
+
+PROTO_COMPILE_OPTIONS := 
+PROTO_COMPILE_FLAGS = --std=c++11 $(PROTO_COMPILE_OPTIONS)
 
 .PHONY: $(PROTODIR)/%.capnp.h
 $(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp $(PROTODIR)/%.capnp.c++
@@ -46,12 +51,12 @@ $(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp $(PROTODIR)/%.capnp.c++
 $(PROTODIR)/%.capnp.c++: $(PROTODIR)/%.capnp
 	@mkdir -pv $(dir $@)
 	@echo Generating protocol source $@...
-	$(CAPNP) compile -o$(CAPNPC) $<
+	$(CAPNP) compile $(CAPNP_FLAGS) $<
 
 $(PROTOOBJDIR)/%.o: $(PROTODIR)/%.capnp.c++ $(PROTODIR)/%.capnp.h
 	@mkdir -pv $(dir $@)
 	@echo Creating object file from $<...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) --std=c++11 $< -o $@ -I$(PROTODIR)
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(PROTO_COMPILE_FLAGS) $< -o $@ -I$(PROTODIR)
 
 
 .PHONY: proto
@@ -80,8 +85,8 @@ OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
 STD := c++11
 PROGRAM_NAME := client
-LINK_FLAGS := -Wall -Wextra
-COMPILE_FLAGS := 
+LINK_OPTIONS := -Wall -Wextra
+COMPILE_OPTIONS := 
 
 OBJDIR := obj
 OUTDIR := bin
@@ -91,6 +96,8 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
+LINK_FLAGS = $(OPTIONS) $(LINK_OPTIONS)
+COMPILE_FLAGS = $(OPTIONS) $(COMPILE_OPTIONS)
 
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -pv $(dir $@)
