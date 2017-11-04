@@ -1,6 +1,5 @@
 FROM lezsakdomi/capnproto-cplusplus
 
-ARG CLEAN_BEFORE=1
 ARG MAKEFLAGS=""
 ARG TARGET=""
 ARG WORKDIR="/src"
@@ -8,5 +7,4 @@ ARG WORKDIR="/src"
 COPY . $WORKDIR
 WORKDIR $WORKDIR
 
-RUN if [ -n "$CLEAN_BEFORE" ]; then make $MAKEFLAGS clean; fi
 RUN make $MAKEFLAGS $TARGET
