@@ -39,7 +39,7 @@ PROTOS_OBJECTS = $(addprefix $(PROTOOBJDIR)/,$(PROTOS_OBJ))
 CAPNP := capnp
 CAPNPC := c++
 
-$(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp.c++
+$(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp.c++ ;
 $(PROTODIR)/%.capnp.c++: $(PROTODIR)/%.capnp
 	@mkdir -pv $(dir $@)
 	@echo Generating protocol source $@...
