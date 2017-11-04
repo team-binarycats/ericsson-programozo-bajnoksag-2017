@@ -21,7 +21,7 @@ make LIB="" CXXFLAGS="-I$capnp_repo/c++/src" LINK_FLAGS="-pthread $(echo $capnp_
 - Standard development environment
 	- `sudo apt install build-essential` (Note: As of writing only `g++` and `make` is required really)
 - Cap'n Proto
-	- `sudo apt install capnproto`, _or_
+	- `sudo apt install capnproto libcapnp-dev`, _or_
 	- `git clone https://github.com/capnproto/capnproto`
 	- `cd capnproto`
 	- `mkdir build`
