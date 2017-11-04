@@ -38,17 +38,25 @@ PROTOS_OBJECTS = $(addprefix $(PROTOOBJDIR)/,$(PROTOS_OBJ))
 
 CAPNP := capnp
 CAPNPC := c++
+CAPNP_OPTIONS := 
+CAPNP_FLAGS = -o$(CAPNPC) $(CAPNP_OPTIONS)
 
-$(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp.c++ ;
+PROTO_COMPILE_OPTIONS := 
+PROTO_COMPILE_FLAGS = --std=c++11 $(PROTO_COMPILE_OPTIONS)
+
+.PHONY: $(PROTODIR)/%.capnp.h
+$(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp $(PROTODIR)/%.capnp.c++
+	@[ -f $@ -a ! $@ -ot $< ] || (echo "Error: $@ doesn't seems to got generated. Please run make $@ -B manually!"; false)
+
 $(PROTODIR)/%.capnp.c++: $(PROTODIR)/%.capnp
 	@mkdir -pv $(dir $@)
 	@echo Generating protocol source $@...
-	$(CAPNP) compile -o$(CAPNPC) $<
+	$(CAPNP) compile $(CAPNP_FLAGS) $<
 
 $(PROTOOBJDIR)/%.o: $(PROTODIR)/%.capnp.c++ $(PROTODIR)/%.capnp.h
 	@mkdir -pv $(dir $@)
 	@echo Creating object file from $<...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) --std=c++11 $< -o $@ -I$(PROTODIR)
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(PROTO_COMPILE_FLAGS) $< -o $@ -I$(PROTODIR)
 
 
 .PHONY: proto
@@ -75,8 +83,12 @@ clean-proto-obj:
 SRC := main.cpp
 OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
+LIB := capnp
 STD := c++11
 PROGRAM_NAME := client
+
+LINK_OPTIONS := -Wall -Wextra
+COMPILE_OPTIONS := 
 
 OBJDIR := obj
 OUTDIR := bin
@@ -86,16 +98,18 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
+LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
+COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
 
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -pv $(dir $@)
 	@echo Linking...
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) -Wall -Wextra --std=$(STD) $^ -o $@
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LINK_FLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
 	@mkdir -pv $(dir $@)
 	@echo Compiling $@...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(OPTIONS) --std=$(STD) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
 
 
 .PHONY: executable
