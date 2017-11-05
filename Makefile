@@ -79,12 +79,12 @@ clean-proto-obj:
 ##############
 # Main program
 
-SRC := main.cpp interface.cpp
+PROGRAM := client
+SRC := $(addsuffix .cpp,$(PROGRAM)) interface.cpp
 INC := interface.h
 OPTIONS := -Wall -Wextra -g
 LIB := capnp kj
 STD := c++11
-PROGRAM_NAME := client
 
 LINK_OPTIONS := -Wall -Wextra
 COMPILE_OPTIONS := 
@@ -97,6 +97,7 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(PROTOS_HEADERS)
+PROGRAM_NAME = $(PROGRAM)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
 LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
 COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
