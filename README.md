@@ -4,7 +4,9 @@ This package uses a docker build system
 (check out the autotools branch for autotools, cmake for CMake, and make for GNU make based toolchains)
 so compilation is very easy:
 ```
-docker build .
+tag=`golang-petname`
+docker build . -t "$tag"
+docker run -it --rm "$tag"
 ```
 
 ### Prerequisites
