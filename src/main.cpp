@@ -16,8 +16,8 @@ using namespace ericsson2017::protocol::test;
 
 char* hash;
 char* username;
-const int receive_fd = 1;
-const int send_fd = 1;
+const int receive_fd = 3;
+const int send_fd = 3;
 
 void login() {
 	::capnp::MallocMessageBuilder message;
@@ -60,15 +60,18 @@ bool response() {
 
 	Response::Reader resp = msg.getRoot<Response>();
 
-	std::cerr<<"Status: "<<(std::string)resp.getStatus()<<std::endl;
+	std::cerr<<"] "<<(std::string)resp.getStatus()<<std::endl;
 
 	if (resp.hasBugfix()) {
 		Bugfix::Reader bgfx = resp.getBugfix();
+		std::cerr<<"> ";
 		std::cout<<bgfx.getBugs()<<" "<<(std::string)bgfx.getMessage()<<std::endl;
+	} else {
+		std::cerr<<"* "<<"No bugfix got!"<<std::endl;
 	}
 
 	if (resp.isEnd()) {
-		std::cerr<<"Got end status: "<<(resp.getEnd() ? "true" : "false")<<std::endl;
+		std::cerr<<"* "<<"Got end status: "<<(resp.getEnd() ? "true" : "false")<<std::endl;
 		return resp.getEnd();
 	}
 
@@ -82,10 +85,10 @@ int main(int argc, char* argv[]) {
 		return 1;
 	} else {
 		username = argv[1];
-		std::cerr<<"Using username "<<username<<std::endl;
+		std::cerr<<"* "<<"Using username "<<username<<std::endl;
 
 		hash = argv[2];
-		std::cerr<<"Using hash "<<hash<<std::endl;
+		std::cerr<<"* "<<"Using hash "<<hash<<std::endl;
 	}
 
 	login();
@@ -93,10 +96,11 @@ int main(int argc, char* argv[]) {
 		uint8_t bugs;
 		std::string message;
 
+		std::cerr<<"< ";
 		std::cin>>bugs;
 		std::getline(std::cin, message);
 		if (std::cin.eof()) {
-			std::cerr<<"End of input before got an end response"<<std::endl;
+			std::cerr<<"* "<<"End of input before got an end response"<<std::endl;
 			return 1;
 		}
 
