@@ -141,4 +141,4 @@ RUN_REDIRECTS =
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
+	bash -c 'exec {socket}<>"$(RUN_SOCKET)" 3<&$$socket 4>&$$socket; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
