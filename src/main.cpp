@@ -24,7 +24,7 @@ const int send_fd = 3;
 
 
 void log(std::string message) {
-	std::cerr<<"* "<<message;
+	std::cerr<<"* "<<message<<std::endl;
 }
 
 void write_bugfix(const Bugfix::Reader& bugfix) {
@@ -48,7 +48,9 @@ void read_bugfix(Bugfix::Builder& bugfix) {
 	std::getline(std::cin, message);
 
 	if (std::cin.eof()) {
-		std::cerr<<"* "<<"End of input before got an end response"<<std::endl;
+		std::cerr<<std::endl;
+		log("End of input before got an end response");
+		std::cerr<<std::endl;
 		throw std::runtime_error("End of input");
 	}
 
