@@ -136,7 +136,8 @@ TEAM_USERNAME = binary_cats
 TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
 RUN_CAT_OPTIONS = 
 RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
+RUN_REDIRECTS = 
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c '$< $(RUN_PARAMETERS) 3<>"$(RUN_SOCKET)"'
+	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
