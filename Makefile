@@ -47,11 +47,7 @@ PROTO_COMPILE_FLAGS = --std=c++11 $(PROTO_COMPILE_OPTIONS)
 .SECONDARY: $(PROTOS_SOURCES) $(PROTOS_HEADERS)
 .SECONDARY: $(PROTO_OBJECTS)
 
-.PHONY: $(PROTODIR)/%.capnp.h
-$(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp $(PROTODIR)/%.capnp.c++
-	@[ -f $@ -a ! $@ -ot $< ] || (echo "Error: $@ doesn't seems to got generated. Please run make $@ -B manually!"; false)
-
-$(PROTODIR)/%.capnp.c++: $(PROTODIR)/%.capnp
+$(PROTODIR)/%.capnp.c++ $(PROTODIR)/%.capnp.h: $(PROTODIR)/%.capnp
 	@mkdir -pv $(dir $@)
 	@echo Generating protocol source $@...
 	$(CAPNP) compile $(CAPNP_FLAGS) $<
