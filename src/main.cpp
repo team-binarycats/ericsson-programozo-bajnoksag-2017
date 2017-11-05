@@ -16,8 +16,8 @@ using namespace ericsson2017::protocol::test;
 
 char* hash;
 char* username;
-const int receive_fd = 1;
-const int send_fd = 1;
+const int receive_fd = 3;
+const int send_fd = 3;
 
 void login() {
 	::capnp::MallocMessageBuilder message;
