@@ -16,6 +16,8 @@ using namespace ericsson2017::protocol::test;
 
 char* hash;
 char* username;
+const int receive_fd = 1;
+const int send_fd = 1;
 
 void login() {
 	::capnp::MallocMessageBuilder message;
@@ -25,14 +27,14 @@ void login() {
 	login.setTeam(username);
 	login.setHash(hash);
 
-	::capnp::writeMessageToFd(1, message);
+	::capnp::writeMessageToFd(send_fd, message);
 }
 
 void sendEmptyRequest() {
 	::capnp::MallocMessageBuilder message;
 	message.initRoot<Request>();
 	
-	::capnp::writeMessageToFd(1, message);
+	::capnp::writeMessageToFd(send_fd, message);
 }
 
 void request(uint8_t bugs, ::capnp::Text::Reader message, bool login = false) {
@@ -49,12 +51,12 @@ void request(uint8_t bugs, ::capnp::Text::Reader message, bool login = false) {
 	bgfx.setBugs(bugs);
 	bgfx.setMessage(message);
 
-	::capnp::writeMessageToFd(1, msg);
+	::capnp::writeMessageToFd(send_fd, msg);
 }
 
 
 bool response() {
-	::capnp::StreamFdMessageReader msg(1);
+	::capnp::StreamFdMessageReader msg(receive_fd);
 
 	Response::Reader resp = msg.getRoot<Response>();
 
