@@ -138,7 +138,8 @@ TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
 RUN_CAT_OPTIONS = 
 RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
 RUN_REDIRECTS = 
+RUN_SCRIPT = script
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c 'exec {socket}<>"$(RUN_SOCKET)" 3<&$$socket 4>&$$socket; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
+	bash -c 'exec {socket}<>"$(RUN_SOCKET)" <"$(RUN_SCRIPT)" 3<&$$socket 4>&$$socket; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
