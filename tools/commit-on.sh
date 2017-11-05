@@ -49,5 +49,5 @@ trap 'exit 1' INT
 for i in {3..1}; do
 	echo -ne "Pushing in $i...\r"
 	sleep 1
-done; echo
+done; echo "Pushing all branches"
 git push --all || error "Failed to push"
