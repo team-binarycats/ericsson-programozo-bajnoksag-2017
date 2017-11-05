@@ -30,6 +30,7 @@ void log(std::string message) {
 void write_bugfix(const Bugfix::Reader& bugfix) {
 	std::cerr<<"> ";
 	std::cout<<(int)bugfix.getBugs()<<" "<<(std::string)bugfix.getMessage()<<std::endl;
+	if (!isatty(fileno(stdout))) std::cerr<<"#"<<(int)bugfix.getBugs()<<": \""<<(std::string)bugfix.getMessage()<<"\""<<std::endl;
 }
 
 void write_status(const ::capnp::Text::Reader& status) {
@@ -52,6 +53,8 @@ void read_bugfix(Bugfix::Builder& bugfix) {
 
 	bugfix.setBugs(bugs);
 	bugfix.setMessage(message);
+
+	if (!isatty(fileno(stdin))) std::cerr<<"#"<<(int)bugs<<": \""<<(std::string)message<<"\""<<std::endl;
 }
 
 
