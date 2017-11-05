@@ -79,12 +79,12 @@ clean-proto-obj:
 ##############
 # Main program
 
-SRC := main.cpp interface.cpp
+PROGRAM := client
+SRC := $(addsuffix .cpp,$(PROGRAM)) interface.cpp
 INC := interface.h
 OPTIONS := -Wall -Wextra -g
 LIB := capnp kj
 STD := c++11
-PROGRAM_NAME := client
 
 LINK_OPTIONS := -Wall -Wextra
 COMPILE_OPTIONS := 
@@ -97,6 +97,7 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(PROTOS_HEADERS)
+PROGRAM_NAME = $(PROGRAM)
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
 LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
 COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
@@ -136,7 +137,8 @@ TEAM_USERNAME = binary_cats
 TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
 RUN_CAT_OPTIONS = 
 RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
+RUN_REDIRECTS = 
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c '$< $(RUN_PARAMETERS) 3<>"$(RUN_SOCKET)"'
+	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
