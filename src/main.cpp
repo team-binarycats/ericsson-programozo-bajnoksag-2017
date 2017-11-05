@@ -39,11 +39,12 @@ void write_status(const ::capnp::Text::Reader& status) {
 }
 
 void read_bugfix(Bugfix::Builder& bugfix) {
-	uint8_t bugs;
+	int bugs;
 	std::string message;
 
 	std::cerr<<"< ";
 	std::cin>>bugs;
+	std::cin.ignore(1);
 	std::getline(std::cin, message);
 
 	if (std::cin.eof()) {
