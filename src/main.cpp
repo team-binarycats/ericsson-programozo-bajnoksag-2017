@@ -65,7 +65,7 @@ bool response() {
 	if (resp.hasBugfix()) {
 		Bugfix::Reader bgfx = resp.getBugfix();
 		std::cerr<<"> ";
-		std::cout<<bgfx.getBugs()<<" "<<(std::string)bgfx.getMessage()<<std::endl;
+		std::cout<<(int)bgfx.getBugs()<<" "<<(std::string)bgfx.getMessage()<<std::endl;
 	} else {
 		std::cerr<<"* "<<"No bugfix got!"<<std::endl;
 	}
