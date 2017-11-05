@@ -10,6 +10,7 @@
 #include <capnp/serialize.h>
 
 #include <iostream>
+#include <string>
 
 using namespace ericsson2017::protocol::test;
 
@@ -52,6 +53,27 @@ void request(uint8_t bugs, ::capnp::Text::Reader message, bool login = false) {
 }
 
 
+bool response() {
+	::capnp::StreamFdMessageReader msg(1);
+
+	Response::Reader resp = msg.getRoot<Response>();
+
+	std::cerr<<"Status: "<<(std::string)resp.getStatus()<<std::endl;
+
+	if (resp.hasBugfix()) {
+		Bugfix::Reader bgfx = resp.getBugfix();
+		std::cout<<bgfx.getBugs()<<" "<<(std::string)bgfx.getMessage()<<std::endl;
+	}
+
+	if (resp.isEnd()) {
+		std::cerr<<"Got end status: "<<(resp.getEnd() ? "true" : "false")<<std::endl;
+		return resp.getEnd();
+	}
+
+	return false;
+}
+
+
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
 		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
@@ -65,6 +87,19 @@ int main(int argc, char* argv[]) {
 	}
 
 	login();
+	while (!response()) {
+		uint8_t bugs;
+		std::string message;
+
+		std::cin>>bugs;
+		std::getline(std::cin, message);
+		if (std::cin.eof()) {
+			std::cerr<<"End of input before got an end response"<<std::endl;
+			return 1;
+		}
+
+		request(bugs, message);
+	}
 
 	return 0;
 }
