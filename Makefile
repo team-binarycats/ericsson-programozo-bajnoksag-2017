@@ -82,7 +82,7 @@ clean-proto-obj:
 SRC := main.cpp
 OPTIONS := -Wall -Wextra -g
 HEADERS = $(PROTOS_HEADERS)
-LIB := capnp
+LIB := capnp kj
 STD := c++11
 PROGRAM_NAME := client
 
@@ -138,4 +138,4 @@ RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) >&3; cat $(RUN_CAT_OPTIONS) <&3'
+	bash -c 'exec 3<>"$(RUN_SOCKET)"; $< $(RUN_PARAMETERS) 2>&1 0<&3 1>&3'
