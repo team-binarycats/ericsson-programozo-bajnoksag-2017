@@ -29,6 +29,7 @@ void login() {
 	login.setTeam(username);
 	login.setHash(hash);
 
+	log("Sending login information...");
 	::capnp::writeMessageToFd(send_fd, message);
 }
 
@@ -36,6 +37,7 @@ void sendEmptyRequest() {
 	::capnp::MallocMessageBuilder message;
 	message.initRoot<Request>();
 	
+	log("Sending an empty request");
 	::capnp::writeMessageToFd(send_fd, message);
 }
 
@@ -47,6 +49,7 @@ void request(void (*bugfix_builder)(Bugfix::Builder&), bool login = false) {
 		Request::Login::Builder lgn = req.initLogin();
 		lgn.setTeam(username);
 		lgn.setHash(hash);
+		log("Added login information to the following request");
 	}
 
 	Bugfix::Builder bgfx = req.initBugfix();
