@@ -4,7 +4,7 @@
 
 #include "Request.capnp.h"
 #include "Response.capnp.h"
-//#include "Bugfix.capnp.h"
+#include "Bugfix.capnp.h"
 
 #include <capnp/message.h>
 #include <capnp/serialize.h>
@@ -16,22 +16,41 @@ using namespace ericsson2017::protocol::test;
 char* hash;
 char* username;
 
-void sendRequest(Bugfix::Reader* bugfix, bool login = false) {
+void login() {
 	::capnp::MallocMessageBuilder message;
 	Request::Builder request = message.initRoot<Request>();
 	
-	if (login) {
-		Request::Login::Builder login = request.initLogin();
-		login.setTeam(username);
-		login.setHash(hash);
-	}
-
-	if (bugfix != nullptr) {
-		request.setBugfix(*bugfix);
-	}
+	Request::Login::Builder login = request.initLogin();
+	login.setTeam(username);
+	login.setHash(hash);
 
 	::capnp::writeMessageToFd(1, message);
 }
+
+void sendEmptyRequest() {
+	::capnp::MallocMessageBuilder message;
+	message.initRoot<Request>();
+	
+	::capnp::writeMessageToFd(1, message);
+}
+
+void request(uint8_t bugs, ::capnp::Text::Reader message, bool login = false) {
+	::capnp::MallocMessageBuilder msg;
+	Request::Builder req = msg.initRoot<Request>();
+	
+	if (login) {
+		Request::Login::Builder lgn = req.initLogin();
+		lgn.setTeam(username);
+		lgn.setHash(hash);
+	}
+
+	Bugfix::Builder bgfx = req.initBugfix();
+	bgfx.setBugs(bugs);
+	bgfx.setMessage(message);
+
+	::capnp::writeMessageToFd(1, msg);
+}
+
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
@@ -45,7 +64,7 @@ int main(int argc, char* argv[]) {
 		std::cerr<<"Using hash "<<hash<<std::endl;
 	}
 
-	sendRequest(nullptr, true);
+	login();
 
 	return 0;
 }
