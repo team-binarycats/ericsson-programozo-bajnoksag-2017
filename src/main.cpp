@@ -20,7 +20,7 @@ char* username;
 void login() {
 	::capnp::MallocMessageBuilder message;
 	Request::Builder request = message.initRoot<Request>();
-	
+
 	Request::Login::Builder login = request.initLogin();
 	login.setTeam(username);
 	login.setHash(hash);
@@ -38,7 +38,7 @@ void sendEmptyRequest() {
 void request(uint8_t bugs, ::capnp::Text::Reader message, bool login = false) {
 	::capnp::MallocMessageBuilder msg;
 	Request::Builder req = msg.initRoot<Request>();
-	
+
 	if (login) {
 		Request::Login::Builder lgn = req.initLogin();
 		lgn.setTeam(username);
