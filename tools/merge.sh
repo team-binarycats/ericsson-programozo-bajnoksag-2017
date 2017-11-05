@@ -5,9 +5,9 @@ drop_shell(){
 	reason="$1"
 	echo -e "\033[41m$reason\033[0m" >&2
 	echo -e "Please fix the errors in this shell and press Ctrl+D. or" >&2
-	echo -e "do an \`exit 1\` if you want to abort merging \033[1m$mother\0330m" >&2
-	eval "$(getent passwd `logname` | cut -d: -f7)" \
-		|| exit $?
+	echo -e "do an \`exit 1\` if you want to abort merging \033[1m$mother\033[0m" >&2
+	"$(getent passwd `logname` | cut -d: -f7)" || exit $?
+	echo -e "\033[42mContinuing merge...\033[0m"
 }
 
 mother="$(git symbolic-ref --short HEAD)"
