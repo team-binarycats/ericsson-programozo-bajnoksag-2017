@@ -15,6 +15,24 @@ using namespace ericsson2017::protocol::test;
 
 char* hash;
 char* username;
+
+void sendRequest(Bugfix::Reader* bugfix, bool login = false) {
+	::capnp::MallocMessageBuilder message;
+	Request::Builder request = message.initRoot<Request>();
+	
+	if (login) {
+		Request::Login::Builder login = request.initLogin();
+		login.setTeam(username);
+		login.setHash(hash);
+	}
+
+	if (bugfix != nullptr) {
+		request.setBugfix(*bugfix);
+	}
+
+	::capnp::writeMessageToFd(1, message);
+}
+
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
 		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
@@ -27,15 +45,7 @@ int main(int argc, char* argv[]) {
 		std::cerr<<"Using hash "<<hash<<std::endl;
 	}
 
-	{
-		::capnp::MallocMessageBuilder message;
-		Request::Builder request = message.initRoot<Request>();
-		Request::Login::Builder login = request.initLogin();
-		login.setTeam(username);
-		login.setHash(hash);
-		
-		::capnp::writeMessageToFd(1, message);
-	}
+	sendRequest(nullptr, true);
 
 	return 0;
 }
