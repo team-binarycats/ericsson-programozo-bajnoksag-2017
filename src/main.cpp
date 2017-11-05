@@ -6,14 +6,12 @@
 #include "Response.capnp.h"
 #include "Bugfix.capnp.h"
 
+#include "interface.h"
+
 #include <capnp/message.h>
 #include <capnp/serialize.h>
 
-#include <iostream>
 #include <string>
-#include <unistd.h>
-#include <exception>
-#include <cstring>
 
 using namespace ericsson2017::protocol::test;
 
@@ -21,44 +19,6 @@ char* hash;
 char* username;
 const int receive_fd = 3;
 const int send_fd = 3;
-
-
-void log(std::string message) {
-	std::cerr<<"* "<<message<<std::endl;
-}
-
-void write_bugfix(const Bugfix::Reader& bugfix) {
-	std::cerr<<"> ";
-	std::cout<<(int)bugfix.getBugs()<<" "<<(std::string)bugfix.getMessage()<<std::endl;
-	if (!isatty(fileno(stdout))) std::cerr<<"#"<<(int)bugfix.getBugs()<<": \""<<(std::string)bugfix.getMessage()<<"\""<<std::endl;
-}
-
-void write_status(const ::capnp::Text::Reader& status) {
-	std::cerr<<"] ";
-	std::cerr<<(std::string)status<<std::endl;
-}
-
-void read_bugfix(Bugfix::Builder& bugfix) {
-	int bugs;
-	std::string message;
-
-	std::cerr<<"< ";
-	std::cin>>bugs;
-	std::cin.ignore(1);
-	std::getline(std::cin, message);
-
-	if (std::cin.eof()) {
-		std::cerr<<std::endl;
-		log("End of input before got an end response");
-		std::cerr<<std::endl;
-		throw std::runtime_error("End of input");
-	}
-
-	bugfix.setBugs(bugs);
-	bugfix.setMessage(message);
-
-	if (!isatty(fileno(stdin))) std::cerr<<"#"<<(int)bugs<<": \""<<(std::string)message<<"\""<<std::endl;
-}
 
 
 void login() {
@@ -110,7 +70,7 @@ bool response(void (*bugfix_handler)(const Bugfix::Reader&), void (*status_handl
 	}
 
 	if (resp.isEnd()) {
-		log((std::string)"Got end status: "+(resp.getEnd() ? (std::string)"true" : (std::string)"false"));
+		log((::std::string)"Got end status: "+(resp.getEnd() ? (::std::string)"true" : (::std::string)"false"));
 		return resp.getEnd();
 	}
 
@@ -120,14 +80,14 @@ bool response(void (*bugfix_handler)(const Bugfix::Reader&), void (*status_handl
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
+		::std::cerr<<"Usage: "<<argv[0]<<" username hash"<<::std::endl;
 		return 1;
 	} else {
 		username = argv[1];
-		log((std::string)"Using username "+(std::string)username);
+		log((::std::string)"Using username "+(::std::string)username);
 
 		hash = argv[2];
-		log((std::string)"Using hash "+(std::string)hash);
+		log((::std::string)"Using hash "+(::std::string)hash);
 	}
 
 	login();
