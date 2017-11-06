@@ -1,8 +1,8 @@
 FROM lezsakdomi/capnproto-cplusplus:buildpack
 
-RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
-		cmake
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		cmake \
+	&& rm -rf /var/lib/apt/lists/*
 
 ARG CMAKEFLAGS=""
 ARG MAKEFLAGS=""
