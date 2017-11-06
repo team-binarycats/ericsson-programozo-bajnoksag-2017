@@ -7,10 +7,13 @@ find_package(CapnProto REQUIRED)
 include_directories(${CAPNP_INCLUDE_DIRS})
 add_definitions(${CAPNP_DEFINITIONS})
 
+set(CMAKE_CXX_STANDARD 11)
+
+set(CAPNPC_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 capnp_generate_cpp(CAPNP_SRCS CAPNP_HDRS ${PROTO_FILES})
 add_custom_target(capnp_cpp
                   DEPENDS ${CAPNP_SRCS} ${CAPNP_HDRS})
-include_directories("${PROTO_DIR}")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}/${PROTO_DIR}")
 
 set(CLIENT_SRCS src/client.cpp ${CAPNP_SRCS} ${CAPNP_HDRS})
 
