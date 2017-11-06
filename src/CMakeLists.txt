@@ -1,4 +1,4 @@
-set(CLIENT_SRCS main.cpp ${CAPNP_SRCS})
+set(CLIENT_SRCS client.cpp ${CAPNP_SRCS})
 
 #TODO move out
 set_source_files_properties(${CAPNP_SRCS} ${CAPNP_HDRS}
