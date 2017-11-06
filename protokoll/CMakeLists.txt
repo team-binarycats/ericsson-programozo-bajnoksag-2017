@@ -1,8 +1,0 @@
-set(PROTOKOLL_FILES Bugfix.capnp Request.capnp Response.capnp)
-
-capnp_generate_cpp(CAPNP_SRCS CAPNP_HDRS ${PROTOKOLL_FILES})
-set(CAPNP_SRCS "${CAPNP_SRCS}" PARENT_SCOPE)
-set(CAPNP_HDRS "${CAPNP_HDRS}" PARENT_SCOPE)
-
-add_custom_target(capnp_cpp
-                  DEPENDS ${CAPNP_SRCS} ${CAPNP_HDRS})
