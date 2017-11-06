@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := all
 
+.PHONY: PHONY_EXPLICIT
+PHONY_EXPLICIT:
+
 ###############
 # Basic targets
 
@@ -79,59 +82,82 @@ clean-proto-obj:
 ##############
 # Main program
 
-PROGRAM := client
-COM := $(basename $(wildcard $(COMDIR)/*.h)) #Files which have headers are not programs
-SRC := $(COMPONENT_SOURCES) $(addsuffix .cpp,$(PROGRAM))
-INC := $(COMPONENT_HEADERS)
-OPTIONS := -Wall -Wextra -g
-LIB := capnp kj
-STD := c++11
+OUTDIR = bin
+.PHONY: clean-out
+clean: clean-out
+clean-out:
+	-rm -f $(OUTDIR)/*
 
-LINK_OPTIONS := -Wall -Wextra
-COMPILE_OPTIONS := 
+PROGRAM = client
+PROGRAM_NAME = $(PROGRAM)
+PROGRAMS = $(notdir $(filter-out $(basename $(wildcard $(INCDIR)/*.h)),$(basename $(wildcard $(SRCDIR)/*.cpp)))) #Files which have headers are not programs
+.PHONY: programs
+programs:
+	@for program in $(PROGRAMS); do \
+		echo Invoking make for $$program...; \
+		$(MAKE) $$program || exit $$?; \
+	done
 
-OBJDIR := obj
-OUTDIR := bin
-SRCDIR := src
-INCDIR := src
-COMDIR := src
+LIB = capnp kj
+LIBRARIES = $(LIB)
 
+COMDIR = $(SRCDIR)
+COM = $(notdir $(filter $(basename $(wildcard $(INCDIR)/*.h)),$(basename $(wildcard $(SRCDIR)/*.cpp)))) #Files which have headers are not programs
 COMPONENTS = $(addprefix $(COMDIR)/,$(COM))
 COMPONENT_SOURCES = $(addsuffix .cpp,$(COMPONENTS))
-OBJ = $(SRC:.cpp=.o)
-OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
-HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(PROTOS_HEADERS)
-PROGRAM_NAME = $(PROGRAM)
-EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
-LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
-COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
+COMPONENT_HEADERS = $(addsuffix .h,$(COMPONENTS))
 
+SRCDIR = src
+SRC = $(addsuffix .cpp,$(PROGRAM)) #Propably we have only one real source: The main routine
+SOURCES = $(addprefix $(SRCDIR)/,$(SRC)) $(COMPONENT_SOURCES) 
+
+INCDIR = $(SRCDIR)
+INC =
+HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(COMPONENT_HEADERS) $(PROTOS_HEADERS)
+
+OBJDIR = obj
+.PHONY: clean-obj
+mostlyclean: clean-obj
+clean-obj:
+	-rm -f $(OBJDIR)/*.o
+OBJ = $(SRC:.cpp=.o) $(addsuffix .o,$(COM))
+OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
+$(OBJDIR)/%.o $(SRCDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
+	@mkdir -pv $(dir $@)
+	@echo Compiling $@...
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
+.PHONY: objects
+objects: $(OBJECTS)
+.PHONY: clean-objects
+mostlyclean: clean-objects
+clean-objects:
+	-rm -f $(OBJECTS)
+
+OPTIONS = -Wall -Wextra -g
+STD = c++11
+
+LINK_OPTIONS = -Wall -Wextra
+LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
+
+COMPILE_OPTIONS = 
+COMPILE_FLAGS = --std=$(STD) $(OPTIONS) $(COMPILE_OPTIONS)
+
+EXEC = $(PROGRAM_NAME)
+EXECUTABLE = $(OUTDIR)/$(EXEC)
 $(EXECUTABLE): $(OBJECTS)
 	@mkdir -pv $(dir $@)
 	@echo Linking...
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LINK_FLAGS) $^ -o $@
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
-	@mkdir -pv $(dir $@)
-	@echo Compiling $@...
-	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(COMPILE_FLAGS) $< -o $@ -I$(INCDIR) -I$(PROTODIR)
-
-
 .PHONY: executable
 all: executable
 executable: $(EXECUTABLE)
-
-.PHONY: clean-obj clean-out clean-executable
-mostlyclean: clean-obj clean-out clean-executable
-clean-obj:
-	-rm -f $(OBJDIR)/*.o
-clean-out:
-	-rm -f $(OUTDIR)/*
+.PHONY: clean-executable
+mostlyclean: clean-executable
 clean-executable:
 	-rm -f $(EXECUTABLE)
 
-###############
-# Misc commands
+###################
+# Running a program
 
 SERVER_HOST = ecovpn.dyndns.org
 SERVER_PORT = 11223
@@ -147,3 +173,15 @@ RUN_SCRIPT = script
 .PHONY: run
 run: $(EXECUTABLE)
 	bash -c 'exec {socket}<>"$(RUN_SOCKET)" <"$(RUN_SCRIPT)" 3<&$$socket 4>&$$socket; $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
+
+###############
+# Misc commands
+
+VARIABLE = VARIABLE #We like recursion
+
+.PHONY: print_var
+print_var:
+	@echo '$(VARIABLE)=$(value $(VARIABLE))="$($(VARIABLE))"'
+
+%: $(SRCDIR)/%.cpp
+	$(MAKE) PROGRAM="$*"
