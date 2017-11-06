@@ -79,8 +79,8 @@ clean-proto-obj:
 ##############
 # Main program
 
-PROGRAM := client
-SRC := $(addsuffix .cpp,$(PROGRAM)) interface.cpp
+PROGRAMS := client test
+SRC := interface.cpp
 INC := interface.h
 OPTIONS := -Wall -Wextra -g
 LIB := capnp kj
@@ -97,14 +97,14 @@ INCDIR := src
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(PROTOS_HEADERS)
-PROGRAM_NAME = $(PROGRAM)
+PROGRAM_NAME = $(firstword $(PROGRAMS))
 EXECUTABLE = $(OUTDIR)/$(PROGRAM_NAME)
 LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
 COMPILE_FLAGS = $(OPTIONS) --std=$(STD) $(COMPILE_OPTIONS)
 
-$(EXECUTABLE): $(OBJECTS)
+$(OUTDIR)/%: $(OBJECTS) $(OBJDIR)/%.o
 	@mkdir -pv $(dir $@)
-	@echo Linking...
+	@echo Linking $*...
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LINK_FLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
@@ -117,14 +117,20 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
 all: executable
 executable: $(EXECUTABLE)
 
-.PHONY: clean-obj clean-out clean-executable
-mostlyclean: clean-obj clean-out clean-executable
+.PHONY: programs
+all: programs
+programs: $(addprefix $(OUTDIR)/,$(PROGRAMS))
+
+.PHONY: clean-obj clean-out clean-executable clean-programs
+mostlyclean: clean-obj clean-out clean-executable clean-programs
 clean-obj:
 	-rm -f $(OBJDIR)/*.o
 clean-out:
 	-rm -f $(OUTDIR)/*
 clean-executable:
 	-rm -f $(EXECUTABLE)
+clean-programs:
+	-rm -f $(OUTDIR)/*
 
 ###############
 # Misc commands
