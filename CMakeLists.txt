@@ -18,3 +18,4 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}/${PROTO_DIR}")
 set(CLIENT_SRCS src/client.cpp ${CAPNP_SRCS} ${CAPNP_HDRS})
 
 add_executable(client ${CLIENT_SRCS})
+target_link_libraries(client CapnProto::capnp)
