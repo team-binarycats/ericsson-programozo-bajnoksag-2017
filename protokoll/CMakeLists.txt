@@ -9,9 +9,5 @@ foreach(hdr ${CAPNP_HDRS})
 	include_directories("${dir}")
 endforeach(hdr)
 
-list(GET CAPNP_SRCS 1 le)
-get_source_file_property(PROP "${le}" GENERATED)
-message("BEFORE Property status: ${PROP}")
-
 add_custom_target(capnp_cpp ALL
                   DEPENDS ${CAPNP_SRCS} ${CAPNP_HDRS})
