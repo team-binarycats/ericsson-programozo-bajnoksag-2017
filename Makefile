@@ -80,8 +80,9 @@ clean-proto-obj:
 # Main program
 
 PROGRAM := client
-SRC := $(addsuffix .cpp,$(PROGRAM)) interface.cpp
-INC := interface.h
+COM := $(basename $(wildcard $(COMDIR)/*.h)) #Files which have headers are not programs
+SRC := $(COMPONENT_SOURCES) $(addsuffix .cpp,$(PROGRAM))
+INC := $(COMPONENT_HEADERS)
 OPTIONS := -Wall -Wextra -g
 LIB := capnp kj
 STD := c++11
@@ -93,7 +94,10 @@ OBJDIR := obj
 OUTDIR := bin
 SRCDIR := src
 INCDIR := src
+COMDIR := src
 
+COMPONENTS = $(addprefix $(COMDIR)/,$(COM))
+COMPONENT_SOURCES = $(addsuffix .cpp,$(COMPONENTS))
 OBJ = $(SRC:.cpp=.o)
 OBJECTS = $(addprefix $(OBJDIR)/,$(OBJ)) $(PROTOS_OBJECTS)
 HEADERS = $(addprefix $(INCDIR)/,$(INC)) $(PROTOS_HEADERS)
