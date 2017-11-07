@@ -41,6 +41,14 @@ void response(void (*response_handler)(const Response::Reader&), void (*status_h
 	if (response_handler != nullptr) response_handler(resp);
 }
 
+void request() {
+	::capnp::MallocMessageBuilder message;
+	Command::Builder command = message.initRoot<Command>();
+
+	log("Sending command...");
+	::capnp::writeMessageToFd(send_fd, message);
+}
+
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
@@ -57,6 +65,7 @@ int main(int argc, char* argv[]) {
 	login();
 	while (true) {
 		response(draw_response, write_status);
+		request();
 	}
 
 	return 0;
