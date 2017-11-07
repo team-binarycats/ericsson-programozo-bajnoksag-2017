@@ -96,7 +96,7 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	// Enemies
 	for (auto enemy : response.getEnemies()) {
 		os<<csi<<"s";
-		os<<csi<<enemy.getPosition().getX()+1<<";"<<enemy.getPosition().getY()+1<<"H";
+		os<<csi<<enemy.getPosition().getX()+2<<";"<<enemy.getPosition().getY()+2<<"H";
 		if (enemy.getDirection().getVertical() == Direction::UP)
 			if (enemy.getDirection().getHorizontal() == Direction::LEFT) // Up-left
 				os<<enemy_ul;
@@ -112,7 +112,7 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 
 	for (auto unit : response.getUnits()) {
 		os<<csi<<"s";
-		os<<csi<<unit.getPosition().getX()+1<<";"<<unit.getPosition().getY()+1<<"H";
+		os<<csi<<unit.getPosition().getX()+2<<";"<<unit.getPosition().getY()+2<<"H";
 		switch (unit.getHealth()) {
 			case 3: os<<sgr<<37<<sgr_end; break;
 			case 2: os<<sgr<<36<<sgr_end; break;
