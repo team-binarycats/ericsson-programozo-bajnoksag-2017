@@ -28,7 +28,7 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	const char esc = '\033';
 	const char* csi = "\033[";
 	const char* sgr = csi;
-	const char* end_sgr = "m";
+	const char* sgr_end = "m";
 
 	const char border_h = '-';
 	const char border_v = '|';
