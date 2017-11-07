@@ -1,7 +1,7 @@
 #include "interface.h"
 
-using namespace ericsson2017::protocol::test;
+using namespace ericsson2017::protocol;
 
-void ::ericsson2017::protocol::test::log(::std::string message) {
+void ::ericsson2017::protocol::log(::std::string message) {
 	::std::cerr<<"* "<<message<<::std::endl;
 }

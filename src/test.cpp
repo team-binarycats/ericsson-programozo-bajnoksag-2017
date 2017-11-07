@@ -9,7 +9,7 @@
 
 #include <string>
 
-using namespace ericsson2017::protocol::test;
+using namespace ericsson2017::protocol;
 
 const int receive_fd = 0;
 

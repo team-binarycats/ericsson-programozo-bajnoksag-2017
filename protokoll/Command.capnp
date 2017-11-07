@@ -1,7 +1,7 @@
 @0xabf8f53c554fa923;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("ericsson2017::protocol::semifinal");
+$Cxx.namespace("ericsson2017::protocol");
 
 
 using Common = import "Common.capnp";

@@ -5,6 +5,6 @@
 #include <exception>
 #include <string>
 
-namespace ericsson2017 { namespace protocol { namespace test {
+namespace ericsson2017 { namespace protocol {
 	void log(::std::string message);
-} } } // Namespaces
+} } // Namespaces

@@ -1,7 +1,7 @@
 @0xf0897c6777e66a25;
 
 using Cxx = import "/capnp/c++.capnp";
-$Cxx.namespace("ericsson2017::protocol::semifinal");
+$Cxx.namespace("ericsson2017::protocol");
 
 
 enum Direction {
