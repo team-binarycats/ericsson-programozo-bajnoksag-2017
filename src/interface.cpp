@@ -1,5 +1,10 @@
 #include "interface.h"
 
+#include <iostream>
+#include <unistd.h>
+#include <exception>
+#include <string>
+#include <capnp/blob.h>
 #include <sstream>
 
 using namespace ericsson2017::protocol;

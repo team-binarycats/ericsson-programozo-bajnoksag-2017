@@ -1,10 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <unistd.h>
-#include <exception>
 #include <string>
-#include <capnp/blob.h>
 
 #include "Response.capnp.h"
 

@@ -11,6 +11,7 @@
 #include <capnp/serialize.h>
 
 #include <string>
+#include <iostream> // For usage message
 
 using namespace ericsson2017::protocol;
 
