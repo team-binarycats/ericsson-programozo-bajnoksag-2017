@@ -4,6 +4,11 @@
 
 #include "interface.h"
 
+#include "Command.capnp.h"
+
+#include <capnp/message.h>
+#include <capnp/serialize.h>
+
 #include <string>
 
 using namespace ericsson2017::protocol;
@@ -16,7 +21,9 @@ const int send_fd = 4;
 
 void login() {
 	::capnp::MallocMessageBuilder message;
+	Command::Builder command = message.initRoot<Command>();
 
+	Command::Login::Builder login = command.initLogin();
 	login.setTeam(username);
 	login.setHash(hash);
 

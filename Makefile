@@ -160,7 +160,7 @@ clean-executable:
 # Running a program
 
 SERVER_HOST = ecovpn.dyndns.org
-SERVER_PORT = 11223
+SERVER_PORT = 11224
 RUN_SOCKET = /dev/tcp/$(SERVER_HOST)/$(SERVER_PORT)
 
 TEAM_USERNAME = binary_cats
