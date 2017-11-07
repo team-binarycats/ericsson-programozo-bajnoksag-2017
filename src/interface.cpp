@@ -35,6 +35,10 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	const char border_corner = '+';
 	const char status_separator = '\t';
 	const char cell_mark = '.';
+	const char* enemy_ul = "↖";
+	const char* enemy_ur = "↗";
+	const char* enemy_dl = "↙";
+	const char* enemy_dr = "↘";
 
 	// Print border
 	os<<csi<<"s";
@@ -83,5 +87,22 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 			os<<csi<<I<<";"<<J<<"H"<<cell_mark;
 			os<<sgr<<0<<sgr_end<<csi<<"u";
 		}
+	}
+
+	// Enemies
+	for (auto enemy : response.getEnemies()) {
+		os<<csi<<"s";
+		os<<csi<<enemy.getPosition().getX()+1<<";"<<enemy.getPosition().getY()+1<<"H";
+		if (enemy.getDirection().getVertical() == Direction::UP)
+			if (enemy.getDirection().getHorizontal() == Direction::LEFT) // Up-left
+				os<<enemy_ul;
+			else // Up-right
+				os<<enemy_ur;
+		else
+			if (enemy.getDirection().getHorizontal() == Direction::LEFT) // Down-left
+				os<<enemy_dl;
+			else // Down-right
+				os<<enemy_dr;
+		os<<csi<<"u";
 	}
 }
