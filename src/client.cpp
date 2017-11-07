@@ -44,14 +44,14 @@ void response(void (*response_handler)(const Response::Reader&), void (*status_h
 
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
-		::std::cerr<<"Usage: "<<argv[0]<<" username hash"<<::std::endl;
+		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
 		return 1;
 	} else {
 		username = argv[1];
-		log((::std::string)"Using username "+(::std::string)username);
+		log((std::string)"Using username "+(std::string)username);
 
 		hash = argv[2];
-		log((::std::string)"Using hash "+(::std::string)hash);
+		log((std::string)"Using hash "+(std::string)hash);
 	}
 
 	login();
