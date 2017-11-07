@@ -34,6 +34,7 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	const char border_v = '|';
 	const char border_corner = '+';
 	const char status_separator = '\t';
+	const char cell_mark = '.';
 
 	// Print border
 	os<<csi<<"s";
@@ -61,4 +62,26 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	os<<"Level: "<<info.getLevel()<<status_separator;
 	os<<"Tick: "<<info.getTick()<<status_separator;
 	os<<csi<<"u";
+
+	// Cells
+	for (int i=0; i<80; i++) {
+		int I=i+2;
+		for (int j=0; j<100; j++) {
+			int J=j+2;
+			Cell::Reader cell = response.getCells()[i][j];
+			os<<csi<<"s";
+			if (cell.getOwner()!=0)
+				os<<sgr<<7<<sgr_end;
+			if (cell.getAttack().isCan())
+				if (cell.getAttack().getCan())
+					os<<sgr<<32<<sgr_end;
+				else // can't attack
+					os<<sgr<<31<<sgr_end;
+			if (cell.getAttack().isUnit())
+				os<<sgr<<1<<sgr_end;
+				// TODO indicate unit ID
+			os<<csi<<I<<";"<<J<<"H"<<cell_mark;
+			os<<sgr<<0<<sgr_end<<csi<<"u";
+		}
+	}
 }
