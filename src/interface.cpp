@@ -1,5 +1,7 @@
 #include "interface.h"
 
+#include <sstream>
+
 using namespace ericsson2017::protocol;
 
 void ::ericsson2017::protocol::log(::std::string message) {
@@ -12,7 +14,7 @@ void ::ericsson2017::protocol::write_status(const ::capnp::Text::Reader& status)
 }
 
 void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
-	::std::ostream& os = std::cerr;
+	::std::stringstream os;
 	/* Screen layout:
 	 *     2     101
 	 *    +--------+
@@ -129,4 +131,6 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 		}
 		os<<csi<<"u";
 	}
+
+	std::cerr<<os.str();
 }
