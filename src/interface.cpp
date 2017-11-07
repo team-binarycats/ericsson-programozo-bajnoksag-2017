@@ -32,7 +32,6 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	 *    +--------+
 	 */
 
-	const char esc = '\033';
 	const char* csi = "\033[";
 	const char* sgr = csi;
 	const char* sgr_end = "m";
