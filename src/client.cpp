@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
 	login();
 	while (true) {
-		response(nullptr, write_status);
+		response(write_response_human, write_status);
 	}
 
 	return 0;

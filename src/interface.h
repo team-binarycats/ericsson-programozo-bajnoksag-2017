@@ -6,7 +6,10 @@
 #include <string>
 #include <capnp/blob.h>
 
+#include "Response.capnp.h"
+
 namespace ericsson2017 { namespace protocol {
 	void log(::std::string message);
 	void write_status(const ::capnp::Text::Reader& status);
+	void write_response_human(const Response::Reader& response);
 } } // Namespaces
