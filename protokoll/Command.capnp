@@ -1,11 +1,7 @@
 @0xabf8f53c554fa923;
 
-# using Java = import "java.capnp";
-# $Java.package("org.ericsson2017.protocol.semifinal");
-# $Java.outerClassname("CommandClass");
-
-# using Cxx = import "/capnp/c++.capnp";
-# $Cxx.namespace("ericsson2017::protocol::semifinal");
+using Cxx = import "/capnp/c++.capnp";
+$Cxx.namespace("ericsson2017::protocol::semifinal");
 
 
 using Common = import "Common.capnp";

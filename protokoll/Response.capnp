@@ -1,11 +1,7 @@
 @0xc006e8d67841eca5;
 
-# using Java = import "java.capnp";
-# $Java.package("org.ericsson2017.protocol.semifinal");
-# $Java.outerClassname("ResponseClass");
-
-# using Cxx = import "/capnp/c++.capnp";
-# $Cxx.namespace("ericsson2017::protocol::semifinal");
+using Cxx = import "/capnp/c++.capnp";
+$Cxx.namespace("ericsson2017::protocol::semifinal");
 
 
 using Common = import "Common.capnp";
