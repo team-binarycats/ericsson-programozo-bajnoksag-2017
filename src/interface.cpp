@@ -11,7 +11,7 @@ void ::ericsson2017::protocol::write_status(const ::capnp::Text::Reader& status)
 	::std::cerr<<(::std::string)status<<::std::endl;
 }
 
-void ::ericsson2017::protocol::write_response_human(const Response::Reader& response) {
+void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	::std::ostream& os = std::cerr;
 	/* Screen layout:
 	 *     2     101
