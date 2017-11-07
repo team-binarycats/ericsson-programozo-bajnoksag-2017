@@ -21,3 +21,24 @@ _or_
 	- `sudo apt install make`
 - Cap'n Proto and its libraries
 	- `sudo apt install capnproto libcapnp-dev`
+
+# Files
+- `Makefile`, `Dockerfile`: Files for the build system...
+- `src`: Standard source files
+	- `*.cpp` without a corresponding `*.h`: Components. You include their headers in your program
+		- To specify costum component, override the `COM` make variable: `make COM=interface client`
+		- Directory of components: `COMDIR` make variable
+	- `*.cpp` (withoud a header file): Programs, are compiled separated
+		- Override `PROGRAM` for make to specify your target: `make PROGRAM="client" run`
+		- Specify a program for make as target to compile that: `make client`
+- `obj`: Compiled sources (_objects_)
+	- `*.o`: ...
+		- To specify object file location, override the `OBJDIR` make variable: `make OBJDIR=/tmp/`
+		- To add customize objects to be linked, override `OBJ`: `make OBJ="main.o my-lib.o" PROGRAM_NAME="my-application"`
+- `protokoll`: Cap'n Proto specifications
+	- `*.capnp`: ...
+		- To manage capnp specs, see the `proto` target and the `PROTO` (and/or `PROTO_*`) make variables.
+	- `*.capnp.{c++,h}`: Compiled specifications
+- `bin`: Compiled runnable binaries
+	- `*`: ...
+		- To override the directory, see the `BINDIR` make variable
