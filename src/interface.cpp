@@ -39,6 +39,10 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 	const char* enemy_ur = "↗";
 	const char* enemy_dl = "↙";
 	const char* enemy_dr = "↘";
+	const char* unit_l = "⇦";
+	const char* unit_r = "⇨";
+	const char* unit_u = "⇧";
+	const char* unit_d = "⇩";
 
 	// Print border
 	os<<csi<<"s";
@@ -103,6 +107,26 @@ void ::ericsson2017::protocol::write_response_human(const Response::Reader& resp
 				os<<enemy_dl;
 			else // Down-right
 				os<<enemy_dr;
+		os<<csi<<"u";
+	}
+
+	for (auto unit : response.getUnits()) {
+		os<<csi<<"s";
+		os<<csi<<unit.getPosition().getX()+1<<";"<<unit.getPosition().getY()+1<<"H";
+		switch (unit.getHealth()) {
+			case 3: os<<sgr<<37<<sgr_end; break;
+			case 2: os<<sgr<<36<<sgr_end; break;
+			case 1: os<<sgr<<35<<sgr_end; break;
+			case 0: os<<sgr<<34<<sgr_end; break;
+			default: throw std::runtime_error((std::string)"Invalid health: "+std::to_string(unit.getHealth()));
+		}
+		//TODO indicate unit killer level
+		switch (unit.getDirection()) {
+			case Direction::LEFT:	os<<unit_l; break;
+			case Direction::RIGHT:	os<<unit_r; break;
+			case Direction::UP:	os<<unit_u; break;
+			case Direction::DOWN:	os<<unit_d; break;
+		}
 		os<<csi<<"u";
 	}
 }
