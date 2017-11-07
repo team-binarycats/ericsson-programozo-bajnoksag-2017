@@ -5,6 +5,7 @@
 #include "interface.h"
 
 #include "Command.capnp.h"
+#include "Response.capnp.h"
 
 #include <capnp/message.h>
 #include <capnp/serialize.h>
@@ -31,8 +32,12 @@ void login() {
 	::capnp::writeMessageToFd(send_fd, message);
 }
 
-void response() {
+void response(void (*response_handler)(const Response::Reader&), void (*status_handler)(const ::capnp::Text::Reader&)) {
 	::capnp::StreamFdMessageReader msg(receive_fd);
+	Response::Reader resp = msg.getRoot<Response>();
+	
+	if (status_handler != nullptr) status_handler(resp.getStatus());
+	if (response_handler != nullptr) response_handler(resp);
 }
 
 
@@ -49,6 +54,9 @@ int main(int argc, char* argv[]) {
 	}
 
 	login();
+	while (true) {
+		response(nullptr, write_status);
+	}
 
 	return 0;
 }
