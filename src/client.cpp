@@ -50,6 +50,8 @@ void request(void (*move_handler)(Move::Builder&)) {
 		auto move = moves[0];
 		move_handler(move);
 	}
+
+	::capnp::writeMessageToFd(send_fd, message);
 }
 
 
