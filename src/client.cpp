@@ -41,12 +41,15 @@ void response(void (*response_handler)(const Response::Reader&), void (*status_h
 	if (response_handler != nullptr) response_handler(resp);
 }
 
-void request() {
+void request(void (*move_handler)(Move::Builder&)) {
 	::capnp::MallocMessageBuilder message;
 	Command::Builder command = message.initRoot<Command>();
 
-	log("Sending command...");
-	::capnp::writeMessageToFd(send_fd, message);
+	if (move_handler != nullptr) {
+		auto moves = command.initMoves(1);
+		auto move = moves[0];
+		move_handler(move);
+	}
 }
 
 
