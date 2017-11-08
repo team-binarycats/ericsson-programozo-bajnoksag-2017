@@ -42,3 +42,9 @@ _or_
 - `bin`: Compiled runnable binaries
 	- `*`: ...
 		- To override the directory, see the `BINDIR` make variable
+
+### Useful commands
+To decode (and print) messages on the fly:
+```
+make run RUN_SOCKET_REDIRECTS= RUN_REDIRECTS='3< <(tee >(capnp decode protokoll/Response.capnp Response >&2) <&$$socket) 4> >(tee >(capnp decode protokoll/Command.capnp Command >&2) >&$$socket)'
+```
