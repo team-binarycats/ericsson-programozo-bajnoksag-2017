@@ -75,6 +75,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	os<<"Owns: "<<info.getOwns()<<status_separator;
 	os<<"Level: "<<info.getLevel()<<status_separator;
 	os<<"Tick: "<<info.getTick()<<status_separator;
+	os<<"Unit0 position: "<<response.getUnits()[0].getPosition().getX()<<";"<<response.getUnits()[0].getPosition().getY()<<status_separator;
 	os<<csi<<"u";
 
 	// Cells
