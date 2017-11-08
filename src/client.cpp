@@ -80,10 +80,10 @@ int main(int argc, char* argv[]) {
 		request([](Move::Builder& move){
 			move.setUnit(0);
 			switch(cnt/curr) {
-				case 0: move.setDirection(Direction::UP);	break;
-				case 1: move.setDirection(Direction::RIGHT);	break;
-				case 2: move.setDirection(Direction::DOWN);	break;
-				case 3: move.setDirection(Direction::LEFT);	break;
+				case 0: move.setDirection(Direction::RIGHT);	break;
+				case 1: move.setDirection(Direction::DOWN);	break;
+				case 2: move.setDirection(Direction::LEFT);	break;
+				case 3: move.setDirection(Direction::UP);	break;
 			}
 		});
 		cnt++;
