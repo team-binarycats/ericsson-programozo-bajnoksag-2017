@@ -41,15 +41,22 @@ void response(void (*response_handler)(const Response::Reader&), void (*status_h
 	if (response_handler != nullptr) response_handler(resp);
 }
 
-void request() {
+void request(void (*move_handler)(Move::Builder&)) {
 	::capnp::MallocMessageBuilder message;
 	Command::Builder command = message.initRoot<Command>();
 
-	log("Sending command...");
+	if (move_handler != nullptr) {
+		auto moves = command.initMoves(1);
+		auto move = moves[0];
+		move_handler(move);
+	}
+
 	::capnp::writeMessageToFd(send_fd, message);
 }
 
 
+int cnt=0;
+int curr=1;
 int main(int argc, char* argv[]) {
 	if (argc != 3) {
 		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
@@ -65,7 +72,21 @@ int main(int argc, char* argv[]) {
 	login();
 	while (true) {
 		response(draw_response, write_status);
-		request();
+
+		if (cnt==curr*4){
+			log("Square finished.");
+			curr++; cnt=0;
+		}
+		request([](Move::Builder& move){
+			move.setUnit(0);
+			switch(cnt/curr) {
+				case 0: move.setDirection(Direction::RIGHT);	break;
+				case 1: move.setDirection(Direction::DOWN);	break;
+				case 2: move.setDirection(Direction::LEFT);	break;
+				case 3: move.setDirection(Direction::UP);	break;
+			}
+		});
+		cnt++;
 	}
 
 	return 0;
