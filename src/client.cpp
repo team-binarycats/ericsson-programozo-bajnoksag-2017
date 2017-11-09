@@ -3,6 +3,7 @@
  */
 
 #include "interface.h"
+#include "engine.h"
 
 #include "Command.capnp.h"
 #include "Response.capnp.h"
@@ -73,6 +74,7 @@ int main(int argc, char* argv[]) {
 	while (true) {
 		response([](const Response::Reader& response){
 			draw_response(response);
+			save_response(response);
 		}, write_status);
 
 		if (cnt==curr*4){
