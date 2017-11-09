@@ -122,6 +122,16 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 			draw_cell(cell, i, j, false);
 		}
 	}
+	for (auto enemy : lastResponse.getEnemies()) {
+		auto x = enemy.getPosition().getX();
+		auto y = enemy.getPosition().getY();
+		draw_cell(response.getCells()[x][y], x, y, false);
+	}
+	for (auto unit : lastResponse.getUnits()) {
+		auto x = unit.getPosition().getX();
+		auto y = unit.getPosition().getY();
+		draw_cell(response.getCells()[x][y], x, y, false);
+	}
 	os<<csi<<"u";
 
 	// Enemies
