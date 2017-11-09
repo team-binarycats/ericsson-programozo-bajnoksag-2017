@@ -7,5 +7,5 @@ Rendelkezésre áll: 1000 tick
 Négyzetek esetén:
 	-> a*3+1 tick
 	-> a^2 cell
-	Képlet: a*3+1 >= a^2/6   ( http://fos.hu/g5w :) )
-		Azaz 0 <= a <= 18
+	Képlet: a*3+1 <= a^2/6   ( http://fos.hu/g61 :) )
+		Azaz a >= 19
