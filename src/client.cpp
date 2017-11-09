@@ -71,7 +71,9 @@ int main(int argc, char* argv[]) {
 
 	login();
 	while (true) {
-		response(draw_response, write_status);
+		response([](const Response::Reader& response){
+			draw_response(response);
+		}, write_status);
 
 		if (cnt==curr*4){
 			log("Square finished.");
