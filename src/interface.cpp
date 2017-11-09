@@ -85,16 +85,20 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 			int J=j+2;
 			Cell::Reader cell = response.getCells()[i][j];
 			os<<csi<<"s";
-			if (cell.getOwner()!=1)
-				os<<sgr<<7<<sgr_end;
-			if (cell.getAttack().isCan())
-				if (cell.getAttack().getCan())
-					os<<sgr<<32<<sgr_end;
-				else // can't attack
-					os<<sgr<<31<<sgr_end;
-			if (cell.getAttack().isUnit())
-				os<<sgr<<1<<sgr_end;
+			if (cell.getOwner()!=1) {
+				os<<sgr<<7<<sgr_end; sgred=true;
+			}
+			if (cell.getAttack().isCan()) {
+				if (cell.getAttack().getCan()) {
+					os<<sgr<<32<<sgr_end; sgred=true;
+				} else { // can't attack
+					os<<sgr<<31<<sgr_end; sgred=true;
+				}
+			}
+			if (cell.getAttack().isUnit()) {
+				os<<sgr<<1<<sgr_end; sgred=true;
 				// TODO indicate unit ID
+			}
 			os<<csi<<I<<";"<<J<<"H"<<cell_mark;
 			os<<sgr<<0<<sgr_end<<csi<<"u";
 		}
