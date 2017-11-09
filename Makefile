@@ -88,7 +88,7 @@ clean: clean-out
 clean-out:
 	-rm -f $(OUTDIR)/*
 
-PROGRAM = squareer
+PROGRAM = sequential
 PROGRAM_NAME = $(PROGRAM)
 PROGRAMS = $(notdir $(filter-out $(basename $(wildcard $(INCDIR)/*.h)),$(basename $(wildcard $(SRCDIR)/*.cpp)))) #Files which have headers are not programs
 .PHONY: programs
