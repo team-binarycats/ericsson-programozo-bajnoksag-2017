@@ -85,7 +85,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 			int J=j+2;
 			Cell::Reader cell = response.getCells()[i][j];
 			os<<csi<<"s";
-			if (cell.getOwner()!=0)
+			if (cell.getOwner()!=1)
 				os<<sgr<<7<<sgr_end;
 			if (cell.getAttack().isCan())
 				if (cell.getAttack().getCan())
