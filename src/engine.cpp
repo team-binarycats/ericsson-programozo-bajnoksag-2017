@@ -2,10 +2,12 @@
 
 #include <exception>
 
-using namespace ericsson2017::protocol;
+namespace ericsson2017 { namespace protocol {
 
-Response::Reader ::ericsson2017::protocol::lastResponse;
+Response::Reader lastResponse;
 
-void ::ericsson2017::protocol::save_response(const Response::Reader& response) {
+void save_response(const Response::Reader& response) {
 	lastResponse = response;
 }
+
+}} // Namespaces
