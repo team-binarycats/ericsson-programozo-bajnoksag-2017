@@ -79,12 +79,13 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	os<<csi<<"u";
 
 	// Cells
+	os<<csi<<"s";
 	for (int i=0; i<80; i++) {
 		int I=i+2;
 		for (int j=0; j<100; j++) {
+			bool sgred=false;
 			int J=j+2;
 			Cell::Reader cell = response.getCells()[i][j];
-			os<<csi<<"s";
 			if (cell.getOwner()!=1) {
 				os<<sgr<<7<<sgr_end; sgred=true;
 			}
@@ -100,9 +101,10 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 				// TODO indicate unit ID
 			}
 			os<<csi<<I<<";"<<J<<"H"<<cell_mark;
-			os<<sgr<<0<<sgr_end<<csi<<"u";
+			if (sgred) os<<sgr<<0<<sgr_end;
 		}
 	}
+	os<<csi<<"u";
 
 	// Enemies
 	for (auto enemy : response.getEnemies()) {
