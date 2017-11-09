@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 
 		if (cnt==curr*4){
 			log("Square finished.");
-			curr++;
+			curr++; cnt=0;
 		}
 		request([](Move::Builder& move){
 			move.setUnit(0);
