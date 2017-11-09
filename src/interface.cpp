@@ -1,4 +1,5 @@
 #include "interface.h"
+#include "engine.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -52,7 +53,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 
 	// Print border
 	os<<csi<<"s";
-	os<<csi<<"85;102H"<<csi<<"1J"; //ED
+	//os<<csi<<"85;102H"<<csi<<"1J"; //ED
 	for (int i=2; i<=83; i++) {
 		os<<csi<<i<<";"<<"1H"<<border_v; // Left
 		os<<csi<<i<<";"<<"102H"<<border_v; // Right
@@ -86,6 +87,17 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 			bool sgred=false;
 			int J=j+2;
 			Cell::Reader cell = response.getCells()[i][j];
+			{
+				Cell::Reader ocell = response.getCells()[i][j];
+				if (
+					(cell.getOwner()==ocell.getOwner())
+					&& (cell.getAttack().which()==ocell.getAttack().which())
+					&& (	  cell.getAttack().isCan() ? (cell.getAttack().getCan()==ocell.getAttack().getCan())
+						: cell.getAttack().isUnit() ? (cell.getAttack().isUnit()==ocell.getAttack().getUnit())
+						: true
+					)
+				) continue;
+			}
 			if (cell.getOwner()!=1) {
 				os<<sgr<<7<<sgr_end; sgred=true;
 			}
