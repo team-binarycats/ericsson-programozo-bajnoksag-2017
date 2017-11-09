@@ -51,6 +51,30 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	const char* unit_u = "⇧";
 	const char* unit_d = "⇩";
 
+	auto draw_cell = [&](const Cell::Reader& cell, int i, int j, bool restore_cursor=true) {
+		if (restore_cursor) os<<csi<<"s";
+		int I=i+2;
+		int J=j+2;
+		bool sgred=false;
+		if (cell.getOwner()!=1) {
+			os<<sgr<<7<<sgr_end; sgred=true;
+		}
+		if (cell.getAttack().isCan()) {
+			if (cell.getAttack().getCan()) {
+				os<<sgr<<32<<sgr_end; sgred=true;
+			} else { // can't attack
+				os<<sgr<<31<<sgr_end; sgred=true;
+			}
+		}
+		if (cell.getAttack().isUnit()) {
+			os<<sgr<<1<<sgr_end; sgred=true;
+			// TODO indicate unit ID
+		}
+		os<<csi<<I<<";"<<J<<"H"<<cell_mark;
+		if (sgred) os<<sgr<<0<<sgr_end;
+		if (restore_cursor) os<<csi<<"u";
+	};
+
 	// Print border
 	os<<csi<<"s";
 	//os<<csi<<"85;102H"<<csi<<"1J"; //ED
@@ -82,10 +106,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	// Cells
 	os<<csi<<"s";
 	for (int i=0; i<80; i++) {
-		int I=i+2;
 		for (int j=0; j<100; j++) {
-			bool sgred=false;
-			int J=j+2;
 			Cell::Reader cell = response.getCells()[i][j];
 			{
 				Cell::Reader ocell = response.getCells()[i][j];
@@ -98,22 +119,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 					)
 				) continue;
 			}
-			if (cell.getOwner()!=1) {
-				os<<sgr<<7<<sgr_end; sgred=true;
-			}
-			if (cell.getAttack().isCan()) {
-				if (cell.getAttack().getCan()) {
-					os<<sgr<<32<<sgr_end; sgred=true;
-				} else { // can't attack
-					os<<sgr<<31<<sgr_end; sgred=true;
-				}
-			}
-			if (cell.getAttack().isUnit()) {
-				os<<sgr<<1<<sgr_end; sgred=true;
-				// TODO indicate unit ID
-			}
-			os<<csi<<I<<";"<<J<<"H"<<cell_mark;
-			if (sgred) os<<sgr<<0<<sgr_end;
+			draw_cell(cell, i, j, false);
 		}
 	}
 	os<<csi<<"u";
