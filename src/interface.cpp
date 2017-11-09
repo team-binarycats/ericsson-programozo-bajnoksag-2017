@@ -108,7 +108,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	for (int i=0; i<80; i++) {
 		for (int j=0; j<100; j++) {
 			Cell::Reader cell = response.getCells()[i][j];
-			{
+			/* {
 				Cell::Reader ocell = response.getCells()[i][j];
 				if (
 					(cell.getOwner()==ocell.getOwner())
@@ -118,7 +118,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 						: true
 					)
 				) continue;
-			}
+			} */ // Caching isn't working properly yet :(
 			draw_cell(cell, i, j, false);
 		}
 	}
