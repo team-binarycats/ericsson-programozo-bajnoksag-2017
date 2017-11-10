@@ -29,20 +29,24 @@ int main(int argc, char* argv[]) {
 		login.setHash(hash);
 		log("Sending login information...");
 	});
-	while (true) {
-		response([&currentResponse](const Response::Reader& response){
-			draw_response(response);
-			currentResponse=response;
-		}, write_status);
+	std::function<void()> fetch_and_proc_response;
+	auto response_handler = [&fetch_and_proc_response, &lastLevel, &lastHealth](const Response::Reader& currentResponse) {
 		if ( currentResponse.getInfo().getLevel() != lastLevel ) {
-			log((std::string)"Setting up for level "+std::to_string(currentResponse.getInfo().getLevel()));
 			setup(currentResponse.getInfo().getLevel());
 			lastLevel = currentResponse.getInfo().getLevel();
 		}
 		request([currentResponse](Move::Builder& move){
 			loop(currentResponse, move);
 		});
-	}
+		fetch_and_proc_response();
+	};
+	fetch_and_proc_response = [&response_handler](){
+		response([&response_handler](const Response::Reader& response){
+			draw_response(response);
+			response_handler(response);
+		}, write_status);
+	};
 
+	fetch_and_proc_response();
 	return 0;
 }
