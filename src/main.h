@@ -11,7 +11,9 @@ extern char* hash;
 enum class SetupReason {
 	INIT,
 	LEVELUP,
-	LEVELDOWN
+	LEVELDOWN,
+	HEAL,
+	DEATH
 };
 
 //int main(char* argc, char* argv); // Defined...

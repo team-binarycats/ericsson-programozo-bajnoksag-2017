@@ -12,6 +12,7 @@ char* username;
 int main(int argc, char* argv[]) {
 	Response::Reader currentResponse;
 	int lastLevel = -1;
+	int lastHealth = 3;
 
 	if (argc != 3) {
 		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
@@ -43,6 +44,16 @@ int main(int argc, char* argv[]) {
 				setup(currentResponse.getInfo().getLevel(), SetupReason::LEVELUP);
 			}
 			lastLevel = currentResponse.getInfo().getLevel();
+		} else if ( ( currentResponse.getUnits().size() == 1 ) && ( currentResponse.getUnits()[0].getHealth() != lastHealth ) ) {
+			log("Health differs, This should mean something!");
+			if ( currentResponse.getUnits()[0].getHealth() < lastHealth ) {
+				log("Unit died :(");
+				setup(currentResponse.getInfo().getLevel(), SetupReason::DEATH);
+			} else { // health < lastHealth
+				log("Unit healed. What a suprise!");
+				setup(currentResponse.getInfo().getLevel(), SetupReason::HEAL);
+			}
+			lastHealth = currentResponse.getUnits()[0].getHealth();
 		}
 		request([currentResponse](Move::Builder& move){
 			loop(currentResponse, move);
