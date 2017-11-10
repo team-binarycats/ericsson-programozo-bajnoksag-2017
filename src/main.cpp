@@ -32,7 +32,16 @@ int main(int argc, char* argv[]) {
 	std::function<void()> fetch_and_proc_response;
 	auto response_handler = [&fetch_and_proc_response, &lastLevel, &lastHealth](const Response::Reader& currentResponse) {
 		if ( currentResponse.getInfo().getLevel() != lastLevel ) {
-			setup(currentResponse.getInfo().getLevel());
+			if ( lastLevel == -1 ) {
+				log((std::string)"Setting up for level "+std::to_string(currentResponse.getInfo().getLevel()));
+				setup(currentResponse.getInfo().getLevel(), SetupReason::INIT);
+			} else if ( currentResponse.getInfo().getLevel() < lastLevel ) {
+				log("Lost that level :(");
+				setup(currentResponse.getInfo().getLevel(), SetupReason::LEVELDOWN);
+			} else { // level > lastLevel
+				log("Level up, good job!");
+				setup(currentResponse.getInfo().getLevel(), SetupReason::LEVELUP);
+			}
 			lastLevel = currentResponse.getInfo().getLevel();
 		}
 		request([currentResponse](Move::Builder& move){

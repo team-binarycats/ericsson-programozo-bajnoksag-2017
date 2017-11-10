@@ -21,7 +21,7 @@ Direction direction; // Everybody moves while draws squares...
 size_t square_num; // How many squares did we do in a column?
 
 _SETUP {
-	stage = initial;
+	stage = (reason==SetupReason::INIT) ? initial : begin;
 	cnt = 0;
 	direction = Direction::DOWN;
 	square_num = 0;
