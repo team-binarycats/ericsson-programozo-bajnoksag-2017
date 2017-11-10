@@ -105,6 +105,19 @@ _MAIN_LOOP {
 				cnt = 0;
 				stage = prep;
 			}
+
+			if ( status.square_num+1 == max_square_num ) {
+				log("max_square_num reached, making an enconomic U-turn");
+				status.square_num = 0;
+				move.setDirection(Direction::RIGHT); cnt = (-cnt) + 1 + 1;
+				switch (status.direction) {
+					case Direction::UP:	status.direction = Direction::DOWN;	break;
+					case Direction::DOWN:	status.direction = Direction::UP;	break;
+				}
+				stage = begin;
+				status.saved = false;
+			}
+
 			break;
 
 		case prep:
