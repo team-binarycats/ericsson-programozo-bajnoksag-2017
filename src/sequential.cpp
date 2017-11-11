@@ -106,6 +106,17 @@ _MAIN_LOOP {
 				status.cnt = 0;
 				stage = end;
 			}
+			if ( response.getUnits()[0].getPosition().getX() == (status.direction==Direction::DOWN?79:0) ) {
+				log("Error: We are near hitting a wall. Making an emergency (and economic) U-turn");
+				status.square_num = 0;
+				move.setDirection(Direction::RIGHT); status.cnt = 1;
+				switch (status.direction) {
+					case Direction::UP:	status.direction = Direction::DOWN;	break;
+					case Direction::DOWN:	status.direction = Direction::UP;	break;
+				}
+				stage = begin;
+				status.saved = false;
+			}
 			break;
 
 		case end:
