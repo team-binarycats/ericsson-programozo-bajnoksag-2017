@@ -5,11 +5,12 @@
 
 namespace ericsson2017 { namespace protocol {
 
-void login(std::function<void(Command::Login::Builder)> login_handler) {
+void login(std::function<void(Command::Commands::Login::Builder)> login_handler) {
 	::capnp::MallocMessageBuilder message;
 	Command::Builder command = message.initRoot<Command>();
+	Command::Commands::Builder commands = command.initCommands();
 
-	if (login_handler != nullptr) login_handler(command.initLogin());
+	if (login_handler != nullptr) login_handler(commands.initLogin());
 
 	::capnp::writeMessageToFd(send_fd, message);
 }
@@ -25,9 +26,10 @@ void response(std::function<void(const Response::Reader&)> response_handler, std
 void request(std::function<void(Move::Builder&)> move_handler) {
 	::capnp::MallocMessageBuilder message;
 	Command::Builder command = message.initRoot<Command>();
+	Command::Commands::Builder commands = command.initCommands();
 
 	if (move_handler != nullptr) {
-		auto moves = command.initMoves(1);
+		auto moves = commands.initMoves(1);
 		auto move = moves[0];
 		move_handler(move);
 	}

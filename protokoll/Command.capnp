@@ -13,7 +13,7 @@ struct Move {
 }
 
 struct Command {
-    union {
+    commands : union {
         moves @0 : List(Move);
         login : group {
             team @1 : Text;

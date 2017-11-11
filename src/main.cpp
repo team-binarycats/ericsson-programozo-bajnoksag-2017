@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 		log((std::string)"Using hash "+(std::string)hash);
 	}
 
-	login([](Command::Login::Builder login){
+	login([](Command::Commands::Login::Builder login){
 		login.setTeam(username);
 		login.setHash(hash);
 		log("Sending login information...");
