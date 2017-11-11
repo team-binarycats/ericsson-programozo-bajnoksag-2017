@@ -2,7 +2,7 @@
 #include "interface.h"
 #include "messaging.h"
 
-#include <iostream> // For usage message
+#include <string> // For usage message
 
 using namespace ericsson2017::protocol;
 
@@ -15,21 +15,22 @@ int main(int argc, char* argv[]) {
 	int lastHealth = 3;
 
 	if (argc != 3) {
-		std::cerr<<"Usage: "<<argv[0]<<" username hash"<<std::endl;
-		return 1;
+		log("Skipping login");
+		log((std::string)"Basic usage: "+(std::string)argv[0]+(std::string)" <username> <hash>");
 	} else {
 		username = argv[1];
 		log((std::string)"Using username "+(std::string)username);
 
 		hash = argv[2];
 		log((std::string)"Using hash "+(std::string)hash);
+
+		login([](Command::Commands::Login::Builder login){
+			login.setTeam(username);
+			login.setHash(hash);
+			log("Sending login information...");
+		});
 	}
 
-	login([](Command::Commands::Login::Builder login){
-		login.setTeam(username);
-		login.setHash(hash);
-		log("Sending login information...");
-	});
 	std::function<void()> fetch_and_proc_response;
 	auto response_handler = [&fetch_and_proc_response, &lastLevel, &lastHealth](const Response::Reader& currentResponse) {
 		if ( currentResponse.getInfo().getLevel() != lastLevel ) {
