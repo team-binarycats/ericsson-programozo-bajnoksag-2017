@@ -18,17 +18,17 @@ enum Stage {
 	prep,	// Prepare for next square: Move to starting position
 	turn	// Make a U-turn
 } stage;
-size_t cnt; // Steps are taken in the stage
 struct SquareStatus {
 	int32_t x, y;
 	Direction direction; // Everybody moves while draws squares...
 	size_t square_num; // How many squares did we do in a column?
 	bool saved;
+	size_t cnt; // Steps are taken in the stage
 };
 SquareStatus status, lastStatus;
 
 _SETUP {
-	cnt = 0;
+	status.cnt = 0;
 	status.direction = Direction::DOWN;
 	status.square_num = 0;
 	status.saved = false;
@@ -84,32 +84,32 @@ _MAIN_LOOP {
 				status.saved = true;
 			}
 			move.setDirection(Direction::RIGHT);
-			if ( ++cnt == a ) {
-				cnt = 0;
+			if ( ++status.cnt == a ) {
+				status.cnt = 0;
 				stage = cont;
 			}
 			break;
 
 		case cont:
 			move.setDirection(status.direction);
-			if ( ++cnt == a ) {
-				cnt = 0;
+			if ( ++status.cnt == a ) {
+				status.cnt = 0;
 				stage = end;
 			}
 			break;
 
 		case end:
 			move.setDirection(Direction::LEFT);
-			if ( ++cnt == a ) {
+			if ( ++status.cnt == a ) {
 				log("Square finished");
-				cnt = 0;
+				status.cnt = 0;
 				stage = prep;
 			}
 
 			if ( status.square_num+1 == max_square_num ) {
 				log("max_square_num reached, making an enconomic U-turn");
 				status.square_num = 0;
-				move.setDirection(Direction::RIGHT); cnt = (-cnt) + 1 + 1;
+				move.setDirection(Direction::RIGHT); status.cnt = (-status.cnt) + 1 + 1;
 				switch (status.direction) {
 					case Direction::UP:	status.direction = Direction::DOWN;	break;
 					case Direction::DOWN:	status.direction = Direction::UP;	break;
@@ -125,7 +125,7 @@ _MAIN_LOOP {
 			if ( ++status.square_num == max_square_num ) {
 				log("max_square_num reached, making a U-turn");
 				status.square_num = 0;
-				move.setDirection(Direction::RIGHT); cnt++;
+				move.setDirection(Direction::RIGHT); status.cnt++;
 				stage = turn;
 			} else {
 				move.setDirection(status.direction);
@@ -135,14 +135,14 @@ _MAIN_LOOP {
 
 		case turn:
 			move.setDirection(Direction::RIGHT);
-			if ( ++cnt == a ) {
+			if ( ++status.cnt == a ) {
 				switch (status.direction) {
 					case Direction::UP:	status.direction = Direction::DOWN;	break;
 					case Direction::DOWN:	status.direction = Direction::UP;	break;
 				}
 				log("OK, turn succeeded, begining the next square");
-				cnt = 0;
-				move.setDirection(Direction::RIGHT); cnt++;
+				status.cnt = 0;
+				move.setDirection(Direction::RIGHT); status.cnt++;
 				stage = begin;
 			}
 			break;
