@@ -98,7 +98,7 @@ programs:
 		$(MAKE) $$program || exit $$?; \
 	done
 
-LIB = capnp kj
+LIB = capnp kj ncursesw
 LIBRARIES = $(LIB)
 
 COMDIR = $(SRCDIR)

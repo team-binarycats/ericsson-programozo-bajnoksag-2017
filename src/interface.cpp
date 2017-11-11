@@ -6,93 +6,117 @@
 #include <exception>
 #include <string>
 #include <capnp/blob.h>
-#include <sstream>
+#include <ncurses.h>
+#include <signal.h>
 
 using namespace ericsson2017::protocol;
 
+enum : short {
+	COLORPAIR_NORMAL,
+	COLORPAIR_CELL_CANATTACK,
+	COLORPAIR_CELL_CANTATTACK,
+	COLORPAIR_UNIT_HEALTH_GOOD,
+	COLORPAIR_UNIT_HEALTH_WEAK,
+	COLORPAIR_UNIT_HEALTH_CRITICAL,
+	COLORPAIR_UNIT_HEALTH_DEAD,
+};
+
+static bool inited = false;
+
+void ::ericsson2017::protocol::initiface() {
+	if (!inited) {
+		initscr();
+		start_color();
+		curs_set(0); // invisible
+		noecho();
+		cbreak();
+		keypad(stdscr, TRUE);
+		nodelay(stdscr, TRUE);
+		init_pair(COLORPAIR_NORMAL, COLOR_BLACK, COLOR_WHITE);
+		init_pair(COLORPAIR_CELL_CANATTACK, COLOR_BLACK, COLOR_GREEN);
+		init_pair(COLORPAIR_CELL_CANTATTACK, COLOR_BLACK, COLOR_RED);
+		init_pair(COLORPAIR_UNIT_HEALTH_GOOD, COLOR_BLACK, COLOR_WHITE);
+		init_pair(COLORPAIR_UNIT_HEALTH_WEAK, COLOR_BLACK, COLOR_CYAN);
+		init_pair(COLORPAIR_UNIT_HEALTH_CRITICAL, COLOR_BLACK, COLOR_MAGENTA);
+		init_pair(COLORPAIR_UNIT_HEALTH_DEAD, COLOR_BLACK, COLOR_BLUE);
+		{
+			int row, col;
+			getmaxyx(stdscr, row, col);
+			if ( row<80 || col < 200 ) {
+				addstr("Your terminal is too small (at least 80x200 needed)");
+				exit(1);
+			}
+		}
+		{
+			auto signal_handler = [](int sig){
+				endiface();
+				SIG_DFL(sig);
+			};
+			signal(SIGABRT, signal_handler);
+			signal(SIGFPE, signal_handler);
+			signal(SIGILL, signal_handler);
+			signal(SIGINT, signal_handler);
+			signal(SIGSEGV, signal_handler);
+			//signal(SIGTERM, signal_handler);
+		}
+		inited = true;
+	}
+}
+
+void ::ericsson2017::protocol::endiface() {
+	if (inited) {
+		endwin();
+		inited = false;
+	}
+}
+
 void ::ericsson2017::protocol::log(std::string message) {
-	std::cout<<"* "<<message<<std::endl;
+	std::cerr<<"* "<<message<<std::endl;
 }
 
 void ::ericsson2017::protocol::write_status(const ::capnp::Text::Reader& status) {
-	std::cout<<"] ";
-	std::cout<<(std::string)status<<std::endl;
+	std::cerr<<"] ";
+	std::cerr<<(std::string)status<<std::endl;
 }
 
 void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
-	std::stringstream os;
-	/* Screen layout:
-	 *     2     101
-	 *    +--------+
-	 *  2 |        |
-	 *    |        |
-	 *    |        |
-	 * 81 |        |
-	 *    +--------+
-	 * 83 | STATUS |
-	 *    +--------+
-	 */
+	if (!inited) initiface();
 
-	const char* csi = "\033[";
-	const char* sgr = csi;
-	const char* sgr_end = "m";
+	typedef char schar[3];
+	const char* status_separator = "\t";
+	const schar cell_mark = "[]";
+	const schar enemy_ul =  "UL";
+	const schar enemy_ur =  "UR";
+	const schar enemy_dl =  "DL";
+	const schar enemy_dr =  "DR";
+	const schar unit_l =    "< ";
+	const schar unit_r =    " >";
+	const schar unit_u =    "/\\";
+	const schar unit_d =    "\\/";
 
-	const char border_h = '-';
-	const char border_v = '|';
-	const char border_corner = '+';
-	const char status_separator = '\t';
-	const char cell_mark = '.';
-	const char* enemy_ul = "↖";
-	const char* enemy_ur = "↗";
-	const char* enemy_dl = "↙";
-	const char* enemy_dr = "↘";
-	const char* unit_l = "⇦";
-	const char* unit_r = "⇨";
-	const char* unit_u = "⇧";
-	const char* unit_d = "⇩";
 
-	auto draw_cell = [&](const Cell::Reader& cell, int i, int j, bool restore_cursor=true) {
-		if (restore_cursor) os<<csi<<"s";
-		int I=i+2;
-		int J=j+2;
-		bool sgred=false;
+	auto draw_cell = [&](const Cell::Reader& cell, int x, int y) {
 		if (cell.getOwner()!=1) {
-			os<<sgr<<7<<sgr_end; sgred=true;
+			attron(A_REVERSE);
 		}
 		if (cell.getAttack().isCan()) {
 			if (cell.getAttack().getCan()) {
-				os<<sgr<<32<<sgr_end; sgred=true;
+				attron(COLOR_PAIR(COLORPAIR_CELL_CANATTACK));
 			} else { // can't attack
-				os<<sgr<<31<<sgr_end; sgred=true;
+				attron(COLOR_PAIR(COLORPAIR_CELL_CANTATTACK));
 			}
 		}
 		if (cell.getAttack().isUnit()) {
-			os<<sgr<<1<<sgr_end; sgred=true;
+			attron(A_BOLD);
 			// TODO indicate unit ID
 		}
-		os<<csi<<I<<";"<<J<<"H"<<cell_mark;
-		if (sgred) os<<sgr<<0<<sgr_end;
-		if (restore_cursor) os<<csi<<"u";
+		mvaddstr(x, 2*y, cell_mark);
+
+		standend();
+		color_set(COLORPAIR_NORMAL, NULL);
 	};
 
-	// Print border
-	os<<csi<<"s";
-	//os<<csi<<"85;102H"<<csi<<"1J"; //ED
-	for (int i=2; i<=83; i++) {
-		os<<csi<<i<<";"<<"1H"<<border_v; // Left
-		os<<csi<<i<<";"<<"102H"<<border_v; // Right
-	}
-	os<<csi<<"1;2H"; for(int i=2;i<=101;i++)os<<border_h; // Upper
-	os<<csi<<"82;2H"; for(int i=2;i<=101;i++)os<<border_h; // Unter
-	os<<csi<<"84;2H"; for(int i=2;i<=101;i++)os<<border_h; // Status
-	os<<csi<<"1;1H"<<border_corner; // Upper left
-	os<<csi<<"1;102H"<<border_corner; // Upper right
-	os<<csi<<"82;1H"<<border_corner; // Unter left
-	os<<csi<<"82;102H"<<border_corner; // Unter right
-	os<<csi<<"84;1H"<<border_corner; // Status left
-	os<<csi<<"84;102H"<<border_corner; // Status right
-	os<<csi<<"u";
-
+	/*
 	// Info field
 	Response::Info::Reader info = response.getInfo();
 	os<<csi<<"s";
@@ -102,9 +126,9 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	os<<"Tick: "<<info.getTick()<<status_separator;
 	os<<"Unit0 position: "<<response.getUnits()[0].getPosition().getX()<<";"<<response.getUnits()[0].getPosition().getY()<<status_separator;
 	os<<csi<<"u";
+	*/
 
 	// Cells
-	os<<csi<<"s";
 	for (int i=0; i<80; i++) {
 		for (int j=0; j<100; j++) {
 			Cell::Reader cell = response.getCells()[i][j];
@@ -119,57 +143,53 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 					)
 				) continue;
 			} */ // Caching isn't working properly yet :(
-			draw_cell(cell, i, j, false);
+			draw_cell(cell, i, j);
 		}
 	}
 	for (auto enemy : lastResponse.getEnemies()) {
 		auto x = enemy.getPosition().getX();
 		auto y = enemy.getPosition().getY();
-		draw_cell(response.getCells()[x][y], x, y, false);
+		draw_cell(response.getCells()[x][y], x, y);
 	}
 	for (auto unit : lastResponse.getUnits()) {
 		auto x = unit.getPosition().getX();
 		auto y = unit.getPosition().getY();
-		draw_cell(response.getCells()[x][y], x, y, false);
+		draw_cell(response.getCells()[x][y], x, y);
 	}
-	os<<csi<<"u";
 
 	// Enemies
 	for (auto enemy : response.getEnemies()) {
-		os<<csi<<"s";
-		os<<csi<<enemy.getPosition().getX()+2<<";"<<enemy.getPosition().getY()+2<<"H";
+		auto x = enemy.getPosition().getX(), y = enemy.getPosition().getY();
 		if (enemy.getDirection().getVertical() == Direction::UP)
 			if (enemy.getDirection().getHorizontal() == Direction::LEFT) // Up-left
-				os<<enemy_ul;
+				mvaddstr(x, 2*y, enemy_ul);
 			else // Up-right
-				os<<enemy_ur;
+				mvaddstr(x, 2*y, enemy_ur);
 		else
 			if (enemy.getDirection().getHorizontal() == Direction::LEFT) // Down-left
-				os<<enemy_dl;
+				mvaddstr(x, 2*y, enemy_dl);
 			else // Down-right
-				os<<enemy_dr;
-		os<<csi<<"u";
+				mvaddstr(x, 2*y, enemy_dr);
 	}
 
 	for (auto unit : response.getUnits()) {
-		os<<csi<<"s";
-		os<<csi<<unit.getPosition().getX()+2<<";"<<unit.getPosition().getY()+2<<"H";
+		auto x = unit.getPosition().getX(), y = unit.getPosition().getY();
 		switch (unit.getHealth()) {
-			case 3: os<<sgr<<37<<sgr_end; break;
-			case 2: os<<sgr<<36<<sgr_end; break;
-			case 1: os<<sgr<<35<<sgr_end; break;
-			case 0: os<<sgr<<34<<sgr_end; break;
+			case 3: attron( COLOR_PAIR(COLORPAIR_UNIT_HEALTH_GOOD) ); break;
+			case 2: attron( COLOR_PAIR(COLORPAIR_UNIT_HEALTH_WEAK) ); break;
+			case 1: attron( COLOR_PAIR(COLORPAIR_UNIT_HEALTH_CRITICAL) ); break;
+			case 0: attron( COLOR_PAIR(COLORPAIR_UNIT_HEALTH_DEAD) ); break;
 			default: throw std::runtime_error((std::string)"Invalid health: "+std::to_string(unit.getHealth()));
 		}
 		//TODO indicate unit killer level
 		switch (unit.getDirection()) {
-			case Direction::LEFT:	os<<unit_l; break;
-			case Direction::RIGHT:	os<<unit_r; break;
-			case Direction::UP:	os<<unit_u; break;
-			case Direction::DOWN:	os<<unit_d; break;
+			case Direction::LEFT:	mvaddstr(x, 2*y, unit_l); break;
+			case Direction::RIGHT:	mvaddstr(x, 2*y, unit_r); break;
+			case Direction::UP:	mvaddstr(x, 2*y, unit_u); break;
+			case Direction::DOWN:	mvaddstr(x, 2*y, unit_d); break;
 		}
-		os<<csi<<"u";
+		color_set(COLORPAIR_NORMAL, NULL);
 	}
 
-	std::cerr<<os.str();
+	refresh();
 }
