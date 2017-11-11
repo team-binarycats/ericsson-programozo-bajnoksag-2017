@@ -28,6 +28,22 @@ struct SquareStatus {
 };
 SquareStatus status, lastStatus;
 
+Direction opposite (Direction direction) {
+	switch (direction) {
+		case Direction::UP:
+			return Direction::DOWN;
+
+		case Direction::LEFT:
+			return Direction::RIGHT;
+
+		case Direction::DOWN:
+			return Direction::UP;
+
+		case Direction::RIGHT:
+			return Direction::LEFT;
+	}
+}
+
 _SETUP {
 	status.cnt = 0;
 	status.direction = Direction::DOWN;
@@ -110,10 +126,7 @@ _MAIN_LOOP {
 				log("Error: We are near hitting a wall. Making an emergency (and economic) U-turn");
 				status.square_num = 0;
 				move.setDirection(Direction::RIGHT); status.cnt = 1;
-				switch (status.direction) {
-					case Direction::UP:	status.direction = Direction::DOWN;	break;
-					case Direction::DOWN:	status.direction = Direction::UP;	break;
-				}
+				status.direction = opposite(status.direction);
 				stage = begin;
 				status.saved = false;
 			}
@@ -131,10 +144,7 @@ _MAIN_LOOP {
 				log("max_square_num reached, making an enconomic U-turn");
 				status.square_num = 0;
 				move.setDirection(Direction::RIGHT); status.cnt = (-status.cnt) + 1 + 1;
-				switch (status.direction) {
-					case Direction::UP:	status.direction = Direction::DOWN;	break;
-					case Direction::DOWN:	status.direction = Direction::UP;	break;
-				}
+				status.direction = opposite(status.direction);
 				stage = begin;
 				status.saved = false;
 			}
@@ -157,10 +167,7 @@ _MAIN_LOOP {
 		case turn:
 			move.setDirection(Direction::RIGHT);
 			if ( ++status.cnt == a ) {
-				switch (status.direction) {
-					case Direction::UP:	status.direction = Direction::DOWN;	break;
-					case Direction::DOWN:	status.direction = Direction::UP;	break;
-				}
+				status.direction = opposite(status.direction);
 				log("OK, turn succeeded, begining the next square");
 				status.cnt = 0;
 				move.setDirection(Direction::RIGHT); status.cnt++;
