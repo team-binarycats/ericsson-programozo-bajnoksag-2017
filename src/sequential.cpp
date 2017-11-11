@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <ncurses.h>
 
 using namespace ericsson2017::protocol;
 
@@ -45,6 +46,15 @@ _SETUP {
 }
 
 _MAIN_LOOP {
+	switch (getch()) {
+		case KEY_HOME:
+			exit(0);
+			break;
+
+		case KEY_END:
+			std::system("bin/keyboard");
+			break;
+	}
 	move.setUnit(0);
 	switch (stage) {
 		case initial:
