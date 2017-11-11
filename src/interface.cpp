@@ -21,7 +21,9 @@ enum : short {
 	COLORPAIR_UNIT_HEALTH_DEAD,
 };
 
-static bool inited = false;
+bool inited = false;
+
+WINDOW *status_window;
 
 void ::ericsson2017::protocol::initiface() {
 	if (!inited) {
@@ -46,6 +48,7 @@ void ::ericsson2017::protocol::initiface() {
 				addstr("Your terminal is too small (at least 80x200 needed)");
 				exit(1);
 			}
+			status_window = newwin(row-80, 200, 80, 0);
 		}
 		{
 			auto signal_handler = [](int sig){
@@ -83,7 +86,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 	if (!inited) initiface();
 
 	typedef char schar[3];
-	const char* status_separator = "\t";
+	const char status_separator = '\t';
 	const schar cell_mark = "[]";
 	const schar enemy_ul =  "UL";
 	const schar enemy_ur =  "UR";
@@ -116,17 +119,23 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 		color_set(COLORPAIR_NORMAL, NULL);
 	};
 
-	/*
 	// Info field
-	Response::Info::Reader info = response.getInfo();
-	os<<csi<<"s";
-	os<<csi<<"83;3H";
-	os<<"Owns: "<<info.getOwns()<<status_separator;
-	os<<"Level: "<<info.getLevel()<<status_separator;
-	os<<"Tick: "<<info.getTick()<<status_separator;
-	os<<"Unit0 position: "<<response.getUnits()[0].getPosition().getX()<<";"<<response.getUnits()[0].getPosition().getY()<<status_separator;
-	os<<csi<<"u";
-	*/
+	if ( status_window != nullptr ) {
+		Response::Info::Reader info = response.getInfo();
+		werase(status_window);
+		int w, h;
+		getmaxyx(status_window, h, w);
+
+		wmove(status_window, h/2, h>1 ? (h-1)/2 : 0); wattrset(status_window, A_BOLD);
+		wprintw(status_window, "Owns: %d", info.getOwns()); waddch(status_window, status_separator);
+		wprintw(status_window, "Level: %d", info.getLevel()); waddch(status_window, status_separator);
+		wprintw(status_window, "Tick: %d", info.getTick()); waddch(status_window, status_separator);
+		wprintw(status_window, "Unit0 position: (%d,%d)", response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()); waddch(status_window, status_separator);
+
+		wmove(status_window, h-1, h>1 ? (h-1)/2-1 : 0); wattrset(status_window, A_NORMAL);
+		wprintw(status_window, "Program: '%s' (compiled on %s %s)", __FILE__, __DATE__, __TIME__);
+		wrefresh(status_window);
+	}
 
 	// Cells
 	for (int i=0; i<80; i++) {
