@@ -131,6 +131,10 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 		wprintw(status_window, "Level: %d", info.getLevel()); waddch(status_window, status_separator);
 		wprintw(status_window, "Tick: %d", info.getTick()); waddch(status_window, status_separator);
 		wprintw(status_window, "Unit0 position: (%d,%d)", response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()); waddch(status_window, status_separator);
+		{
+			int mycells=0; for(int i=0;i<80*100;i++)if(response.getCells()[i%80][i/80].getOwner()==1)mycells++;
+			wprintw(status_window, "Left: %.2f%%", 75.00-mycells/80); waddch(status_window, status_separator);
+		}
 
 		wmove(status_window, h-1, h>1 ? (h-1)/2-1 : 0); wattrset(status_window, A_NORMAL);
 		wprintw(status_window, "Program: '%s' (compiled on %s %s)", __FILE__, __DATE__, __TIME__);
