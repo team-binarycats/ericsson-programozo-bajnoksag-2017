@@ -173,7 +173,7 @@ _MAIN_LOOP {
 			break;
 
 		case begin:
-			if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, a-status.cnt)) {
+			if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 3*a-status.cnt)) {
 				log("Possible collision detected. Stalling for safety.");
 				move.setDirection(Direction::LEFT);
 				stage = stale_begin;
@@ -242,12 +242,16 @@ _MAIN_LOOP {
 			}
 
 			if ( status.square_num+1 == max_square_num ) {
-				log("max_square_num reached, making an enconomic U-turn");
-				status.square_num = 0;
-				move.setDirection(Direction::RIGHT); status.cnt = (-status.cnt) + 1 + 1;
-				status.direction = opposite(status.direction);
-				stage = begin;
-				status.saved = false;
+				if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 3*a)) {
+					log("Possible collision detected. not making economic U-turn");
+				} else {
+					log("max_square_num reached, making an enconomic U-turn");
+					status.square_num = 0;
+					move.setDirection(Direction::RIGHT); status.cnt = (-status.cnt) + 1 + 1;
+					status.direction = opposite(status.direction);
+					stage = begin;
+					status.saved = false;
+				}
 			}
 
 			break;
@@ -273,6 +277,12 @@ _MAIN_LOOP {
 				status.cnt = 0;
 				move.setDirection(Direction::RIGHT); status.cnt++;
 				stage = begin;
+				if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 3*a)) {
+					log("Possible collision detected. Stalling for safety before next square.");
+					move.setDirection(Direction::LEFT);
+					stage = stale_begin;
+					break;
+				}
 			}
 			break;
 	}
