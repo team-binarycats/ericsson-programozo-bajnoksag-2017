@@ -48,3 +48,9 @@ To decode (and print) messages on the fly:
 ```
 make run RUN_SOCKET_REDIRECTS= RUN_REDIRECTS='3< <(tee >(capnp decode protokoll/Response.capnp Response >&2) <&$$socket) 4> >(tee >(capnp decode protokoll/Command.capnp Command >&2) >&$$socket)'
 ```
+
+To test the program, I recommend to issue the followings in two different terminals:
+```
+make run RUN_SOCKET_REDIRECTS= RUN_PREPEND='echo -ne "\033[s\033[85H\033[1J\033[u"; time' RUN_REDIRECTS='3< <(tee ds <&$$socket) 4> >(tee us >&$$socket) 2>log'
+tail -f log | grep \*
+```
