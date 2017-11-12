@@ -29,6 +29,7 @@ struct SquareStatus {
 	Direction direction; // Everybody moves while draws squares...
 	size_t square_num; // How many squares did we do in a column?
 	bool saved;
+	bool square_checked; // It is checked whether safe to make this square
 	size_t cnt; // Steps are taken in the stage
 };
 SquareStatus status, lastStatus;
@@ -54,6 +55,7 @@ _SETUP {
 	status.direction = Direction::DOWN;
 	status.square_num = 0;
 	status.saved = false;
+	status.square_checked = false;
 
 	if ( reason == SetupReason::INIT ) {
 		stage = initial;
@@ -127,6 +129,22 @@ _MAIN_LOOP {
 		return recfreetil(x, y,time, es);
 	};
 
+	auto squarefree = [&](size_t x, size_t y, int shift=0){
+		for (int i=shift; i<a; i++) {
+			if (!freetil(x, y, 3*a-i)) return false;
+			y++;
+		}
+		for (int i=0; i<a; i++) {
+			if (!freetil(x, y, 2*a-i)) return false;
+			x+=(status.direction==Direction::DOWN?1:-1);
+		}
+		for (int i=0; i<a; i++) {
+			if (!freetil(x, y, 1*a-i)) return false;
+			y--;
+		}
+		return true;
+	};
+
 	switch (getch()) {
 		case KEY_HOME:
 			exit(0);
@@ -163,6 +181,10 @@ _MAIN_LOOP {
 				if ( std::abs(v_diff)+std::abs(h_diff) == 1 ) {
 					stage = begin;
 					status = lastStatus;
+					if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), status.cnt)) {
+						move.setDirection(Direction::LEFT);
+						stage = stale_begin;
+					}
 				}
 			}
 			break;
@@ -178,6 +200,15 @@ _MAIN_LOOP {
 				move.setDirection(Direction::LEFT);
 				stage = stale_begin;
 				break;
+			}
+			if ( !status.square_checked && !ismy(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()) ) {
+				status.square_checked = true;
+				if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), status.cnt)) {
+					log("Beginning a square here implies possible collision. Staying in the safe zone");
+					move.setDirection(Direction::LEFT);
+					stage = stale_begin;
+					break;
+				}
 			}
 
 			if ( !status.saved ) {
@@ -218,6 +249,11 @@ _MAIN_LOOP {
 				status.direction = opposite(status.direction);
 				stage = begin;
 				status.saved = false;
+				if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY())) {
+					log("Square implies collision/stalling. Stalling here in the safe zone");
+					move.setDirection(Direction::LEFT);
+					stage = stale_begin;
+				}
 			}
 			break;
 
@@ -258,6 +294,7 @@ _MAIN_LOOP {
 
 		case prep:
 			status.saved = false;
+			status.square_checked = false;
 			if ( ++status.square_num == max_square_num ) {
 				log("max_square_num reached, making a U-turn");
 				status.square_num = 0;
