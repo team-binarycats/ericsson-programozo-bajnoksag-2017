@@ -157,8 +157,19 @@ _MAIN_LOOP {
 	move.setUnit(0);
 	switch (stage) {
 		case initial:
-			move.setDirection(Direction::UP);
-			stage = begin;
+			{
+				auto x = response.getUnits()[0].getPosition().getX();
+				auto y = response.getUnits()[0].getPosition().getY();
+				if ( x==0 ) {
+					move.setDirection(Direction::RIGHT); status.cnt = y+1;
+					stage = begin;
+				} else if ( x>0 ) {
+					move.setDirection(Direction::UP);
+				} else {
+					lastStatus = status;
+					stage = move_to_lastStatus;
+				}
+			}
 			break;
 
 		case move_to_lastStatus:
