@@ -45,7 +45,8 @@ void ::ericsson2017::protocol::initiface() {
 			int row, col;
 			getmaxyx(stdscr, row, col);
 			if ( row<80 || col < 200 ) {
-				addstr("Your terminal is too small (at least 80x200 needed)");
+				endwin();
+				std::cout<<"Your terminal is too small (at least 80x200 needed)";
 				exit(1);
 			}
 			status_window = newwin(row-80, 200, 80, 0);
