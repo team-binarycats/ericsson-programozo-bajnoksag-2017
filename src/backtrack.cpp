@@ -66,8 +66,8 @@ struct Cell {
 
 	Cell(Owner owner, const bool attackable, const Pos pos) : owner(owner), attackable(attackable), pos(pos) {}
 	Cell(const ericsson2017::protocol::Cell::Reader cell, const Pos pos) : Cell(cell.getOwner(), cell.getAttack().isUnit() || cell.getAttack().getCan(), pos) {}
-	Cell(const pair<ericsson2017::protocol::Cell::Reader, Pos pos> pair) : Cell(pair.first, pair.second) {}
-	Cell(const Pair<Pos pos, ericsson2017::protocol::Cell::Reader> pair) : Cell(pair.second, pair.first) {}
+	Cell(const pair<ericsson2017::protocol::Cell::Reader, Pos> pair) : Cell(pair.first, pair.second) {}
+	Cell(const pair<Pos, ericsson2017::protocol::Cell::Reader> pair) : Cell(pair.second, pair.first) {}
 };
 
 class Cells : public array<Cell, BOARD_SIZE_X*BOARD_SIZE_Y> {
