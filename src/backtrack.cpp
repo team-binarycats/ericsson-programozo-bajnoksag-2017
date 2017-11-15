@@ -124,7 +124,10 @@ struct State {
 	ericsson2017::protocol::Direction getNextDirection();
 };
 
-_SETUP {} // Nice code, it's stateless
+_SETUP {
+	(void)level; // Unused
+	(void)reason; // Unused
+} // Nice code, it's stateless
 
 _MAIN_LOOP {
 	State state = State(response);
