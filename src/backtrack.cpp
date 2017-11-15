@@ -70,12 +70,14 @@ struct Cell {
 	Cell(const pair<Pos, ericsson2017::protocol::Cell::Reader> pair) : Cell(pair.second, pair.first) {}
 };
 
-class Cells : public array<Cell, BOARD_SIZE_X*BOARD_SIZE_Y> {
+class Cells {
+	Cell* cellptrs[BOARD_SIZE_X*BOARD_SIZE_Y];
+
 public:
-	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) : array<Cell, BOARD_SIZE_X*BOARD_SIZE_Y>{{Cell(-1, false, Pos(-1, -1))}} {
+	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) {
 		for (X::TYPE x = X::MIN; x <= X::MAX; x++) {
 			for (Y::TYPE y = Y::MIN; y <= Y::MAX; y++) {
-				this->at(Pos(x, y)) = (Cell)cells[x][y]; //TODO do it in initialisation
+				cellptrs[(int)Pos(x, y)] = new Cell(cells[x][y], Pos(x, y)); //TODO do it in initialisation
 			}
 		}
 	}
