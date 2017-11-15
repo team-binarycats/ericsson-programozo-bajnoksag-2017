@@ -82,11 +82,45 @@ public:
 	}
 };
 
+class Dir {
+	X x;
+	Y y;
+
+public:
+	Dir(X x, Y y) : x(x), y(y) {}
+	Dir(const ericsson2017::protocol::Direction dir) : Dir(
+		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
+		( dir == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
+	) {}
+	Dir(const ericsson2017::protocol::Enemy::Direction::Reader dir) : Dir(
+		( dir.getVertical() == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir.getVertical() == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
+		( dir.getHorizontal() == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir.getHorizontal() == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
+	) {}
+};
+
+struct Enemy {
+	Pos pos;
+	Dir dir;
+
+	Enemy(const ericsson2017::protocol::Enemy::Reader enemy) : pos(enemy.getPosition()), dir(enemy.getDirection()) {}
+};
+
+class Enemies : public vector<Enemy*> {
+
+public:
+	Enemies(const capnp::List<ericsson2017::protocol::Enemy>::Reader enemies) {
+		for (auto enemy : enemies) {
+			this->push_back(new Enemy(enemy));
+		}
+	}
+};
+
 struct State {
 	Value<int> level;
 	Value<int> tick;
 	Cells cells;
-	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()) {}
+	Enemies enemies;
+	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()) {}
 	ericsson2017::protocol::Direction getNextDirection();
 };
 
