@@ -115,12 +115,26 @@ public:
 	}
 };
 
+typedef int Health;
+
+typedef int Killer;
+
+struct Unit {
+	Pos pos;
+	Dir dir;
+	Health health;
+	Killer killer;
+
+	Unit(const ericsson2017::protocol::Unit::Reader unit) : pos(unit.getPosition()), dir(unit.getDirection()), health(unit.getHealth()), killer(unit.getKiller()) {}
+};
+
 struct State {
 	Value<int> level;
 	Value<int> tick;
 	Cells cells;
 	Enemies enemies;
-	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()) {}
+	Unit unit;
+	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
 	ericsson2017::protocol::Direction getNextDirection();
 };
 
