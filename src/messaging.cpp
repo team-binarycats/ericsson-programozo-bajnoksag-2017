@@ -3,6 +3,8 @@
 #include <capnp/message.h>
 #include <capnp/serialize.h>
 
+#include <limits>
+
 namespace ericsson2017 { namespace protocol {
 
 void login(std::function<void(Command::Commands::Login::Builder)> login_handler) {
@@ -16,7 +18,10 @@ void login(std::function<void(Command::Commands::Login::Builder)> login_handler)
 }
 
 void response(std::function<void(const Response::Reader&)> response_handler, std::function<void(const ::capnp::Text::Reader&)> status_handler) {
-	::capnp::StreamFdMessageReader msg(receive_fd);
+	::capnp::ReaderOptions readerOptions;
+	readerOptions.traversalLimitInWords = std::numeric_limits<uint64_t>::max();
+
+	::capnp::StreamFdMessageReader msg(receive_fd, readerOptions);
 	Response::Reader resp = msg.getRoot<Response>();
 	
 	if (status_handler != nullptr) status_handler(resp.getStatus());
