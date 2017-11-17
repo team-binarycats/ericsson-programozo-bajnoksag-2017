@@ -140,7 +140,16 @@ struct State {
 	}
 
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
-	ericsson2017::protocol::Direction getNextDirection();
+	ericsson2017::protocol::Direction getNextDirection() {
+		using namespace ericsson2017::protocol;
+		switch (my(cells[unit.pos])) {
+			case true:
+				return rand()%2 ? Direction::LEFT : Direction::UP;
+
+			case false:
+				return rand()%2 ? Direction::RIGHT : Direction::DOWN;
+		}
+	}
 };
 
 _SETUP {
