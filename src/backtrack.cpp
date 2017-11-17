@@ -44,6 +44,22 @@ public:
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
 typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 
+class Dir {
+	X x;
+	Y y;
+
+public:
+	Dir(X x, Y y) : x(x), y(y) {}
+	Dir(const ericsson2017::protocol::Direction dir) : Dir(
+		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
+		( dir == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
+	) {}
+	Dir(const ericsson2017::protocol::Enemy::Direction::Reader dir) : Dir(
+		( dir.getVertical() == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir.getVertical() == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
+		( dir.getHorizontal() == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir.getHorizontal() == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
+	) {}
+};
+
 struct Pos {
 	X x;
 	Y y;
@@ -80,22 +96,6 @@ public:
 			}
 		}
 	}
-};
-
-class Dir {
-	X x;
-	Y y;
-
-public:
-	Dir(X x, Y y) : x(x), y(y) {}
-	Dir(const ericsson2017::protocol::Direction dir) : Dir(
-		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
-		( dir == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
-	) {}
-	Dir(const ericsson2017::protocol::Enemy::Direction::Reader dir) : Dir(
-		( dir.getVertical() == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir.getVertical() == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
-		( dir.getHorizontal() == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir.getHorizontal() == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
-	) {}
 };
 
 struct Enemy {
