@@ -68,6 +68,13 @@ struct Pos {
 		y.set(y+dir.y);
 	}
 
+	template<typename... Args>
+	Pos go(Args... args) {
+		Pos pos(*this);
+		pos.go(args...);
+		return pos;
+	}
+
 	Pos(X x, Y y) : x(x), y(y) {}
 	Pos(const ericsson2017::protocol::Position::Reader pos) : Pos(pos.getX(), pos.getY()) {}
 
