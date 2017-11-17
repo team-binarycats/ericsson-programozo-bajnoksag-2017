@@ -44,11 +44,10 @@ public:
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
 typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 
-class Dir {
+struct Dir {
 	X x;
 	Y y;
 
-public:
 	Dir(X x, Y y) : x(x), y(y) {}
 	Dir(const ericsson2017::protocol::Direction dir) : Dir(
 		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
