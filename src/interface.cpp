@@ -100,7 +100,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 
 
 	auto draw_cell = [&](const Cell::Reader& cell, int x, int y) {
-		if (cell.getOwner()!=1) {
+		if (cell.getOwner()==0) {
 			attron(A_REVERSE);
 		}
 		if (cell.getAttack().isCan()) {
