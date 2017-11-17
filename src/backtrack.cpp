@@ -149,16 +149,49 @@ struct State {
 	bool my(Cell* cell) {
 		return cell->owner == 0;
 	}
+	bool my(Pos pos) {
+		return my(cells[pos]);
+	}
+	bool my() {
+		return my(unit.pos);
+	}
 
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
 	ericsson2017::protocol::Direction getNextDirection() {
 		using namespace ericsson2017::protocol;
-		switch (my(cells[unit.pos])) {
+		switch (my()) {
 			case true:
 				return rand()%2 ? Direction::LEFT : Direction::UP;
 
 			case false:
-				return rand()%2 ? Direction::RIGHT : Direction::DOWN;
+				{
+					struct E {
+						Pos pos;
+						Direction startdir;
+						operator Pos(){
+							return pos;
+						}
+						E(Pos pos, E e) : pos(pos), startdir(e.startdir) {}
+						E(Pos pos, Direction startdir) : pos(pos), startdir(startdir) {}
+					};
+					queue<E> gray;
+
+					gray.push(E(Pos(unit.pos.go(Direction::LEFT	)), Direction::LEFT	));
+					gray.push(E(Pos(unit.pos.go(Direction::RIGHT	)), Direction::RIGHT	));
+					gray.push(E(Pos(unit.pos.go(Direction::UP	)), Direction::UP	));
+					gray.push(E(Pos(unit.pos.go(Direction::DOWN	)), Direction::DOWN	));
+					while (!gray.empty()) {
+						E e = gray.front(); gray.pop();
+						if (my(e)) return e.startdir;
+						else {
+							gray.push(E(Pos(unit.pos.go(Direction::LEFT	)), e));
+							gray.push(E(Pos(unit.pos.go(Direction::RIGHT	)), e));
+							gray.push(E(Pos(unit.pos.go(Direction::UP	)), e));
+							gray.push(E(Pos(unit.pos.go(Direction::DOWN	)), e));
+						}
+					}
+				}
+				break;
 		}
 	}
 };
