@@ -134,6 +134,11 @@ struct State {
 	Cells cells;
 	Enemies enemies;
 	Unit unit;
+
+	bool my(Cell* cell) {
+		return cell->owner == 0;
+	}
+
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
 	ericsson2017::protocol::Direction getNextDirection();
 };
