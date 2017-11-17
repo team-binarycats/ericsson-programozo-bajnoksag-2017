@@ -63,6 +63,11 @@ struct Pos {
 	X x;
 	Y y;
 
+	void go(const Dir dir) {
+		x.set(x+dir.x);
+		y.set(y+dir.y);
+	}
+
 	Pos(X x, Y y) : x(x), y(y) {}
 	Pos(const ericsson2017::protocol::Position::Reader pos) : Pos(pos.getX(), pos.getY()) {}
 
