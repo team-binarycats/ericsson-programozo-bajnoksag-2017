@@ -69,7 +69,7 @@ struct Pos {
 	}
 
 	template<typename... Args>
-	Pos go(Args... args) {
+	Pos go_copy(Args... args) {
 		Pos pos(*this);
 		pos.go(args...);
 		return pos;
@@ -176,18 +176,18 @@ struct State {
 					};
 					queue<E> gray;
 
-					gray.push(E(Pos(unit.pos.go(Direction::LEFT	)), Direction::LEFT	));
-					gray.push(E(Pos(unit.pos.go(Direction::RIGHT	)), Direction::RIGHT	));
-					gray.push(E(Pos(unit.pos.go(Direction::UP	)), Direction::UP	));
-					gray.push(E(Pos(unit.pos.go(Direction::DOWN	)), Direction::DOWN	));
+					gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), Direction::LEFT	));
+					gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), Direction::RIGHT	));
+					gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), Direction::UP	));
+					gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), Direction::DOWN	));
 					while (!gray.empty()) {
 						E e = gray.front(); gray.pop();
 						if (my(e)) return e.startdir;
 						else {
-							gray.push(E(Pos(unit.pos.go(Direction::LEFT	)), e));
-							gray.push(E(Pos(unit.pos.go(Direction::RIGHT	)), e));
-							gray.push(E(Pos(unit.pos.go(Direction::UP	)), e));
-							gray.push(E(Pos(unit.pos.go(Direction::DOWN	)), e));
+							gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), e));
+							gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), e));
+							gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), e));
+							gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), e));
 						}
 					}
 				}
