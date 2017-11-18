@@ -139,6 +139,13 @@ struct Unit {
 	Unit(const ericsson2017::protocol::Unit::Reader unit) : pos(unit.getPosition()), dir(unit.getDirection()), health(unit.getHealth()), killer(unit.getKiller()) {}
 };
 
+template<typename E, typename Base>
+bool tryPushGo(queue<E>& gray, Pos pos, ericsson2017::protocol::Direction dir, Base base) {
+	try {
+		gray.push(E(pos.go_copy(dir), base));
+	} catch (domain_error err) {}
+}
+
 struct State {
 	Value<int> level;
 	Value<int> tick;
