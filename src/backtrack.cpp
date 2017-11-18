@@ -202,7 +202,6 @@ struct State {
 
 			case false:
 				return directToNextAttackable();
-				break;
 		}
 	}
 };
