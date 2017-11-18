@@ -178,18 +178,18 @@ struct State {
 		};
 		queue<E> gray;
 
-		  gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), Direction::LEFT	));
-		  gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), Direction::RIGHT	));
-		  gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), Direction::UP	));
-		  gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), Direction::DOWN	));
+		 tryPushGo(gray, unit.pos, Direction::LEFT	,  Direction::LEFT	);
+		 tryPushGo(gray, unit.pos, Direction::RIGHT	,  Direction::RIGHT	);
+		 tryPushGo(gray, unit.pos, Direction::UP	,  Direction::UP	);
+		 tryPushGo(gray, unit.pos, Direction::DOWN	,  Direction::DOWN	);
 		while (!gray.empty()) {
 			E e = gray.front(); gray.pop();
 			if (my(e)) return e.startdir;
 			else {
-				  gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), e));
-				  gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), e));
-				  gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), e));
-				  gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), e));
+				tryPushGo(gray, e.pos, Direction::LEFT	, e);
+				tryPushGo(gray, e.pos, Direction::RIGHT	, e);
+				tryPushGo(gray, e.pos, Direction::UP	, e);
+				tryPushGo(gray, e.pos, Direction::DOWN	, e);
 			}
 		}
 	}
