@@ -157,6 +157,36 @@ struct State {
 	}
 
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
+
+	ericsson2017::protocol::Direction directToNextAttackable() {
+		using namespace ericsson2017::protocol;
+		struct E {
+			Pos pos;
+			Direction startdir;
+			operator Pos(){
+				return pos;
+			}
+			E(Pos pos, E e) : pos(pos), startdir(e.startdir) {}
+			E(Pos pos, Direction startdir) : pos(pos), startdir(startdir) {}
+		};
+		queue<E> gray;
+
+		  gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), Direction::LEFT	));
+		  gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), Direction::RIGHT	));
+		  gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), Direction::UP	));
+		  gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), Direction::DOWN	));
+		while (!gray.empty()) {
+			E e = gray.front(); gray.pop();
+			if (my(e)) return e.startdir;
+			else {
+				  gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), e));
+				  gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), e));
+				  gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), e));
+				  gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), e));
+			}
+		}
+	}
+
 	ericsson2017::protocol::Direction getNextDirection() {
 		using namespace ericsson2017::protocol;
 		switch (my()) {
@@ -164,33 +194,7 @@ struct State {
 				return rand()%2 ? Direction::LEFT : Direction::UP;
 
 			case false:
-				{
-					struct E {
-						Pos pos;
-						Direction startdir;
-						operator Pos(){
-							return pos;
-						}
-						E(Pos pos, E e) : pos(pos), startdir(e.startdir) {}
-						E(Pos pos, Direction startdir) : pos(pos), startdir(startdir) {}
-					};
-					queue<E> gray;
-
-					gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), Direction::LEFT	));
-					gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), Direction::RIGHT	));
-					gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), Direction::UP	));
-					gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), Direction::DOWN	));
-					while (!gray.empty()) {
-						E e = gray.front(); gray.pop();
-						if (my(e)) return e.startdir;
-						else {
-							gray.push(E(Pos(unit.pos.go_copy(Direction::LEFT	)), e));
-							gray.push(E(Pos(unit.pos.go_copy(Direction::RIGHT	)), e));
-							gray.push(E(Pos(unit.pos.go_copy(Direction::UP	)), e));
-							gray.push(E(Pos(unit.pos.go_copy(Direction::DOWN	)), e));
-						}
-					}
-				}
+				return directToNextAttackable();
 				break;
 		}
 	}
