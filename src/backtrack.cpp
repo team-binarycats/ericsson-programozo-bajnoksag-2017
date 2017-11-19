@@ -170,6 +170,8 @@ struct State {
 		return my(unit.pos);
 	}
 
+	bool kills(Pos pos, size_t ticks);
+
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
 
 	struct BacktrackInfo { // It's tdk a function
