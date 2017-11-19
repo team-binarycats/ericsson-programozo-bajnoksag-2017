@@ -134,10 +134,10 @@ clean-objects:
 	-rm -f $(OBJECTS)
 
 OPTIONS = -Wall -Wextra -g
-STD = c++11
+STD = c++17
 
 LINK_OPTIONS = -Wall -Wextra
-LINK_FLAGS = $(patsubst %,-l%,$(LIB)) --std=$(STD) $(OPTIONS) $(LINK_OPTIONS)
+LINK_FLAGS = $(patsubst %,-l%,$(LIB)) $(OPTIONS) $(LINK_OPTIONS)
 
 COMPILE_OPTIONS = 
 COMPILE_FLAGS = --std=$(STD) $(OPTIONS) $(COMPILE_OPTIONS)
