@@ -54,6 +54,11 @@ struct Dir {
 	X x;
 	Y y;
 
+	void turn(Dir dir) {
+		x.set(x*dir.x+y*dir.y);
+		y.set(y*dir.x-x*dir.y);
+	}
+
 	Dir(X x, Y y) : x(x), y(y) {}
 	Dir(const ericsson2017::protocol::Direction dir) : Dir(
 		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
