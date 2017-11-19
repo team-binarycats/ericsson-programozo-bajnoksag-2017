@@ -44,6 +44,12 @@ public:
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
 typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 
+#define copy_call(obj, func) [&](){ \
+	auto copy = obj; \
+	copy.func; \
+	return copy; \
+}()
+
 struct Dir {
 	X x;
 	Y y;
@@ -66,13 +72,6 @@ struct Pos {
 	void go(const Dir dir) {
 		x.set(x+dir.x);
 		y.set(y+dir.y);
-	}
-
-	template<typename... Args>
-	Pos go_copy(Args... args) {
-		Pos pos(*this);
-		pos.go(args...);
-		return pos;
 	}
 
 	Pos(X x, Y y) : x(x), y(y) {}
@@ -142,8 +141,11 @@ struct Unit {
 template<typename E, typename Base>
 bool tryPushGo(queue<E>& gray, Pos pos, ericsson2017::protocol::Direction dir, Base base) {
 	try {
-		gray.push(E(pos.go_copy(dir), base));
-	} catch (domain_error err) {}
+		gray.push(E(copy_call(pos, go(dir)), base));
+		return true;
+	} catch (domain_error err) {
+		return false;
+	}
 }
 
 struct State {
