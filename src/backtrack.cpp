@@ -172,6 +172,44 @@ struct State {
 
 	State(const ericsson2017::protocol::Response::Reader response) : level(response.getInfo().getLevel()), tick(response.getInfo().getTick()), cells(response.getCells()), enemies(response.getEnemies()), unit(response.getUnits()[0]) {}
 
+	struct BacktrackInfo { // It's tdk a function
+		optional<Dir> dir;
+		size_t length = 0;
+
+		BacktrackInfo next(Dir dir) {
+			BacktrackInfo newinfo = BacktrackInfo(*this);
+			newinfo.length++; newinfo.dir = dir;
+			return newinfo;
+		}
+		BacktrackInfo(Dir dir, size_t length) : dir(dir), length(length) {}
+	};
+
+	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) {
+		if (my(pos)) {
+			return BacktrackInfo(Dir(1-rand()%2*2, 1-rand()%2*2), 1);
+		}
+
+		{ // Try forward
+			optional<BacktrackInfo> info = backtrack(dir, pos);
+			if (info && !kills(pos, info->length)) return info->next(dir);
+		}
+
+		{ // Try right
+			dir.turn(Dir(0, 1));
+			optional<BacktrackInfo> info = backtrack(dir, pos);
+			if (info && !kills(pos, info->length)) return info->next(dir);
+		}
+
+		{ // Try left
+			dir.turn(Dir(-1, 0));
+			optional<BacktrackInfo> info = backtrack(dir, pos);
+			if (info && !kills(pos, info->length)) return info->next(dir);
+		}
+
+		// else
+		return nullopt;
+	}
+
 	ericsson2017::protocol::Direction directToNextAttackable() {
 		using namespace ericsson2017::protocol;
 		struct E {
