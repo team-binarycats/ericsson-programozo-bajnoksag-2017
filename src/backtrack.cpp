@@ -68,6 +68,20 @@ struct Dir {
 		( dir.getVertical() == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir.getVertical() == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
 		( dir.getHorizontal() == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir.getHorizontal() == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
 	) {}
+	operator ericsson2017::protocol::Direction() {
+		using namespace ericsson2017::protocol;
+		if ( x>0 && y==0 ) {
+			return Direction::DOWN;
+		} else if ( x<0 && y==0 ) {
+			return Direction::UP;
+		} else if ( x==0 && y>0 ) {
+			return Direction::RIGHT;
+		} else if ( x==0 && y<0 ) {
+			return Direction::LEFT;
+		} else {
+			throw logic_error("Failed to classify direction");
+		}
+	}
 };
 
 struct Pos {
