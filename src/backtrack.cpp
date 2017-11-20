@@ -259,7 +259,11 @@ struct State {
 		using namespace ericsson2017::protocol;
 		switch (my()) {
 			case true:
-				return rand()%2 ? Direction::LEFT : Direction::UP;
+				{
+					optional<BacktrackInfo> info = backtrack(unit.dir, unit.pos);
+					if (info && info->dir) return info->dir->operator ericsson2017::protocol::Direction();
+				}
+				return unit.dir;
 
 			case false:
 				return directToNextAttackable();
