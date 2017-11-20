@@ -320,6 +320,7 @@ struct State {
 				tryPushGo(gray, e.pos, Direction::DOWN	, e);
 			}
 		}
+		/* else */ return (Direction)Dir(1-rand()%2*2, 1-rand()%2*2);
 	}
 
 	ericsson2017::protocol::Direction getNextDirection() const {
