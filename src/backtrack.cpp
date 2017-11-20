@@ -74,7 +74,7 @@ struct Dir {
 	bool operator!=(const Dir& other) const {
 		return !(*this == other);
 	}
-	operator ericsson2017::protocol::Direction() const {
+	explicit operator ericsson2017::protocol::Direction() const {
 		using namespace ericsson2017::protocol;
 		if ( x>0 && y==0 ) {
 			return Direction::DOWN;
@@ -330,7 +330,7 @@ struct State {
 					optional<BacktrackInfo> info = backtrack(unit.dir, unit.pos);
 					if (info && info->dir) return info->dir->operator ericsson2017::protocol::Direction();
 				}
-				return unit.dir;
+				return (Direction)unit.dir;
 
 			case false:
 				return directToNextAttackable();
