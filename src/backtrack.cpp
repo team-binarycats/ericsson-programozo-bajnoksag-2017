@@ -232,6 +232,10 @@ struct State {
 				} catch (domain_error) {}
 			}
 		}
+		for (auto enemy : state.enemies) {
+			if (enemy->pos==pos) return true;
+		}
+		return kills(pos, ticks-1, state);
 	}
 
 	bool kills(Pos pos, size_t ticks) {
