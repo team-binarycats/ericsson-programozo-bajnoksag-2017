@@ -51,8 +51,8 @@ typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 }()
 
 struct Dir {
-	X x;
-	Y y;
+	Value<int> x;
+	Value<int> y;
 
 	void turn(Dir dir) {
 		x.set(x*dir.x+y*dir.y);
