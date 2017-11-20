@@ -44,11 +44,11 @@ public:
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
 typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 
-#define copy_call(obj, func) [&](){ \
+#define copy_call(obj, func) ([&](){ \
 	auto copy = obj; \
 	copy.func; \
 	return copy; \
-}()
+}())
 
 struct Dir {
 	Value<int> x;
