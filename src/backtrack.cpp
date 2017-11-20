@@ -68,6 +68,12 @@ struct Dir {
 		( dir.getVertical() == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir.getVertical() == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
 		( dir.getHorizontal() == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir.getHorizontal() == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
 	) {}
+	bool operator==(const Dir& other) const {
+		return x==other.x && y==other.y;
+	}
+	bool operator!=(const Dir& other) const {
+		return !(*this == other);
+	}
 	operator ericsson2017::protocol::Direction() {
 		using namespace ericsson2017::protocol;
 		if ( x>0 && y==0 ) {
