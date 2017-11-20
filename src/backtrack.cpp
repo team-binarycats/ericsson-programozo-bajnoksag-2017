@@ -100,6 +100,9 @@ struct Pos {
 	operator T(){
 		return x * X::MAX + y;
 	}
+	bool operator==(const Pos& other) {
+		return x==other.x && y==other.y;
+	}
 };
 
 typedef int Owner;
