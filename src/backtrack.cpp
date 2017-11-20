@@ -227,7 +227,9 @@ struct State {
 					}
 				}
 			} else {
-				enemy.pos.go(enemy.dir);
+				try {
+					enemy.pos.go(enemy.dir);
+				} catch (domain_error) {}
 			}
 		}
 	}
