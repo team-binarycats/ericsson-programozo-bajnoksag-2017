@@ -74,7 +74,7 @@ struct Dir {
 	bool operator!=(const Dir& other) const {
 		return !(*this == other);
 	}
-	operator ericsson2017::protocol::Direction() {
+	operator ericsson2017::protocol::Direction() const {
 		using namespace ericsson2017::protocol;
 		if ( x>0 && y==0 ) {
 			return Direction::DOWN;
@@ -103,10 +103,10 @@ struct Pos {
 	Pos(const ericsson2017::protocol::Position::Reader pos) : Pos(pos.getX(), pos.getY()) {}
 
 	template <typename T>
-	operator T(){
+	operator T() const {
 		return x * X::MAX + y;
 	}
-	bool operator==(const Pos& other) {
+	bool operator==(const Pos& other) const {
 		return x==other.x && y==other.y;
 	}
 };
@@ -183,13 +183,13 @@ struct State {
 	Enemies enemies;
 	Unit unit;
 
-	bool my(Cell* cell) {
+	bool my(Cell* cell) const {
 		return cell->owner == 0;
 	}
-	bool my(Pos pos) {
+	bool my(Pos pos) const {
 		return my(cells[pos]);
 	}
-	bool my() {
+	bool my() const {
 		return my(unit.pos);
 	}
 
@@ -249,7 +249,7 @@ struct State {
 		return kills(pos, ticks-1, state);
 	}
 
-	bool kills(Pos pos, size_t ticks) {
+	bool kills(Pos pos, size_t ticks) const {
 		return kills(pos, ticks, *this);
 	}
 
@@ -267,7 +267,7 @@ struct State {
 		BacktrackInfo(Dir dir, size_t length) : dir(dir), length(length) {}
 	};
 
-	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) {
+	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
 			return BacktrackInfo(Dir(1-rand()%2*2, 1-rand()%2*2), 1);
 		}
@@ -293,7 +293,7 @@ struct State {
 		return nullopt;
 	}
 
-	ericsson2017::protocol::Direction directToNextAttackable() {
+	ericsson2017::protocol::Direction directToNextAttackable() const {
 		using namespace ericsson2017::protocol;
 		struct E {
 			Pos pos;
@@ -322,7 +322,7 @@ struct State {
 		}
 	}
 
-	ericsson2017::protocol::Direction getNextDirection() {
+	ericsson2017::protocol::Direction getNextDirection() const {
 		using namespace ericsson2017::protocol;
 		switch (my()) {
 			case true:
