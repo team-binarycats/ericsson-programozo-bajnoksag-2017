@@ -186,50 +186,52 @@ struct State {
 
 	static bool kills(Pos pos, size_t ticks, State state) {
 		if (ticks==0) return false;
-		size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
-		for (size_t i=0; i<enemies_size_before; i++) {
-			Enemy& enemy = *state.enemies[i];
-			Pos next_pos = copy_call(enemy.pos, go(enemy.dir));
-			if (state.my(next_pos)) { // Bouncing - more possible outcome
-				bool moved = false;
-				{
-					Dir test_dir = enemy.dir;
-					do {
-						if (!state.my(copy_call(enemy.pos, go(test_dir)))) {
-							try {
-								if (!moved) {
-									enemy.pos.go(test_dir);
-									moved = true;
-								} else { //moved
-									state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
-								}
-							} catch (domain_error) {}
-						}
-
-						test_dir.turn(Dir(0, 1));
-					} while (test_dir != enemy.dir);
-				}
-				if (!moved) {
+		{
+			size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
+			for (size_t i=0; i<enemies_size_before; i++) {
+				Enemy& enemy = *state.enemies[i];
+				Pos next_pos = copy_call(enemy.pos, go(enemy.dir));
+				if (state.my(next_pos)) { // Bouncing - more possible outcome
+					bool moved = false;
 					{
 						Dir test_dir = enemy.dir;
 						do {
-							try {
-								if (!moved) {
-									enemy.pos.go(test_dir);
-									moved = true;
-								} else { //moved
-									state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
-								}
-							} catch (domain_error) {}
+							if (!state.my(copy_call(enemy.pos, go(test_dir)))) {
+								try {
+									if (!moved) {
+										enemy.pos.go(test_dir);
+										moved = true;
+									} else { //moved
+										state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
+									}
+								} catch (domain_error) {}
+							}
 
 							test_dir.turn(Dir(0, 1));
 						} while (test_dir != enemy.dir);
 					}
+					if (!moved) {
+						{
+							Dir test_dir = enemy.dir;
+							do {
+								try {
+									if (!moved) {
+										enemy.pos.go(test_dir);
+										moved = true;
+									} else { //moved
+										state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
+									}
+								} catch (domain_error) {}
+
+								test_dir.turn(Dir(0, 1));
+							} while (test_dir != enemy.dir);
+						}
+					}
+				} else {
+					try {
+						enemy.pos.go(enemy.dir);
+					} catch (domain_error) {}
 				}
-			} else {
-				try {
-					enemy.pos.go(enemy.dir);
-				} catch (domain_error) {}
 			}
 		}
 		for (auto enemy : state.enemies) {
