@@ -112,6 +112,10 @@ struct Pos {
 	Pos(X x, Y y) : x(x), y(y) {}
 	Pos(const ericsson2017::protocol::Position::Reader pos) : Pos(pos.getX(), pos.getY()) {}
 
+	operator string() const {
+		return (string)"("+(string)x+(string)","+(string)")";
+	}
+
 	template <typename T>
 	operator T() const {
 		return x * X::MAX + y;
