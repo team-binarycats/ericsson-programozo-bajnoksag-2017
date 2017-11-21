@@ -46,7 +46,7 @@ void ::ericsson2017::protocol::initiface() {
 			getmaxyx(stdscr, row, col);
 			if ( row<80 || col < 200 ) {
 				endwin();
-				std::cout<<"Your terminal is too small (at least 80x200 needed)";
+				std::cout<<"Your terminal ("<<row<<"x"<<col<<") is too small (at least 80x200 needed)";
 				exit(1);
 			}
 			status_window = newwin(row-80, 200, 80, 0);
@@ -100,7 +100,7 @@ void ::ericsson2017::protocol::draw_response(const Response::Reader& response) {
 
 
 	auto draw_cell = [&](const Cell::Reader& cell, int x, int y) {
-		if (cell.getOwner()!=1) {
+		if (cell.getOwner()==0) {
 			attron(A_REVERSE);
 		}
 		if (cell.getAttack().isCan()) {

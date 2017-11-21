@@ -186,3 +186,24 @@ print_var:
 
 %: $(SRCDIR)/%.cpp
 	$(MAKE) PROGRAM="$*"
+
+DOCKER_IMAGE_NAME = ericssonprogb2017
+DOCKER_IMAGE_TAG = $(shell git rev-parse --abbrev-ref HEAD)
+DOCKER_IMAGE = $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
+
+.PHONY: dockerized_build
+dockerized_build:
+	docker build . -t "$(DOCKER_IMAGE)"
+
+.PHONY: dockerized_run
+dockerized_run: dockerized_build
+	docker run -it --rm "$(DOCKER_IMAGE)"
+
+.PHONY: dockerized_artifact
+dockerized_artifact: dockerized_build
+	container=`docker create $(DOCKER_IMAGE)` \
+		&& docker cp $$container:/src/$(EXECUTABLE) $(EXECUTABLE) \
+		&& docker rm -f $$container >/dev/null
+
+.PHONY: dockerized
+dockerized: dockerized_build dockerized_run
