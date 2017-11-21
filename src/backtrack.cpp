@@ -283,7 +283,7 @@ struct State {
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
-			ericsson2017::protocol::log("Backtrack succeeded");
+			ericsson2017::protocol::log((string)"Backtrack succeeded. Plan: "+(string)pos);
 			return BacktrackInfo(randomDir(), 1);
 		}
 
