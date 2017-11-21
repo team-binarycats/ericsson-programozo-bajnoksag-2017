@@ -327,7 +327,7 @@ struct State {
 		 tryPushGo(gray, unit.pos, Direction::DOWN	,  Direction::DOWN	);
 		while (!gray.empty()) {
 			E e = gray.front(); gray.pop();
-			if (my(e)) return e.startdir;
+			if (!my(e)) return e.startdir;
 			else {
 				tryPushGo(gray, e.pos, Direction::LEFT	, e);
 				tryPushGo(gray, e.pos, Direction::RIGHT	, e);
@@ -341,14 +341,14 @@ struct State {
 	ericsson2017::protocol::Direction getNextDirection() const {
 		using namespace ericsson2017::protocol;
 		switch (my()) {
-			case true:
+			case false: // We are in action
 				{
 					optional<BacktrackInfo> info = backtrack(unit.dir, unit.pos);
 					if (info && info->dir) return info->dir->operator ericsson2017::protocol::Direction();
 				}
 				return (Direction)unit.dir;
 
-			case false:
+			case true: // Get ready for next fight
 				return directToNextAttackable();
 		}
 	}
