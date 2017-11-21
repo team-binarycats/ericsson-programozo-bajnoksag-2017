@@ -90,6 +90,15 @@ struct Dir {
 	}
 };
 
+Dir randomDir(){
+	switch (rand()%4) {
+		case 0: return Dir(1, 0);
+		case 1: return Dir(-1, 0);
+		case 2: return Dir(0, 1);
+		case 3: return Dir(0, -1);
+	}
+}
+
 struct Pos {
 	X x;
 	Y y;
@@ -269,7 +278,7 @@ struct State {
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
-			return BacktrackInfo(Dir(1-rand()%2*2, 1-rand()%2*2), 1);
+			return BacktrackInfo(randomDir(), 1);
 		}
 
 		{ // Try forward
@@ -320,7 +329,7 @@ struct State {
 				tryPushGo(gray, e.pos, Direction::DOWN	, e);
 			}
 		}
-		/* else */ return (Direction)Dir(1-rand()%2*2, 1-rand()%2*2);
+		/* else */ return (Direction)randomDir();
 	}
 
 	ericsson2017::protocol::Direction getNextDirection() const {
