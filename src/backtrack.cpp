@@ -327,7 +327,7 @@ struct State {
 		 tryPushGo(gray, unit.pos, Direction::DOWN	,  Direction::DOWN	);
 		while (!gray.empty()) {
 			E e = gray.front(); gray.pop();
-			if (my(e)) return e.startdir;
+			if (!my(e)) return e.startdir;
 			else {
 				tryPushGo(gray, e.pos, Direction::LEFT	, e);
 				tryPushGo(gray, e.pos, Direction::RIGHT	, e);
