@@ -113,7 +113,7 @@ struct Pos {
 	Pos(const ericsson2017::protocol::Position::Reader pos) : Pos(pos.getX(), pos.getY()) {}
 
 	operator string() const {
-		return (string)"("+(string)x+(string)","+(string)")";
+		return (string)"("+to_string(x)+(string)","+to_string(y)+(string)")";
 	}
 
 	template <typename T>
@@ -283,7 +283,7 @@ struct State {
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
-			ericsson2017::protocol::log((string)"Backtrack succeeded. Plan: "+pos);
+			ericsson2017::protocol::log((string)"Backtrack succeeded. Plan: "+(string)pos);
 			return BacktrackInfo(randomDir(), 1);
 		}
 
