@@ -1,4 +1,5 @@
 #include "main.h"
+#include "interface.h"
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -282,6 +283,7 @@ struct State {
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
+			ericsson2017::protocol::log((string)"Backtrack succeeded. Plan: "+(string)unit.pos+(string)"-->"+(string)pos);
 			return BacktrackInfo(randomDir(), 1);
 		}
 
