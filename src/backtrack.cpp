@@ -198,7 +198,7 @@ struct State {
 	Unit unit;
 
 	bool my(Cell* cell) const {
-		return cell->owner == 0;
+		return cell->owner == 1;
 	}
 	bool my(Pos pos) const {
 		return my(cells[pos]);
