@@ -159,7 +159,7 @@ clean-executable:
 ###################
 # Running a program
 
-SERVER_HOST = ecovpn.dyndns.org
+SERVER_HOST = epb2017.dyndns.org
 SERVER_PORT = 11224
 RUN_SOCKET = /dev/tcp/$(SERVER_HOST)/$(SERVER_PORT)
 
