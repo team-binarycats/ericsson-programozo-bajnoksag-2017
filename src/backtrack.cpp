@@ -278,7 +278,7 @@ struct State {
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (my(pos)) {
-			return BacktrackInfo(randomDir())
+			return BacktrackInfo(randomDir(), 1);
 		}
 
 		{ // Try forward
