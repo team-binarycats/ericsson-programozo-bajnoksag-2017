@@ -282,19 +282,19 @@ struct State {
 		}
 
 		{ // Try forward
-			optional<BacktrackInfo> info = backtrack(dir, pos);
+			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
 		}
 
 		{ // Try right
 			dir.turn(Dir(0, 1));
-			optional<BacktrackInfo> info = backtrack(dir, pos);
+			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
 		}
 
 		{ // Try left
 			dir.turn(Dir(-1, 0));
-			optional<BacktrackInfo> info = backtrack(dir, pos);
+			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
 		}
 
