@@ -1,8 +1,12 @@
 #include "main.h"
 #include "interface.h"
 #include <bits/stdc++.h>
+#include <ctime>
 
 using namespace std;
+
+clock_t thinking_timeout = numeric_limits<clock_t>::max();
+const clock_t thinking_time_limit = CLOCKS_PER_SEC*4;
 
 const size_t BOARD_SIZE_X = 80;
 const size_t BOARD_SIZE_Y = 100;
@@ -264,6 +268,10 @@ struct State {
 	}
 
 	bool kills(Pos pos, size_t ticks) const {
+		if (thinking_timeout<clock()) { // Ouch, timed out. Returning some dummy result.
+			ericsson2017::protocol::log((string)"Backtrack timed out in kills() at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string((float)(clock()-thinking_timeout)/CLOCKS_PER_SEC));
+			return false;
+		}
 		return kills(pos, ticks, *this);
 	}
 
@@ -282,6 +290,10 @@ struct State {
 	};
 
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
+		if (thinking_timeout<clock()) { // Ouch, timed out. Returning some dummy result.
+			ericsson2017::protocol::log((string)"Backtrack timed out at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string((float)(clock()-thinking_timeout)/CLOCKS_PER_SEC));
+			return BacktrackInfo(randomDir(), numeric_limits<size_t>::max());
+		}
 		if (my(pos)) {
 			ericsson2017::protocol::log((string)"Backtrack succeeded. Plan: "+(string)unit.pos+(string)"-->"+(string)pos);
 			return BacktrackInfo(randomDir(), 1);
@@ -340,6 +352,7 @@ struct State {
 
 	ericsson2017::protocol::Direction getNextDirection() const {
 		using namespace ericsson2017::protocol;
+		thinking_timeout = clock()+thinking_time_limit;
 		switch (my()) {
 			case false: // We are in action
 				{
