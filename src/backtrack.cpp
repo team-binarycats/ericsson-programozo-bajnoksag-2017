@@ -341,14 +341,14 @@ struct State {
 	ericsson2017::protocol::Direction getNextDirection() const {
 		using namespace ericsson2017::protocol;
 		switch (my()) {
-			case true:
+			case false: // We are in action
 				{
 					optional<BacktrackInfo> info = backtrack(unit.dir, unit.pos);
 					if (info && info->dir) return info->dir->operator ericsson2017::protocol::Direction();
 				}
 				return (Direction)unit.dir;
 
-			case false:
+			case true: // Get ready for next fight
 				return directToNextAttackable();
 		}
 	}
