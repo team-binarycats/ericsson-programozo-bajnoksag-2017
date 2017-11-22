@@ -60,8 +60,11 @@ struct Dir {
 	Value<int> y;
 
 	void turn(Dir dir) {
-		x.set(x*dir.x+y*dir.y);
-		y.set(y*dir.x-x*dir.y);
+		auto old_x=x;
+		auto old_y=y;
+
+		x.set(old_x*dir.x+old_y*dir.y);
+		y.set(old_y*dir.x-old_x*dir.y);
 	}
 
 	Dir(X x, Y y) : x(x), y(y) {}
