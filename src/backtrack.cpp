@@ -201,11 +201,11 @@ struct State {
 	Enemies enemies;
 	Unit unit;
 
-	bool my(Cell* cell) const {
-		return cell->owner == 1;
+	bool my(const Cell cell) const {
+		return cell.owner == 1;
 	}
-	bool my(Pos pos) const {
-		return my(cells[pos]);
+	bool my(const Pos pos) const {
+		return my(*cells[pos]);
 	}
 	bool my() const {
 		return my(unit.pos);
