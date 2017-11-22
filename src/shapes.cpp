@@ -11,7 +11,6 @@
 using namespace ericsson2017::protocol;
 
 const size_t a = 19; // Square size
-const size_t max_square_num = 80/(a+1);
 
 enum Stage {
 	initial,
@@ -28,7 +27,6 @@ enum Stage {
 struct SquareStatus {
 	int32_t x, y;
 	Direction direction; // Everybody moves while draws squares...
-	size_t square_num; // How many squares did we do in a column?
 	bool saved;
 	bool square_checked; // It is checked whether safe to make this square
 	size_t cnt; // Steps are taken in the stage
@@ -55,7 +53,6 @@ Direction opposite (Direction direction) {
 _SETUP {
 	status.cnt = 0;
 	status.direction = Direction::DOWN;
-	status.square_num = 0;
 	status.saved = false;
 	status.square_checked = false;
 	status.affected_cells.clear();
@@ -155,14 +152,11 @@ _MAIN_LOOP {
 			{
 				auto x = response.getUnits()[0].getPosition().getX();
 				auto y = response.getUnits()[0].getPosition().getY();
-				if ( x==0 ) {
+				if ( x>1 ) {
 					move.setDirection(Direction::RIGHT); status.cnt = y+1;
 					stage = begin;
-				} else if ( x>0 ) {
-					move.setDirection(Direction::UP);
 				} else {
-					lastStatus = status;
-					stage = move_to_lastStatus;
+					move.setDirection(Direction::DOWN);
 				}
 			}
 			break;
@@ -245,11 +239,10 @@ _MAIN_LOOP {
 				}
 			}
 
-			if ( response.getUnits()[0].getPosition().getX() == (status.direction==Direction::DOWN?79:0) ) {
-				log("Error: We are near hitting a wall. Making an emergency (and economic) U-turn");
-				status.square_num = 0;
-				move.setDirection(Direction::RIGHT); status.cnt = 1;
+			if (ismy(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY())) {
+				log("We are finished with this line. Making an emergency (and economic) U-turn");
 				status.direction = opposite(status.direction);
+				move.setDirection(status.direction); status.cnt = 0;
 				stage = begin;
 				status.saved = false;
 			}
@@ -276,31 +269,12 @@ _MAIN_LOOP {
 				status.cnt = 0;
 				stage = prep;
 			}
-
-			if ( status.square_num+1 == max_square_num ) {
-				if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 3*a)) {
-					log("Possible collision detected. not making economic U-turn");
-				} else {
-					log("max_square_num reached, making an enconomic U-turn");
-					status.square_num = 0;
-					move.setDirection(Direction::RIGHT); status.cnt = (-status.cnt) + 1 + 1;
-					status.direction = opposite(status.direction);
-					stage = begin;
-					status.saved = false;
-				}
-			}
-
 			break;
 
 		case prep:
 			status.saved = false;
 			status.square_checked = false;
-			if ( ++status.square_num == max_square_num ) {
-				log("max_square_num reached, making a U-turn");
-				status.square_num = 0;
-				move.setDirection(Direction::RIGHT); status.cnt++;
-				stage = turn;
-			} else {
+			{
 				move.setDirection(status.direction);
 				stage = begin;
 			}
