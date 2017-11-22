@@ -6,7 +6,7 @@
 using namespace std;
 
 time_t thinking_timeout = numeric_limits<time_t>::max();
-const time_t thinking_time_limit = 4;
+const time_t thinking_time_limit = 2;
 
 const size_t BOARD_SIZE_X = 80;
 const size_t BOARD_SIZE_Y = 100;
@@ -60,11 +60,14 @@ struct Dir {
 	Value<int> y;
 
 	void turn(Dir dir) {
-		x.set(x*dir.x+y*dir.y);
-		y.set(y*dir.x-x*dir.y);
+		auto old_x=x;
+		auto old_y=y;
+
+		x.set(old_x*dir.x+old_y*dir.y);
+		y.set(old_y*dir.x-old_x*dir.y);
 	}
 
-	Dir(X x, Y y) : x(x), y(y) {}
+	Dir(int x, int y) : x(x), y(y) {}
 	Dir(const ericsson2017::protocol::Direction dir) : Dir(
 		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
 		( dir == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
