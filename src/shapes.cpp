@@ -133,14 +133,6 @@ _MAIN_LOOP {
 	};
 
 	auto squarefree = [&](size_t x, size_t y, int shift=0){
-		for (int i=shift; i<a; i++) {
-			if (!freetil(x, y, 3*a-i)) return false;
-			y++;
-		}
-		for (int i=0; i<a; i++) {
-			if (!freetil(x, y, 2*a-i)) return false;
-			x+=(status.direction==Direction::DOWN?1:-1);
-		}
 		for (int i=0; i<a; i++) {
 			if (!freetil(x, y, 1*a-i)) return false;
 			y--;
@@ -195,10 +187,6 @@ _MAIN_LOOP {
 				if ( std::abs(v_diff)+std::abs(h_diff) == 1 ) {
 					stage = begin;
 					status = lastStatus;
-					if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), status.cnt)) {
-						move.setDirection(Direction::LEFT);
-						stage = stale_begin;
-					}
 				}
 			}
 			break;
@@ -217,12 +205,6 @@ _MAIN_LOOP {
 			}
 			if ( !status.square_checked && !ismy(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()) ) {
 				status.square_checked = true;
-				if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), status.cnt)) {
-					log("Beginning a square here implies possible collision. Staying in the safe zone");
-					move.setDirection(Direction::LEFT);
-					stage = stale_begin;
-					break;
-				}
 			}
 
 			if ( !status.saved ) {
@@ -270,11 +252,6 @@ _MAIN_LOOP {
 				status.direction = opposite(status.direction);
 				stage = begin;
 				status.saved = false;
-				if (!squarefree(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY())) {
-					log("Square implies collision/stalling. Stalling here in the safe zone");
-					move.setDirection(Direction::LEFT);
-					stage = stale_begin;
-				}
 			}
 
 			status.affected_cells.push_back(std::make_pair(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()));
