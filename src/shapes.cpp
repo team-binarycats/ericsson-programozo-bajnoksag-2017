@@ -6,6 +6,7 @@
 #include <ncurses.h>
 #include <functional>
 #include <vector>
+#include <utility>
 
 using namespace ericsson2017::protocol;
 
@@ -31,6 +32,7 @@ struct SquareStatus {
 	bool saved;
 	bool square_checked; // It is checked whether safe to make this square
 	size_t cnt; // Steps are taken in the stage
+	std::vector<std::pair<size_t, size_t>> affected_cells;
 };
 SquareStatus status, lastStatus;
 
@@ -56,6 +58,7 @@ _SETUP {
 	status.square_num = 0;
 	status.saved = false;
 	status.square_checked = false;
+	status.affected_cells.clear();
 
 	if ( reason == SetupReason::INIT ) {
 		stage = initial;
@@ -206,7 +209,7 @@ _MAIN_LOOP {
 			break;
 
 		case begin:
-			if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 3*a-status.cnt)) {
+			if (!freetil(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()+1, 2*a-status.cnt)) {
 				log("Possible collision detected. Stalling for safety.");
 				move.setDirection(Direction::LEFT);
 				stage = stale_begin;
@@ -232,6 +235,7 @@ _MAIN_LOOP {
 			if ( ++status.cnt == a ) {
 				status.cnt = 0;
 				stage = cont;
+				status.affected_cells.clear();
 			}
 			break;
 
@@ -241,7 +245,7 @@ _MAIN_LOOP {
 			break;
 
 		case cont:
-			if (!freetil(response.getUnits()[0].getPosition().getX()+(status.direction==Direction::DOWN?1:-1), response.getUnits()[0].getPosition().getY(), 2*a-status.cnt)) {
+			if (!freetil(response.getUnits()[0].getPosition().getX()+(status.direction==Direction::DOWN?1:-1), response.getUnits()[0].getPosition().getY(), a)) {
 				log("Possible collision detected. Stalling for safety.");
 				move.setDirection(opposite(status.direction));
 				stage = stale_cont;
@@ -249,10 +253,16 @@ _MAIN_LOOP {
 			}
 
 			move.setDirection(status.direction);
-			if ( ++status.cnt == a ) {
-				status.cnt = 0;
-				stage = end;
+			for (auto cell : status.affected_cells) {
+				if (!freetil(cell.first, cell.second, a+1)) {
+					log("Ouch! They try to hit our tail!");
+					move.setDirection(Direction::LEFT);
+					status.cnt = 1;
+					stage = end;
+					break;
+				}
 			}
+
 			if ( response.getUnits()[0].getPosition().getX() == (status.direction==Direction::DOWN?79:0) ) {
 				log("Error: We are near hitting a wall. Making an emergency (and economic) U-turn");
 				status.square_num = 0;
@@ -266,6 +276,8 @@ _MAIN_LOOP {
 					stage = stale_begin;
 				}
 			}
+
+			status.affected_cells.push_back(std::make_pair(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY()));
 			break;
 
 		case stale_end:
