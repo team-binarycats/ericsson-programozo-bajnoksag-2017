@@ -6,7 +6,7 @@
 using namespace std;
 
 time_t thinking_timeout = numeric_limits<time_t>::max();
-const time_t thinking_time_limit = 4;
+const time_t thinking_time_limit = 2;
 
 const size_t BOARD_SIZE_X = 80;
 const size_t BOARD_SIZE_Y = 100;
