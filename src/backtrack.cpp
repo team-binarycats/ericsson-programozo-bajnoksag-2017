@@ -67,7 +67,7 @@ struct Dir {
 		y.set(old_y*dir.x-old_x*dir.y);
 	}
 
-	Dir(X x, Y y) : x(x), y(y) {}
+	Dir(int x, int y) : x(x), y(y) {}
 	Dir(const ericsson2017::protocol::Direction dir) : Dir(
 		( dir == ericsson2017::protocol::Direction::UP ) ? -1 : ( dir == ericsson2017::protocol::Direction::DOWN ) ? 1 : 0,
 		( dir == ericsson2017::protocol::Direction::LEFT ) ? -1 : ( dir == ericsson2017::protocol::Direction::RIGHT ) ? 1 : 0
