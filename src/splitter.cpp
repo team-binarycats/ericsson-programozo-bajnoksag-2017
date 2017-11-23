@@ -224,7 +224,7 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 		if ( e.x==x && e.y==y ) return false;
 	}
 
-	return true;
+	return freetil(response, es, time-1, x, y);
 }
 
 bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
