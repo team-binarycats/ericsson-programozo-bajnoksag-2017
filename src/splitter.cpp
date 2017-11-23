@@ -127,6 +127,10 @@ _SETUP {
 
 bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y);
 
+bool safe(const Response::Reader&, unsigned, size_t, size_t) {
+	return true; //TODO write advanced
+}
+
 _MAIN_LOOP {
 	switch (stage) {
 		case move_to:
