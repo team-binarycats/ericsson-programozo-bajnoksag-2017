@@ -50,6 +50,16 @@ void reset_checkpoint(){
 	checkpoint=0;
 }
 
+Direction direction;
+void reset_direction(){
+	direction=Direction::DOWN; // dummy value
+}
+
+Direction side_direction;
+void reset_side_direction(){
+	side_direction=Direction::RIGHT; // dummy value
+}
+
 unsigned split;
 void reset_split(){
 	split=3;
@@ -70,6 +80,9 @@ void next_side(){
 	} else {
 		vertical=true;
 	}
+
+	// You are not required to understand why this works
+	swap(direction, side_direction); direction=opposite(direction); side_direction=opposite(side_direction);
 }
 
 unsigned col;
@@ -82,6 +95,7 @@ void next_col(){
 		next_side();
 	}
 	reset_checkpoint();
+	direction=opposite(direction);
 	stage=move_to;
 }
 
@@ -124,10 +138,10 @@ _MAIN_LOOP {
 						response.getUnits()[0].getPosition().getX()+( vertical ? 1 : 0 ),
 						response.getUnits()[0].getPosition().getY()+( vertical ? 0 : 1 )
 			)) {
-				move.setDirection(vertical ? Direction::DOWN : Direction::RIGHT);
+				move.setDirection(direction);
 				cnt++;
 			} else {
-				move.setDirection(vertical ? Direction::UP : Direction::LEFT);
+				move.setDirection(opposite(direction));
 				cnt--;
 			}
 
