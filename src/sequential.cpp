@@ -9,7 +9,7 @@
 
 using namespace ericsson2017::protocol;
 
-const size_t a = 19; // Square size
+size_t a = 19; // Square size
 const size_t max_square_num = 80/(a+1);
 
 enum Stage {
@@ -56,6 +56,7 @@ _SETUP {
 	status.square_num = 0;
 	status.saved = false;
 	status.square_checked = false;
+	a = std::max(15, 30-2*level);
 
 	if ( reason == SetupReason::INIT ) {
 		stage = initial;
