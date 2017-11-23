@@ -4,6 +4,42 @@
 using namespace std;
 using namespace ericsson2017::protocol;
 
+Direction opposite (Direction direction) {
+	switch (direction) {
+		case Direction::UP:
+			return Direction::DOWN;
+
+		case Direction::LEFT:
+			return Direction::RIGHT;
+
+		case Direction::DOWN:
+			return Direction::UP;
+
+		case Direction::RIGHT:
+			return Direction::LEFT;
+	}
+}
+
+Direction next (Direction direction) {
+	switch (direction) {
+		case Direction::UP:
+			return Direction::RIGHT;
+
+		case Direction::LEFT:
+			return Direction::UP;
+
+		case Direction::DOWN:
+			return Direction::LEFT;
+
+		case Direction::RIGHT:
+			return Direction::DOWN;
+	}
+}
+
+Direction prev (Direction direction) {
+	return next(next(next(direction)));
+}
+
 enum {
 	move_to,
 	doit,
