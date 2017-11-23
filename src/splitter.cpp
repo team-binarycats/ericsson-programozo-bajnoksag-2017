@@ -174,7 +174,7 @@ _SETUP {
 }
 
 struct E {
-	int x, y;
+	size_t x, y;
 	short signed xd, yd;
 	E(const Enemy::Reader& enemy) :
 		x(enemy.getPosition().getX()),
