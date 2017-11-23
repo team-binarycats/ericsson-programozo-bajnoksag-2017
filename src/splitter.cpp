@@ -187,8 +187,7 @@ struct E {
 bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size_t x, size_t y) {
 	if ( time == 0 ) return true;
 	
-	size_t es_size_before = es.size();
-	for (size_t i = 0; i < es_size_before; i++) {
+	for (size_t i = 0, es_size_before = es.size(); i < es_size_before; i++) {
 		size_t next_x = es[i].x+es[i].xd;
 		size_t next_y = es[i].y+es[i].yd;
 		if ( response.getCells()[next_x][next_y].getOwner() == 1 ) { // My cell => do the bounce
