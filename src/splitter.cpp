@@ -249,6 +249,7 @@ bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, in
 
 _MAIN_LOOP {
 	if ( response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
+		if (cnt>checkpoint) checkpoint=cnt;
 		reset_cnt();
 	}
 
