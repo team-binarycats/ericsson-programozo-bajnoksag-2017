@@ -94,6 +94,16 @@ _MAIN_LOOP {
 				move.setDirection(vertical ? Direction::UP : Direction::LEFT);
 				cnt--;
 			}
+
+			if (vertical) {
+				if (response.getUnits()[0].getPosition().getX()>=78) {
+					next_col();
+				}
+			} else { // horizontal
+				if (response.getUnits()[0].getPosition().getY()>=98) {
+					next_col();
+				}
+			}
 			break;
 	}
 }
