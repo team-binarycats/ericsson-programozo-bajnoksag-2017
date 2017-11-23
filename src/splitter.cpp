@@ -144,9 +144,9 @@ void next_col(){
 	stage=move_to;
 }
 
-unsigned cnt;
+unsigned cnt, maxcnt;
 void reset_cnt(){
-	cnt=0;
+	maxcnt=cnt=0;
 }
 
 _SETUP {
@@ -251,6 +251,8 @@ _MAIN_LOOP {
 	if ( response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
 		if (cnt>checkpoint) checkpoint=cnt;
 		reset_cnt();
+	} else {
+		if (cnt>maxcnt) maxcnt=cnt;
 	}
 
 	if ( stage == doit ) {
