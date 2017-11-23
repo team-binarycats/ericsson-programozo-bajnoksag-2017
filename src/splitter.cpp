@@ -18,6 +18,7 @@ Direction opposite (Direction direction) {
 		case Direction::RIGHT:
 			return Direction::LEFT;
 	}
+	throw domain_error("Bad direction");
 }
 
 Direction next (Direction direction) {
@@ -34,6 +35,7 @@ Direction next (Direction direction) {
 		case Direction::RIGHT:
 			return Direction::DOWN;
 	}
+	throw domain_error("Bad direction");
 }
 
 Direction prev (Direction direction) {
@@ -53,6 +55,9 @@ string to_string(Direction direction) {
 
 		case Direction::RIGHT:
 			return "RIGHT";
+
+		default:
+			return "???";
 	}
 }
 
