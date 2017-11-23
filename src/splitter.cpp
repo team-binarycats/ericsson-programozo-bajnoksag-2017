@@ -189,36 +189,35 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 	
 	size_t es_size_before = es.size();
 	for (size_t i = 0; i < es_size_before; i++) {
-		E& e = es[i];
-		size_t next_x = e.x+e.xd;
-		size_t next_y = e.y+e.yd;
+		size_t next_x = es[i].x+es[i].xd;
+		size_t next_y = es[i].y+es[i].yd;
 		if ( response.getCells()[next_x][next_y].getOwner() == 1 ) { // My cell => do the bounce
 			bool moved = false;
-			for (int i=0; i<4; i++) { // bitfield: <x_dir><y_dir>
-				size_t next_x = e.x + 1-i/2*2;
-				size_t next_y = e.y + 1-i%2*2;
+			for (int d=0; d<4; d++) { // bitfield: <x_dir><y_dir>
+				size_t next_x = es[i].x + 1-d/2*2;
+				size_t next_y = es[i].y + 1-d%2*2;
 				if ( response.getCells()[next_x][next_y].getOwner() == 1 ) continue;
 				else { // free route
 					if (moved) {
-						E e2 = e;
+						E e2 = es[i];
 						e2.x = next_x;
 						e2.y = next_y;
-						e2.xd = 1-i/2*2;
-						e2.yd = 1-i%2*2;
+						e2.xd = 1-d/2*2;
+						e2.yd = 1-d%2*2;
 						es.push_back(e2);
 					} else { // !moved
-						E& e2 = e;
+						E& e2 = es[i];
 						e2.x = next_x;
 						e2.y = next_y;
-						e2.xd = 1-i/2*2;
-						e2.yd = 1-i%2*2;
+						e2.xd = 1-d/2*2;
+						e2.yd = 1-d%2*2;
 						moved = true;
 					}
 				}
 			}
 		} else { // straight line
-			e.x = next_x;
-			e.y = next_y;
+			es[i].x = next_x;
+			es[i].y = next_y;
 		}
 	}
 
