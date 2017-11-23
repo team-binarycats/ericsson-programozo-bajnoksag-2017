@@ -237,10 +237,10 @@ bool safe(const Response::Reader& response, size_t x, size_t y, size_t time) {
 }
 
 bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
-	if ( cnt != 0 ) {
-		if ( !safe(response, cnt-1, x-v_x, y-v_y, v_x, v_y, time) ) return false;
+	for (unsigned i=cnt; i>0; i--) {
+		if ( !safe(response, x-v_x*(cnt-i+1), y-v_y*(cnt-i+1), time) ) return false;
 	}
-	return safe(response, x, y, time);
+	return true;
 }
 
 bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y) {
