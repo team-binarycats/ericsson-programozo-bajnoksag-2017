@@ -220,6 +220,10 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 		}
 	}
 
+	for (auto e : es) {
+		if ( e.x==x && e.y==y ) return false;
+	}
+
 	return true;
 }
 
