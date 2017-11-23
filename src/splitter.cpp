@@ -228,15 +228,19 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 	return freetil(response, es, time-1, x, y);
 }
 
-bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
-	if ( cnt != 0 ) {
-		if ( !safe(response, cnt-1, x-v_x, y-v_y, v_x, v_y, time) ) return false;
-	}
+bool safe(const Response::Reader& response, size_t x, size_t y, size_t time) {
 	vector<E> es;
 	for (auto enemy : response.getEnemies()) {
 		es.push_back(E(enemy));
 	}
 	return freetil(response, es, time, x, y);
+}
+
+bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
+	if ( cnt != 0 ) {
+		if ( !safe(response, cnt-1, x-v_x, y-v_y, v_x, v_y, time) ) return false;
+	}
+	return safe(response, x, y, time);
 }
 
 bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y) {
