@@ -173,10 +173,71 @@ _SETUP {
 	}
 }
 
-bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y);
+struct E {
+	int x, y;
+	short signed xd, yd;
+	E(const Enemy::Reader& enemy) :
+		x(enemy.getPosition().getX()),
+		y(enemy.getPosition().getY()),
+		xd(extract_x(enemy.getDirection().getVertical())),
+		yd(extract_y(enemy.getDirection().getHorizontal()))
+	{}
+};
 
-bool safe(const Response::Reader&, unsigned, size_t, size_t) {
-	return true; //TODO write advanced
+bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size_t x, size_t y) {
+	if ( time == 0 ) return true;
+	
+	size_t es_size_before = es.size();
+	for (size_t i = 0; i < es_size_before; i++) {
+		E& e = es[i];
+		size_t next_x = e.x+e.xd;
+		size_t next_y = e.y+e.yd;
+		if ( response.getCells()[next_x][next_y].getOwner() == 1 ) { // My cell => do the bounce
+			bool moved = false;
+			for (int i=0; i<4; i++) { // bitfield: <x_dir><y_dir>
+				size_t next_x = e.x + 1-i/2*2;
+				size_t next_y = e.y + 1-i%2*2;
+				if ( response.getCells()[next_x][next_y].getOwner() == 1 ) continue;
+				else { // free route
+					if (moved) {
+						E e2 = e;
+						e2.x = next_x;
+						e2.y = next_y;
+						e2.xd = 1-i/2*2;
+						e2.yd = 1-i%2*2;
+						es.push_back(e2);
+					} else { // !moved
+						E& e2 = e;
+						e2.x = next_x;
+						e2.y = next_y;
+						e2.xd = 1-i/2*2;
+						e2.yd = 1-i%2*2;
+						moved = true;
+					}
+				}
+			}
+		} else { // straight line
+			e.x = next_x;
+			e.y = next_y;
+		}
+	}
+
+	return true;
+}
+
+bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
+	if ( cnt != 0 ) {
+		if ( !safe(response, cnt-1, x-v_x, y-v_y, v_x, v_y, time) ) return false;
+	}
+	vector<E> es;
+	for (auto enemy : response.getEnemies()) {
+		es.push_back(E(enemy));
+	}
+	return freetil(response, es, time, x, y);
+}
+
+bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y) {
+	return safe(response, cnt, x, y, v_x, v_y, cnt);
 }
 
 _MAIN_LOOP {
@@ -234,8 +295,8 @@ _MAIN_LOOP {
 		case doit:
 			if (safe(response, cnt,
 						response.getUnits()[0].getPosition().getX()+( vertical ? 1 : 0 ),
-						response.getUnits()[0].getPosition().getY()+( vertical ? 0 : 1 )
-			)) {
+						response.getUnits()[0].getPosition().getY()+( vertical ? 0 : 1 ),
+			extract_x(direction), extract_y(direction))) {
 				move.setDirection(direction);
 				cnt++;
 			} else {
