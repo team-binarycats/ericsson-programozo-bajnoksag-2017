@@ -193,7 +193,7 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 		size_t next_y = es[i].y+es[i].yd;
 		if ( response.getCells()[next_x][next_y].getOwner() == 1 ) { // My cell => do the bounce
 			bool moved = false;
-			for (int d=0; d<4; d++) { // bitfield: <x_dir><y_dir>
+			for (int d=0; d<4; d++) { // bitfield: ...<x_dir><y_dir>
 				size_t next_x = es[i].x + 1-d/2*2;
 				size_t next_y = es[i].y + 1-d%2*2;
 				if ( response.getCells()[next_x][next_y].getOwner() == 1 ) continue;
