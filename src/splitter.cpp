@@ -56,6 +56,27 @@ string to_string(Direction direction) {
 	}
 }
 
+int extract_x(Direction direction) {
+	switch (direction) {
+		case Direction::UP:
+			return -1;
+
+		case Direction::LEFT:
+			return 0;
+
+		case Direction::DOWN:
+			return +1;
+
+		case Direction::RIGHT:
+			return 0;
+	}
+	throw domain_error("Bad direction");
+}
+
+int extract_y(Direction direction) {
+	return extract_x(next(direction));
+}
+
 enum {
 	move_to,
 	doit,
