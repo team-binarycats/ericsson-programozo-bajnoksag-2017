@@ -244,15 +244,11 @@ bool safe(const Response::Reader& response, size_t x, size_t y, size_t time) {
 	return freetil(response, es, time, x, y);
 }
 
-bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y, size_t time) {
-	for (unsigned i=cnt; i>0; i--) {
-		if ( !safe(response, x-v_x*(cnt-i+1), y-v_y*(cnt-i+1), time) ) return false;
+bool safe(const Response::Reader& response, unsigned before, unsigned after, size_t x, size_t y, int v_x, int v_y) {
+	for (unsigned i=-before; i<=after; i++) {
+		if ( !safe(response, x+v_x*i, y+v_y*i, before) ) return false;
 	}
 	return true;
-}
-
-bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, int v_x, int v_y) {
-	return safe(response, cnt, x, y, v_x, v_y, cnt);
 }
 
 _MAIN_LOOP {
@@ -317,7 +313,7 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
-			if (safe(response, cnt,
+			if (safe(response, cnt, maxcnt-cnt,
 						response.getUnits()[0].getPosition().getX()+( vertical ? 1 : 0 ),
 						response.getUnits()[0].getPosition().getY()+( vertical ? 0 : 1 ),
 			extract_x(direction), extract_y(direction))) {
