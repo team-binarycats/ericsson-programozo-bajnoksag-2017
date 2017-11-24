@@ -305,17 +305,31 @@ _MAIN_LOOP {
 
 				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction));
 
-				if ( abs(v_diff) > abs(h_diff) ) {
+				if ( (abs(v_diff)>0) && (unit.getPosition().getY()<2 || unit.getPosition().getY()>97) ) {
 					if ( v_diff > 0 ) {
 						move.setDirection(Direction::DOWN);
 					} else { // v_diff < 0
 						move.setDirection(Direction::UP);
 					}
-				} else { // h_diff > v_diff
+				} else if ( (abs(h_diff)>0) && (unit.getPosition().getX()<2 || unit.getPosition().getX()>77) ) {
 					if ( h_diff > 0 ) {
 						move.setDirection(Direction::RIGHT);
 					} else { // h_diff < 0
 						move.setDirection(Direction::LEFT);
+					}
+				} else { // Dumb method
+					if ( abs(v_diff) > abs(h_diff) ) {
+						if ( v_diff > 0 ) {
+							move.setDirection(Direction::DOWN);
+						} else { // v_diff < 0
+							move.setDirection(Direction::UP);
+						}
+					} else { // h_diff > v_diff
+						if ( h_diff > 0 ) {
+							move.setDirection(Direction::RIGHT);
+						} else { // h_diff < 0
+							move.setDirection(Direction::LEFT);
+						}
 					}
 				}
 
