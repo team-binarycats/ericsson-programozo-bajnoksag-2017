@@ -136,7 +136,7 @@ void next_side(){
 	}
 
 	// You are not required to understand why this works
-	swap(direction, side_direction); direction=opposite(direction); side_direction=opposite(side_direction);
+	swap(direction, side_direction); side_direction=opposite(side_direction);
 }
 
 unsigned col;
