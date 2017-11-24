@@ -349,6 +349,11 @@ _MAIN_LOOP {
 		}
 	}
 
+	while ( allmy(response) ) {
+		log("I own everything here, economic row skip");
+		next_col();
+	}
+
 	if ( (stage == doit) && (cell.getOwner() == 1) ) {
 		auto cp = calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction);
 		if  (cp>checkpoint) {
