@@ -335,6 +335,7 @@ _MAIN_LOOP {
 				move.setDirection(direction);
 				cnt++;
 			} else {
+				log("Ouch, unsafe!");
 				move.setDirection(opposite(direction));
 				cnt--;
 			}
