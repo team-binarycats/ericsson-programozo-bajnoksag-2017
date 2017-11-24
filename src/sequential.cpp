@@ -56,7 +56,7 @@ _SETUP {
 	status.square_num = 0;
 	status.saved = false;
 	status.square_checked = false;
-	a = std::max(15, 30-2*level);
+	a = std::max(15, 32-3*level);
 
 	if ( reason == SetupReason::INIT ) {
 		stage = initial;
