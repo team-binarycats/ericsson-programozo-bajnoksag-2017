@@ -257,13 +257,15 @@ bool safe(const Response::Reader& response, unsigned cnt, size_t x, size_t y, in
 
 _MAIN_LOOP {
 	if ( response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
-		if (cnt>checkpoint) checkpoint=cnt;
 		reset_cnt();
-	} else {
-		if (cnt>maxcnt) maxcnt=cnt;
 	}
 
 	if ( stage == doit ) {
+		{
+			auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
+			if  (cp>checkpoint) checkpoint=cp;
+		}
+		if (cnt>maxcnt) maxcnt=cnt;
 		switch (direction) {
 			case Direction::DOWN:	if (response.getUnits()[0].getPosition().getX()>=78)	next_col(); break;
 			case Direction::UP:	if (response.getUnits()[0].getPosition().getX()<=1)	next_col(); break;
