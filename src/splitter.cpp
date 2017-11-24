@@ -332,7 +332,7 @@ _MAIN_LOOP {
 						unit.getPosition().getY(),
 						extract_x(direction),
 						extract_y(direction),
-						maxcnt
+						cnt+2*(maxcnt-cnt)
 			)) {
 				move.setDirection(direction);
 				cnt++;
