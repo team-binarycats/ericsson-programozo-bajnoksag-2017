@@ -268,7 +268,10 @@ _MAIN_LOOP {
 
 	if ( (stage == doit) && (response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1) ) {
 		auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
-		if  (cp>checkpoint) checkpoint=cp;
+		if  (cp>checkpoint) {
+			checkpoint=cp;
+			log("Checkpoint saved");
+		}
 	}
 
 	switch (stage) {
