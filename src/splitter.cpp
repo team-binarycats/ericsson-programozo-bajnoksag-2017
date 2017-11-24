@@ -82,6 +82,19 @@ int extract_y(const Direction& direction) {
 	return extract_x(next(direction));
 }
 
+size_t size_at(const Direction& direction) {
+	switch (direction) {
+		case Direction::UP:
+		case Direction::DOWN:
+			return 80;
+
+		case Direction::LEFT:
+		case Direction::RIGHT:
+			return 100;
+	}
+	throw domain_error("Bad direction");
+}
+
 enum {
 	move_to,
 	doit,
