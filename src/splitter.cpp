@@ -147,6 +147,10 @@ size_t end_y(const Direction& direction) {
 	throw domain_error("Bad horizontal direction");
 }
 
+bool owns(const Response::Reader& response, const size_t& x, const size_t& y) {
+	return response.getCells()[x][y].getOwner() == 1 && response.getCells()[x][y].getAttack().isCan();
+}
+
 enum {
 	move_to,
 	doit,
@@ -265,13 +269,13 @@ bool freetil(const Response::Reader& response, vector<E> es, const unsigned& tim
 	for (size_t i = 0, es_size_before = es.size(); i < es_size_before; i++) {
 		size_t next_x = es[i].x+es[i].xd;
 		size_t next_y = es[i].y+es[i].yd;
-		if ( response.getCells()[next_x][next_y].getOwner() == 1 ) { // My cell => do the bounce
+		if ( owns(response, next_x, next_y) ) { // My cell => do the bounce
 			E e = es[i];
 			bool moved = false;
 			for (int d=0; d<4; d++) { // bitfield: ...<x_dir><y_dir>
 				size_t next_x = e.x + 1-d/2*2;
 				size_t next_y = e.y + 1-d%2*2;
-				if ( response.getCells()[next_x][next_y].getOwner() == 1 ) continue;
+				if ( owns(response, next_x, next_y) ) continue;
 				else { // free route
 					if (moved) {
 						E e2 = e;
@@ -325,7 +329,7 @@ bool allmy(const Response::Reader& response) { // Checks wether I own all cells 
 		vertical ? x != end_x(direction)+extract_x(direction) : y != end_y(direction)+extract_y(direction);
 		x+=extract_x(direction), y+=extract_y(direction)
 	) {
-		if ( response.getCells()[x][y].getOwner() != 1 ) {
+		if ( !owns(response, x, y) ) {
 			return false;
 		}
 	}
