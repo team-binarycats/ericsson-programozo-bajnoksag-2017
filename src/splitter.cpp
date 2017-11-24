@@ -331,6 +331,7 @@ _MAIN_LOOP {
 				move.setDirection(opposite(direction));
 				cnt--;
 			}
+			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
 			break;
 	}
 }
