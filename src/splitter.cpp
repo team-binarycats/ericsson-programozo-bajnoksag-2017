@@ -99,6 +99,7 @@ unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
 		case Direction::UP:	return 78-x;	break;
 		case Direction::LEFT:	return 98-x;	break;
 	}
+	throw domain_error("Bad direction");
 }
 
 Direction direction;
