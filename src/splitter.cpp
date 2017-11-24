@@ -90,6 +90,7 @@ enum {
 unsigned checkpoint; // last safe x (or y) in current col
 void reset_checkpoint(){
 	checkpoint=0;
+	log("Checkpoint reseted");
 }
 unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
 	switch (direction) {
