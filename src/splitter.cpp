@@ -4,7 +4,7 @@
 using namespace ericsson2017::protocol;
 using namespace std;
 
-Direction opposite (Direction direction) {
+Direction opposite (const Direction& direction) {
 	switch (direction) {
 		case Direction::UP:
 			return Direction::DOWN;
@@ -21,7 +21,7 @@ Direction opposite (Direction direction) {
 	throw domain_error("Bad direction");
 }
 
-Direction next (Direction direction) {
+Direction next (const Direction& direction) {
 	switch (direction) {
 		case Direction::UP:
 			return Direction::RIGHT;
@@ -38,11 +38,11 @@ Direction next (Direction direction) {
 	throw domain_error("Bad direction");
 }
 
-Direction prev (Direction direction) {
+Direction prev (const Direction& direction) {
 	return next(next(next(direction)));
 }
 
-string to_string(Direction direction) {
+string to_string(const Direction& direction) {
 	switch (direction) {
 		case Direction::UP:
 			return "UP";
@@ -61,7 +61,7 @@ string to_string(Direction direction) {
 	}
 }
 
-int extract_x(Direction direction) {
+int extract_x(const Direction& direction) {
 	switch (direction) {
 		case Direction::UP:
 			return -1;
@@ -78,7 +78,7 @@ int extract_x(Direction direction) {
 	throw domain_error("Bad direction");
 }
 
-int extract_y(Direction direction) {
+int extract_y(const Direction& direction) {
 	return extract_x(next(direction));
 }
 
@@ -91,7 +91,7 @@ unsigned checkpoint; // last safe x (or y) in current col
 void reset_checkpoint(){
 	checkpoint=0;
 }
-unsigned calc_cp(size_t x, size_t y, Direction direction) {
+unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
 	switch (direction) {
 		case Direction::DOWN:	return x-1;	break;
 		case Direction::RIGHT:	return y-1;	break;
@@ -192,7 +192,7 @@ struct E {
 	{}
 };
 
-bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size_t x, size_t y) {
+bool freetil(const Response::Reader& response, vector<E> es, const unsigned& time, const size_t& x, const size_t& y) {
 	if ( time == 0 ) return true;
 	
 	for (size_t i = 0, es_size_before = es.size(); i < es_size_before; i++) {
@@ -236,7 +236,7 @@ bool freetil(const Response::Reader& response, vector<E> es, unsigned time, size
 	return freetil(response, es, time-1, x, y);
 }
 
-bool safe(const Response::Reader& response, size_t x, size_t y, size_t time) {
+bool safe(const Response::Reader& response, const size_t& x, const size_t& y, const size_t& time) {
 	vector<E> es;
 	for (auto enemy : response.getEnemies()) {
 		es.push_back(E(enemy));
@@ -244,7 +244,7 @@ bool safe(const Response::Reader& response, size_t x, size_t y, size_t time) {
 	return freetil(response, es, time, x, y);
 }
 
-bool safe(const Response::Reader& response, unsigned before, unsigned after, size_t x, size_t y, int v_x, int v_y) {
+bool safe(const Response::Reader& response, const unsigned& before, const unsigned& after, const size_t& x, const size_t& y, const int& v_x, const int& v_y) {
 	for (unsigned i=-before; i<=after; i++) {
 		if ( !safe(response, x+v_x*i, y+v_y*i, before) ) return false;
 	}
@@ -266,7 +266,7 @@ _MAIN_LOOP {
 		}
 	}
 
-	if ( stage == doit && response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
+	if ( (stage == doit) && (response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1) ) {
 		auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
 		if  (cp>checkpoint) checkpoint=cp;
 	}
