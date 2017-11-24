@@ -95,6 +95,58 @@ size_t size_at(const Direction& direction) {
 	throw domain_error("Bad direction");
 }
 
+size_t start_at(const Direction&) {
+	return 2;
+}
+
+size_t end_at(const Direction& direction) {
+	return size_at(direction)-start_at(direction)-1;
+}
+
+size_t start_x(const Direction& direction) {
+	switch (direction) {
+		case Direction::UP:
+			return 77;
+
+		case Direction::DOWN:
+			return 2;
+	}
+	throw domain_error("Bad vertical direction");
+}
+
+size_t start_y(const Direction& direction) {
+	switch (direction) {
+		case Direction::LEFT:
+			return 97;
+
+		case Direction::RIGHT:
+			return 2;
+	}
+	throw domain_error("Bad horizontal direction");
+}
+
+size_t end_x(const Direction& direction) {
+	switch (direction) {
+		case Direction::UP:
+			return 2;
+
+		case Direction::DOWN:
+			return 77;
+	}
+	throw domain_error("Bad vertical direction");
+}
+
+size_t end_y(const Direction& direction) {
+	switch (direction) {
+		case Direction::LEFT:
+			return 2;
+
+		case Direction::RIGHT:
+			return 97;
+	}
+	throw domain_error("Bad horizontal direction");
+}
+
 enum {
 	move_to,
 	doit,
