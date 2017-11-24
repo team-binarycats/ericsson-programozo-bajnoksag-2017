@@ -321,7 +321,7 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
-			if (safe(response, cnt, maxcnt-cnt,
+			if (safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
 						unit.getPosition().getX()+( vertical ? 1 : 0 ),
 						unit.getPosition().getY()+( vertical ? 0 : 1 ),
 			extract_x(direction), extract_y(direction))) {
