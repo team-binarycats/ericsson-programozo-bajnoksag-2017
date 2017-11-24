@@ -126,11 +126,11 @@ void reset_vertical(){
 }
 void next_side(){
 	log("Next side");
-	if (vertical==true) {
+	if (vertical==false) {
 		reset_vertical();
 		next_split();
 	} else {
-		vertical=true;
+		vertical=false;
 	}
 
 	// You are not required to understand why this works
