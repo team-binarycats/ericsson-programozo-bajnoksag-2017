@@ -91,6 +91,14 @@ unsigned checkpoint; // last safe x (or y) in current col
 void reset_checkpoint(){
 	checkpoint=0;
 }
+unsigned calc_cp(size_t x, size_t y, Direction direction) {
+	switch (direction) {
+		case Direction::DOWN:	return x-1;	break;
+		case Direction::RIGHT:	return y-1;	break;
+		case Direction::UP:	return 78-x;	break;
+		case Direction::LEFT:	return 98-x;	break;
+	}
+}
 
 Direction direction;
 void reset_direction(){
