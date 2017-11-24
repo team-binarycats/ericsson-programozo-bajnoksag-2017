@@ -257,10 +257,6 @@ _MAIN_LOOP {
 	}
 
 	if ( stage == doit ) {
-		{
-			auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
-			if  (cp>checkpoint) checkpoint=cp;
-		}
 		if (cnt>maxcnt) maxcnt=cnt;
 		switch (direction) {
 			case Direction::DOWN:	if (response.getUnits()[0].getPosition().getX()>=78)	next_col(); break;
@@ -268,6 +264,11 @@ _MAIN_LOOP {
 			case Direction::RIGHT:	if (response.getUnits()[0].getPosition().getY()>=98)	next_col(); break;
 			case Direction::LEFT:	if (response.getUnits()[0].getPosition().getY()<=1)	next_col(); break;
 		}
+	}
+
+	if ( stage == doit && response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
+		auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
+		if  (cp>checkpoint) checkpoint=cp;
 	}
 
 	switch (stage) {
