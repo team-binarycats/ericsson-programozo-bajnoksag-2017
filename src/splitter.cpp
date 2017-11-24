@@ -424,7 +424,7 @@ _MAIN_LOOP {
 
 		case doit:
 			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
-			if ( ( maxcnt==cnt || true )
+			if ( maxcnt==cnt
 					&& ( ( safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
