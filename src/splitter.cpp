@@ -290,7 +290,7 @@ _MAIN_LOOP {
 				signed v_diff = target_x - response.getUnits()[0].getPosition().getX();
 				signed h_diff = target_y - response.getUnits()[0].getPosition().getY();
 
-				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") "+to_string(split)+(string)" "+to_string(col)+" "+(string)(vertical?"v":"h")+(string)" "+to_string(direction));
+				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction));
 
 				if ( abs(v_diff) > abs(h_diff) ) {
 					if ( v_diff > 0 ) {
