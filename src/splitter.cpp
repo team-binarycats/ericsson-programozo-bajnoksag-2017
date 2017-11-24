@@ -322,9 +322,11 @@ _MAIN_LOOP {
 
 		case doit:
 			if (safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
-						unit.getPosition().getX()+( vertical ? 1 : 0 ),
-						unit.getPosition().getY()+( vertical ? 0 : 1 ),
-			extract_x(direction), extract_y(direction))) {
+						unit.getPosition().getX(),
+						unit.getPosition().getY(),
+						extract_x(direction),
+						extract_y(direction)
+			)) {
 				move.setDirection(direction);
 				cnt++;
 			} else {
