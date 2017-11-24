@@ -435,7 +435,7 @@ _MAIN_LOOP {
 						extract_x(direction),
 						extract_y(direction),
 						cnt+2*(maxcnt-cnt)+2)
-					) || safe(response, cnt, size_at(direction)-4-cnt,
+					) || safe(response, cnt, size_at(direction)-calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction)-5,
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
 						extract_x(direction),
