@@ -247,9 +247,9 @@ bool safe(const Response::Reader& response, const size_t& x, const size_t& y, co
 	return freetil(response, es, time, x, y);
 }
 
-bool safe(const Response::Reader& response, const unsigned& before, const unsigned& after, const size_t& x, const size_t& y, const int& v_x, const int& v_y) {
-	for (unsigned i=-before; i<=+after; i++) {
-		if ( !safe(response, x+v_x*i, y+v_y*i, before) ) return false;
+bool safe(const Response::Reader& response, const unsigned& before, const unsigned& after, const size_t& x, const size_t& y, const int& v_x, const int& v_y, const size_t& time) {
+	for (int i=-(int)before; i<=+(int)after; i++) {
+		if ( !safe(response, x+v_x*i, y+v_y*i, time) ) return false;
 	}
 	return true;
 }
@@ -331,7 +331,8 @@ _MAIN_LOOP {
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
 						extract_x(direction),
-						extract_y(direction)
+						extract_y(direction),
+						maxcnt
 			)) {
 				move.setDirection(direction);
 				cnt++;
