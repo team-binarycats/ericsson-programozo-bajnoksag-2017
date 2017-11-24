@@ -262,7 +262,6 @@ _MAIN_LOOP {
 	}
 
 	if ( stage == doit ) {
-		if (cnt>maxcnt) maxcnt=cnt;
 		switch (direction) {
 			case Direction::DOWN:	if (unit.getPosition().getX()>=78)	next_col(); break;
 			case Direction::UP:	if (unit.getPosition().getX()<=1)	next_col(); break;
@@ -277,6 +276,10 @@ _MAIN_LOOP {
 			checkpoint=cp;
 			log("Checkpoint saved");
 		}
+	}
+
+	if ( stage == doit ) {
+		if (cnt>maxcnt) maxcnt=cnt;
 	}
 
 	switch (stage) {
@@ -322,6 +325,7 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
+			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
 			if (safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
@@ -334,7 +338,6 @@ _MAIN_LOOP {
 				move.setDirection(opposite(direction));
 				cnt--;
 			}
-			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
 			break;
 	}
 }
