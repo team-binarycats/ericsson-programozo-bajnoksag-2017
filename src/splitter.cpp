@@ -239,6 +239,7 @@ bool freetil(const Response::Reader& response, vector<E> es, const unsigned& tim
 }
 
 bool safe(const Response::Reader& response, const size_t& x, const size_t& y, const size_t& time) {
+	log((string)"Checking ("+to_string(x)+(string)","+to_string(y)+(string)") for safety");
 	vector<E> es;
 	for (auto enemy : response.getEnemies()) {
 		es.push_back(E(enemy));
