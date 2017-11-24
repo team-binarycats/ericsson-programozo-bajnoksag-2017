@@ -246,7 +246,7 @@ bool safe(const Response::Reader& response, const size_t& x, const size_t& y, co
 }
 
 bool safe(const Response::Reader& response, const unsigned& before, const unsigned& after, const size_t& x, const size_t& y, const int& v_x, const int& v_y) {
-	for (unsigned i=-before; i<=after; i++) {
+	for (unsigned i=-before; i<=+after; i++) {
 		if ( !safe(response, x+v_x*i, y+v_y*i, before) ) return false;
 	}
 	return true;
