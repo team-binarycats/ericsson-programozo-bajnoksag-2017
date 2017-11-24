@@ -252,22 +252,25 @@ bool safe(const Response::Reader& response, const unsigned& before, const unsign
 }
 
 _MAIN_LOOP {
-	if ( response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1 ) {
+	Unit::Reader unit = response.getUnits()[0];
+	Cell::Reader cell = response.getCells()[unit.getPosition().getX()][unit.getPosition().getY()];
+
+	if ( cell.getOwner() == 1 ) {
 		reset_cnt();
 	}
 
 	if ( stage == doit ) {
 		if (cnt>maxcnt) maxcnt=cnt;
 		switch (direction) {
-			case Direction::DOWN:	if (response.getUnits()[0].getPosition().getX()>=78)	next_col(); break;
-			case Direction::UP:	if (response.getUnits()[0].getPosition().getX()<=1)	next_col(); break;
-			case Direction::RIGHT:	if (response.getUnits()[0].getPosition().getY()>=98)	next_col(); break;
-			case Direction::LEFT:	if (response.getUnits()[0].getPosition().getY()<=1)	next_col(); break;
+			case Direction::DOWN:	if (unit.getPosition().getX()>=78)	next_col(); break;
+			case Direction::UP:	if (unit.getPosition().getX()<=1)	next_col(); break;
+			case Direction::RIGHT:	if (unit.getPosition().getY()>=98)	next_col(); break;
+			case Direction::LEFT:	if (unit.getPosition().getY()<=1)	next_col(); break;
 		}
 	}
 
-	if ( (stage == doit) && (response.getCells()[response.getUnits()[0].getPosition().getX()][response.getUnits()[0].getPosition().getX()].getOwner() == 1) ) {
-		auto cp = calc_cp(response.getUnits()[0].getPosition().getX(), response.getUnits()[0].getPosition().getY(), direction);
+	if ( (stage == doit) && (cell.getOwner() == 1) ) {
+		auto cp = calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction);
 		if  (cp>checkpoint) {
 			checkpoint=cp;
 			log("Checkpoint saved");
@@ -291,8 +294,8 @@ _MAIN_LOOP {
 					case Direction::LEFT:	target_y = 98 - checkpoint;	break;
 				}
 
-				signed v_diff = target_x - response.getUnits()[0].getPosition().getX();
-				signed h_diff = target_y - response.getUnits()[0].getPosition().getY();
+				signed v_diff = target_x - unit.getPosition().getX();
+				signed h_diff = target_y - unit.getPosition().getY();
 
 				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction));
 
@@ -318,8 +321,8 @@ _MAIN_LOOP {
 
 		case doit:
 			if (safe(response, cnt, maxcnt-cnt,
-						response.getUnits()[0].getPosition().getX()+( vertical ? 1 : 0 ),
-						response.getUnits()[0].getPosition().getY()+( vertical ? 0 : 1 ),
+						unit.getPosition().getX()+( vertical ? 1 : 0 ),
+						unit.getPosition().getY()+( vertical ? 0 : 1 ),
 			extract_x(direction), extract_y(direction))) {
 				move.setDirection(direction);
 				cnt++;
