@@ -327,12 +327,12 @@ _MAIN_LOOP {
 
 		case doit:
 			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
-			if ( maxcnt==cnt && safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
+			if ( maxcnt==cnt && safe(response, cnt, max(maxcnt-cnt, (unsigned)2),
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
 						extract_x(direction),
 						extract_y(direction),
-						cnt+2*(maxcnt-cnt)+1
+						cnt+2*(maxcnt-cnt)+2
 			) ) {
 				move.setDirection(direction);
 				cnt++;
