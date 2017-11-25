@@ -35,6 +35,7 @@ class RangedValue : public Value<T> {
 public:
 	static const T MIN = _MIN;
 	static const T MAX = _MAX;
+	static const T SIZE = _MAX - _MIN + 1;
 
 	void set(T value){
 		if (value < MIN) throw domain_error("too low");
@@ -44,6 +45,40 @@ public:
 	}
 
 	RangedValue(T value) : Value<T>(value) {}
+};
+
+template<typename T>
+class pvector : public vector<T*> {
+public:
+	explicit pvector() : vector<T*>() {}
+
+	explicit pvector(const size_t& count) : vector<T*>(count) {}
+
+	explicit pvector(const size_t& count, const T& value) : pvector(count) {
+		for (size_t i = 0; i < count; i++) {
+			(*this)[i] = new T(value);
+		}
+	}
+
+	pvector(const pvector& other) : pvector(other.size()) {
+		for (size_t i = 0; i < other.size(); i++) {
+			if ( other[i] != nullptr ) { // TODO remove this check
+				(*this)[i] = new T(*other[i]);
+			} else {
+				(*this)[i] = nullptr;
+			}
+		}
+	}
+
+	~pvector() {
+		for (auto p : *this) {
+			if ( p != nullptr ) { // TODO remove this check
+				delete p;
+			} else {
+				cerr<<"\033[0;41m!\033[0m";
+			}
+		}
+	}
 };
 
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
@@ -124,8 +159,8 @@ struct Pos {
 	}
 
 	template <typename T>
-	operator T() const {
-		return x * X::MAX + y;
+	explicit operator T() const {
+		return x * Y::SIZE + y;
 	}
 	bool operator==(const Pos& other) const {
 		return x==other.x && y==other.y;
@@ -145,14 +180,34 @@ struct Cell {
 	Cell(const pair<Pos, ericsson2017::protocol::Cell::Reader> pair) : Cell(pair.second, pair.first) {}
 };
 
-class Cells : public array<Cell*, BOARD_SIZE_X*BOARD_SIZE_Y> {
+class Cells : public pvector<Cell> { //TODO use array
 
 public:
-	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) {
+	reference operator[](const Pos& pos) {
+		return this->vector::operator[]((size_type)pos);
+	}
+
+	const_reference operator[](const Pos& pos) const {
+		return this->vector::operator[]((size_type)pos);
+	}
+
+	reference at(const Pos& pos) {
+		return this->vector::at((size_type)pos);
+	}
+
+	const_reference at(const Pos& pos) const {
+		return this->vector::at((size_type)pos);
+	}
+
+	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) : pvector<Cell>(BOARD_SIZE_X*BOARD_SIZE_Y) {
 		for (X::TYPE x = X::MIN; x <= X::MAX; x++) {
 			for (Y::TYPE y = Y::MIN; y <= Y::MAX; y++) {
+				if ( this->at(Pos(x, y)) != nullptr ) throw logic_error("Should be a memory hole");
 				this->at(Pos(x, y)) = new Cell(cells[x][y], Pos(x, y)); //TODO do it in initialisation
 			}
+		}
+		for (size_t i = 0; i < size(); i++ ) {
+			if ( this->vector::at(i) == nullptr ) throw logic_error("nullptr");
 		}
 	}
 };
@@ -164,22 +219,12 @@ struct Enemy {
 	Enemy(const ericsson2017::protocol::Enemy::Reader enemy) : pos(enemy.getPosition()), dir(enemy.getDirection()) {}
 };
 
-class Enemies : public vector<Enemy*> {
+class Enemies : public pvector<Enemy> {
 
 public:
 	Enemies(const capnp::List<ericsson2017::protocol::Enemy>::Reader enemies) {
 		for (auto enemy : enemies) {
 			this->push_back(new Enemy(enemy));
-		}
-	}
-	Enemies(const Enemies& other) : vector<Enemy*>(other.size()) {
-		for (size_t i = 0; i < other.size(); i++) {
-			(*this)[i] = new Enemy(*other[i]);
-		}
-	}
-	~Enemies() {
-		for (auto p : *this) {
-			delete p;
 		}
 	}
 };
@@ -296,7 +341,7 @@ struct State {
 	}
 
 	bool kills(Pos pos, size_t ticks) const {
-		cerr<<"\033[0;1m?\033[0;33m"<<ticks<<"\033[0;1:\033[0m";
+		cerr<<"\033[0;1m?\033[0;33m"<<ticks<<"\033[0;1m:\033[0m";
 		if (thinking_timeout<time(nullptr)) { // Ouch, timed out. Returning some dummy result.
 			//ericsson2017::protocol::log((string)"Backtrack timed out in kills() at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string(time(nullptr)-thinking_timeout));
 			cerr<<"\033[1;31mX\033[0m";
