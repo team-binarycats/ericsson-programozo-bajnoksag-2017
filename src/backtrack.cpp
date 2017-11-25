@@ -215,9 +215,16 @@ struct State {
 	}
 
 	static bool kills(Pos pos, size_t ticks, State state) {
+		cerr<<"\033[0;32m?\033[0m";
+		if (thinking_timeout<time(nullptr)) { // Ouch, timed out. Returning some dummy result.
+			cerr<<"\033[1;31mX\033[0m";
+			return false;
+		}
 		if (ticks==0) return false;
+#pragma omp parallel
 		{
 			size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
+#pragma omp for
 			for (size_t i=0; i<enemies_size_before; i++) {
 				Enemy& enemy = *state.enemies[i];
 				Pos next_pos = copy_call(enemy.pos, go(enemy.dir));
@@ -271,10 +278,13 @@ struct State {
 	}
 
 	bool kills(Pos pos, size_t ticks) const {
+		cerr<<"\033[0;1m?\033[0;33m"<<ticks<<"\033[0;1:\033[0m";
 		if (thinking_timeout<time(nullptr)) { // Ouch, timed out. Returning some dummy result.
-			ericsson2017::protocol::log((string)"Backtrack timed out in kills() at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string(time(nullptr)-thinking_timeout));
+			//ericsson2017::protocol::log((string)"Backtrack timed out in kills() at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string(time(nullptr)-thinking_timeout));
+			cerr<<"\033[1;31mX\033[0m";
 			return false;
 		}
+		cerr<<"\033[0;1m;\033[0m";
 		return kills(pos, ticks, *this);
 	}
 
@@ -295,6 +305,7 @@ struct State {
 	optional<BacktrackInfo> backtrack(Dir dir, Pos pos) const {
 		if (thinking_timeout<time(nullptr)) { // Ouch, timed out. Returning some dummy result.
 			ericsson2017::protocol::log((string)"Backtrack timed out at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string(time(nullptr)-thinking_timeout));
+			cerr<<"\033[1;31mX\033[0m";
 			return BacktrackInfo(randomDir(), numeric_limits<size_t>::max());
 		}
 		if (my(pos)) {
@@ -303,17 +314,20 @@ struct State {
 		}
 
 		{ // Try forward
+			cerr<<"\033[0;1mV\033[0m";
 			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
 		}
 
 		{ // Try right
+			cerr<<"\033[0;1m>\033[0m";
 			dir.turn(Dir(0, 1));
 			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
 		}
 
 		{ // Try left
+			cerr<<"\033[0;1m<\033[0m";
 			dir.turn(Dir(-1, 0));
 			optional<BacktrackInfo> info = backtrack(dir, copy_call(pos, go(dir)));
 			if (info && !kills(pos, info->length)) return info->next(dir);
@@ -360,6 +374,7 @@ struct State {
 			case false: // We are in action
 				{
 					optional<BacktrackInfo> info = backtrack(unit.dir, unit.pos);
+					cerr<<"\033[0;42m}\033[0m"<<endl;
 					if (info && info->dir) return info->dir->operator ericsson2017::protocol::Direction();
 				}
 				return (Direction)unit.dir;
