@@ -221,6 +221,7 @@ struct State {
 			return false;
 		}
 		if (ticks==0) return false;
+		state.enemies.reserve(state.enemies.size()*4); // We don't like segfaults caused by reallocation
 #pragma omp parallel
 		{
 			size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
