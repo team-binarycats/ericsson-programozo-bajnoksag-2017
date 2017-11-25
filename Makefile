@@ -133,7 +133,7 @@ mostlyclean: clean-objects
 clean-objects:
 	-rm -f $(OBJECTS)
 
-OPTIONS = -Wall -Wextra -g
+OPTIONS = -Wall -Wextra -g -fopenmp
 STD = c++17
 
 LINK_OPTIONS = -Wall -Wextra
