@@ -179,10 +179,10 @@ struct Cell {
 	Cell(const pair<Pos, ericsson2017::protocol::Cell::Reader> pair) : Cell(pair.second, pair.first) {}
 };
 
-class Cells : public array<Cell*, BOARD_SIZE_X*BOARD_SIZE_Y> {
+class Cells : public pvector<Cell> { //TODO use array
 
 public:
-	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) {
+	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) : pvector<Cell>(BOARD_SIZE_X*BOARD_SIZE_Y) {
 		for (X::TYPE x = X::MIN; x <= X::MAX; x++) {
 			for (Y::TYPE y = Y::MIN; y <= Y::MAX; y++) {
 				this->at(Pos(x, y)) = new Cell(cells[x][y], Pos(x, y)); //TODO do it in initialisation
@@ -198,22 +198,12 @@ struct Enemy {
 	Enemy(const ericsson2017::protocol::Enemy::Reader enemy) : pos(enemy.getPosition()), dir(enemy.getDirection()) {}
 };
 
-class Enemies : public vector<Enemy*> {
+class Enemies : public pvector<Enemy> {
 
 public:
 	Enemies(const capnp::List<ericsson2017::protocol::Enemy>::Reader enemies) {
 		for (auto enemy : enemies) {
 			this->push_back(new Enemy(enemy));
-		}
-	}
-	Enemies(const Enemies& other) : vector<Enemy*>(other.size()) {
-		for (size_t i = 0; i < other.size(); i++) {
-			(*this)[i] = new Enemy(*other[i]);
-		}
-	}
-	~Enemies() {
-		for (auto p : *this) {
-			delete p;
 		}
 	}
 };
