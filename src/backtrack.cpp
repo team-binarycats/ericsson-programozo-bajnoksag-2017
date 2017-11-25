@@ -222,6 +222,7 @@ struct State {
 		}
 		if (ticks==0) return false;
 		state.enemies.reserve(state.enemies.size()*4); // We don't like segfaults caused by reallocation
+		vector<vector<Enemy*>> enemy_bounces(state.enemies.size());
 #pragma omp parallel
 		{
 			size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
@@ -240,7 +241,7 @@ struct State {
 										enemy.pos.go(test_dir);
 										moved = true;
 									} else { //moved
-										state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
+										enemy_bounces[i].push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
 									}
 								} catch (domain_error) {}
 							}
@@ -257,7 +258,7 @@ struct State {
 										enemy.pos.go(test_dir);
 										moved = true;
 									} else { //moved
-										state.enemies.push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
+										enemy_bounces[i].push_back(new Enemy(copy_call(enemy, pos.go(test_dir))));
 									}
 								} catch (domain_error) {}
 
@@ -270,6 +271,12 @@ struct State {
 						enemy.pos.go(enemy.dir);
 					} catch (domain_error) {}
 				}
+			}
+		}
+		for (auto bounce_list : enemy_bounces) {
+			for (auto bounce : bounce_list) {
+				cerr<<"\033[0;33m+\033[0m";
+				state.enemies.push_back(bounce);
 			}
 		}
 		for (size_t i=0; i<state.enemies.size(); i++) {
