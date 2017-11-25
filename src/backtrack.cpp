@@ -272,8 +272,8 @@ struct State {
 				}
 			}
 		}
-		for (auto enemy : state.enemies) {
-			if (enemy->pos==pos) return true;
+		for (int i=0; i<state.ememies.size(); i++) {
+			if (state.enemies[i]->pos == pos) return true;
 		}
 		return kills(pos, ticks-1, state);
 	}
