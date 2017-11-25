@@ -272,7 +272,7 @@ struct State {
 				}
 			}
 		}
-		for (int i=0; i<state.ememies.size(); i++) {
+		for (size_t i=0; i<state.enemies.size(); i++) {
 			if (state.enemies[i]->pos == pos) return true;
 		}
 		return kills(pos, ticks-1, state);
