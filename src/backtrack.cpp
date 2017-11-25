@@ -172,6 +172,16 @@ public:
 			this->push_back(new Enemy(enemy));
 		}
 	}
+	Enemies(const Enemies& other) : vector<Enemy*>(other.size()) {
+		for (size_t i = 0; i < other.size(); i++) {
+			(*this)[i] = new Enemy(*other[i]);
+		}
+	}
+	~Enemies() {
+		for (auto p : *this) {
+			delete p;
+		}
+	}
 };
 
 typedef int Health;
@@ -276,7 +286,7 @@ struct State {
 		for (auto bounce_list : enemy_bounces) {
 			for (auto bounce : bounce_list) {
 				cerr<<"\033[0;33m+\033[0m";
-				state.enemies.push_back(bounce);
+				state.enemies.push_back(bounce); // Will be freed up by state.enemies.~Enemies();
 			}
 		}
 		for (size_t i=0; i<state.enemies.size(); i++) {
