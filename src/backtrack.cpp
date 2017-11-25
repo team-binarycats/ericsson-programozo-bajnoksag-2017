@@ -221,8 +221,10 @@ struct State {
 			return false;
 		}
 		if (ticks==0) return false;
+#pragma omp parallel
 		{
 			size_t enemies_size_before = state.enemies.size(); // Store size in variable to avoid infinite recursion
+#pragma omp for
 			for (size_t i=0; i<enemies_size_before; i++) {
 				Enemy& enemy = *state.enemies[i];
 				Pos next_pos = copy_call(enemy.pos, go(enemy.dir));

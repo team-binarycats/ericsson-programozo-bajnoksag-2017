@@ -98,7 +98,7 @@ programs:
 		$(MAKE) $$program || exit $$?; \
 	done
 
-LIB = capnp kj ncursesw
+LIB = capnp kj ncursesw pthread
 LIBRARIES = $(LIB)
 
 COMDIR = $(SRCDIR)
@@ -133,7 +133,7 @@ mostlyclean: clean-objects
 clean-objects:
 	-rm -f $(OBJECTS)
 
-OPTIONS = -Wall -Wextra -g
+OPTIONS = -Wall -Wextra -g -fopenmp
 STD = c++17
 
 LINK_OPTIONS = -Wall -Wextra
