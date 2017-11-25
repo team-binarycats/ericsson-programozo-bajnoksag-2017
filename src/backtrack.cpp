@@ -201,8 +201,12 @@ public:
 	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) : pvector<Cell>(BOARD_SIZE_X*BOARD_SIZE_Y) {
 		for (X::TYPE x = X::MIN; x <= X::MAX; x++) {
 			for (Y::TYPE y = Y::MIN; y <= Y::MAX; y++) {
+				if ( this->at(Pos(x, y)) != nullptr ) throw logic_error("Should be a memory hole");
 				this->at(Pos(x, y)) = new Cell(cells[x][y], Pos(x, y)); //TODO do it in initialisation
 			}
+		}
+		for (size_t i = 0; i < size(); i++ ) {
+			if ( this->vector::at(i) == nullptr ) throw logic_error("nullptr");
 		}
 	}
 };
