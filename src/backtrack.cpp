@@ -35,6 +35,7 @@ class RangedValue : public Value<T> {
 public:
 	static const T MIN = _MIN;
 	static const T MAX = _MAX;
+	static const T SIZE = _MAX - _MIN + 1;
 
 	void set(T value){
 		if (value < MIN) throw domain_error("too low");
@@ -159,7 +160,7 @@ struct Pos {
 
 	template <typename T>
 	explicit operator T() const {
-		return x * X::MAX + y;
+		return x * Y::SIZE + y;
 	}
 	bool operator==(const Pos& other) const {
 		return x==other.x && y==other.y;
