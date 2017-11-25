@@ -158,7 +158,7 @@ struct Pos {
 	}
 
 	template <typename T>
-	operator T() const {
+	explicit operator T() const {
 		return x * X::MAX + y;
 	}
 	bool operator==(const Pos& other) const {
@@ -182,6 +182,22 @@ struct Cell {
 class Cells : public pvector<Cell> { //TODO use array
 
 public:
+	reference operator[](const Pos& pos) {
+		return this->vector::operator[]((size_type)pos);
+	}
+
+	const_reference operator[](const Pos& pos) const {
+		return this->vector::operator[]((size_type)pos);
+	}
+
+	reference at(const Pos& pos) {
+		return this->vector::at((size_type)pos);
+	}
+
+	const_reference at(const Pos& pos) const {
+		return this->vector::at((size_type)pos);
+	}
+
 	Cells(const capnp::List<capnp::List<ericsson2017::protocol::Cell>>::Reader cells) : pvector<Cell>(BOARD_SIZE_X*BOARD_SIZE_Y) {
 		for (X::TYPE x = X::MIN; x <= X::MAX; x++) {
 			for (Y::TYPE y = Y::MIN; y <= Y::MAX; y++) {
