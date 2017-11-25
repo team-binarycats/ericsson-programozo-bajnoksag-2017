@@ -46,6 +46,40 @@ public:
 	RangedValue(T value) : Value<T>(value) {}
 };
 
+template<typename T>
+class pvector : public vector<T*> {
+public:
+	explicit pvector() : vector<T*>() {}
+
+	explicit pvector(const size_t& count) : vector<T*>(count) {}
+
+	explicit pvector(const size_t& count, const T& value) : pvector(count) {
+		for (size_t i = 0; i < count; i++) {
+			(*this)[i] = new T(value);
+		}
+	}
+
+	pvector(const pvector& other) : pvector(other.size()) {
+		for (size_t i = 0; i < other.size(); i++) {
+			if ( other[i] != nullptr ) { // TODO remove this check
+				(*this)[i] = new T(*other[i]);
+			} else {
+				(*this)[i] = nullptr;
+			}
+		}
+	}
+
+	~pvector() {
+		for (auto p : *this) {
+			if ( p != nullptr ) { // TODO remove this check
+				delete p;
+			} else {
+				cerr<<"\033[0;41m!\033[0m";
+			}
+		}
+	}
+};
+
 typedef RangedValue<size_t, 0, BOARD_SIZE_X-1> X;
 typedef RangedValue<size_t, 0, BOARD_SIZE_Y-1> Y;
 
