@@ -341,7 +341,7 @@ struct State {
 	}
 
 	bool kills(Pos pos, size_t ticks) const {
-		cerr<<"\033[0;1m?\033[0;33m"<<ticks<<"\033[0;1:\033[0m";
+		cerr<<"\033[0;1m?\033[0;33m"<<ticks<<"\033[0;1m:\033[0m";
 		if (thinking_timeout<time(nullptr)) { // Ouch, timed out. Returning some dummy result.
 			//ericsson2017::protocol::log((string)"Backtrack timed out in kills() at "+(string)unit.pos+(string)"-->"+(string)pos+(string)+" by "+to_string(time(nullptr)-thinking_timeout));
 			cerr<<"\033[1;31mX\033[0m";
