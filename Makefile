@@ -98,7 +98,7 @@ programs:
 		$(MAKE) $$program || exit $$?; \
 	done
 
-LIB = capnp kj ncursesw
+LIB = capnp kj ncursesw pthread
 LIBRARIES = $(LIB)
 
 COMDIR = $(SRCDIR)
@@ -139,7 +139,7 @@ STD = c++17
 LINK_OPTIONS = -Wall -Wextra
 LINK_FLAGS = $(patsubst %,-l%,$(LIB)) $(OPTIONS) $(LINK_OPTIONS)
 
-COMPILE_OPTIONS = 
+COMPILE_OPTIONS =  -fopenmp
 COMPILE_FLAGS = --std=$(STD) $(OPTIONS) $(COMPILE_OPTIONS)
 
 EXEC = $(PROGRAM_NAME)
