@@ -10,6 +10,12 @@ using namespace ericsson2017::protocol;
 void trim(char * s) {
 	char * p = s;
 	int l = strlen(p);
+
+	for (int i=0; i<l; i++)
+		if ( p[i] == '#' ) {
+			l = i; p[l]=0;
+			break;
+		}
 	
 	while(isspace(p[l - 1])) p[--l] = 0;
 	while(* p && isspace(* p)) ++p, --l;
