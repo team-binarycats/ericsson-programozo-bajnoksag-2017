@@ -183,6 +183,6 @@ repeat(25, LEFT)
 > Not tested yet
 DOWN
 RIGHT
-divide_r(4)
-divide_u(4)
+r(eval((100-4)/4))
+repeat(eval(80-4), DOWN,UP,DOWN)
 > Finished
