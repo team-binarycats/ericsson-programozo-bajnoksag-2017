@@ -179,7 +179,6 @@ repeat(8, LEFT)
 repeat(5, RIGHT)
 repeat(25, LEFT)
 ] Next level is 6, your points: 24
-> Not tested yet
 DOWN
 RIGHT
 r(eval((100-4)/4))
@@ -228,5 +227,6 @@ repeat(8, DOWN)
 repeat(5, UP)
 repeat(11, DOWN)
 repeat(12, LEFT)
+LEFT # Uncaught
 ] Next level is 7, your points: 24
 > Not written yet
