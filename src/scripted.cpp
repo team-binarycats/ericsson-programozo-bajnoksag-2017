@@ -34,13 +34,15 @@ _MAIN_LOOP {
 	move.setUnit(0);
 	
 	while (true) {
-		if (getline(&cmd, &len, cs)<2) throw std::length_error("Unable to read next command");
+		if ( getline(&cmd, &len, cs) == -1 ) throw std::length_error("Unable to read next command");
 		trim(cmd);
 
-		if ( cmd[0]==']' ) {
+		if ( cmd[0]==']' || cmd[0]=='>' || cmd[0]==':' ) {
 			log((std::string)"Comment: "+std::string(cmd));
 			continue;
 		}
+		else if ( cmd[0] == '\0' ) continue;
+		else if ( strcmp(cmd, "NOOP"	) == 0 ) break;
 		else if ( strcmp(cmd, "LEFT"	) == 0 ) move.setDirection(Direction::LEFT	);
 		else if ( strcmp(cmd, "RIGHT"	) == 0 ) move.setDirection(Direction::RIGHT	);
 		else if ( strcmp(cmd, "UP"	) == 0 ) move.setDirection(Direction::UP	);
