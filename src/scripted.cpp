@@ -29,7 +29,6 @@ _SETUP {}
 FILE* cs = fdopen(5, "r");
 char* cmd = NULL;
 size_t len = 0;
-ssize_t read;
 
 _MAIN_LOOP {
 	move.setUnit(0);
