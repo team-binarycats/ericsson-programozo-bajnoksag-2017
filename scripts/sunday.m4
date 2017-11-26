@@ -88,7 +88,7 @@ u(19)
 repeat(24, LEFT) # We finish earlyer
 ] Level3 finished, next should be level4
 # This level is done by keyboard
-NOOP
+DOWN #NOOP
 ] Not sent any command at tick 1.
 repeat(10, DOWN)
 repeat(13, RIGHT)
@@ -152,9 +152,10 @@ repeat(7, UP)
 repeat(25, DOWN)
 repeat(12, UP)
 > Get ready
-repeat(39, LEFT)
+repeat(40, LEFT)
 ] Next level is 5, your points: 22
 > Not tested yet
-divide_r(4)
-divide_u(4)
+DOWN
+RIGHT
+divide_r(3)
 > Finished
