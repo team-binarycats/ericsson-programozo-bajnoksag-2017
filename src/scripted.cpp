@@ -42,7 +42,7 @@ _MAIN_LOOP {
 		}
 		trim(cmd);
 
-		if ( cmd[0]==']' || cmd[0]=='>' || cmd[0]==':' ) {
+		if ( cmd[0]==']' || cmd[0]=='>' || cmd[0]==':' || cmd[0]=='*' ) {
 			log((std::string)"Comment: "+std::string(cmd));
 			continue;
 		}
