@@ -233,6 +233,15 @@ LEFT # Uncaught
 DOWN
 RIGHT
 #RIGHT # Why isn't it required??
-divide_r(4)
+#divide_r(4) # Expanded below
+r(eval((100-4)/4))
+repeat(eval(80-4+1), DOWN,UP,DOWN)
+r(eval((100-4)/4))
+repeat(3, DOWN,UP) # stale
+repeat(eval(80-4+1), :i,UP,DOWN,UP)
+r(eval((100-4)/4))
+repeat(eval(80-4+1), DOWN,UP,DOWN)
+r(eval((100-4)/4))
+# End of expansion
 divide_u(4)
 > Finished
