@@ -9,5 +9,9 @@ define(`u', `ifelse(`$#',`0',`UP',`repeat(`$1',UP)')')dnl
 define(`d', `ifelse(`$#',`0',`DOWN',`repeat(`$1',DOWN)')')dnl
 define(`divide_r', `repeat(eval($1-`1'), `: Column i',		`r(eval(`(100-4)/$1'))',`repeat(eval(`80-4+1'), ifelse(eval(i%`2'),`0', `UP,DOWN,UP',`DOWN,UP,DOWN'))')
 r(eval(`(100-4)/$1'))')dnl
+define(`divide_l', `repeat(eval($1-`1'), `: Col eval(`$1'-i+1)',`l(eval(`(100-4)/$1'))',`repeat(eval(`80-4+1'), ifelse(eval(i%`2'),`0', `UP,DOWN,UP',`DOWN,UP,DOWN'))')
+l(eval(`(100-4)/$1'))')dnl
 define(`divide_u', `repeat(eval($1-`1'), `: Row eval(`$1'-i+1)',`u(eval(`(80-4)/$1'))',`repeat(eval(`100-4+1'), ifelse(eval(i%`2'),`0', `RIGHT,LEFT,RIGHT',`LEFT,RIGHT,LEFT'))')
-r(eval(`(80-4)/$1'))')dnl
+u(eval(`(80-4)/$1'))')dnl
+define(`divide_d', `repeat(eval($1-`1'), `: Vertical row i',	`d(eval(`(80-4)/$1'))',`repeat(eval(`100-4+1'), ifelse(eval(i%`2'),`0', `RIGHT,LEFT,RIGHT',`LEFT,RIGHT,LEFT'))')
+d(eval(`(80-4)/$1'))')dnl
