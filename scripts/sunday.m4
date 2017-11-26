@@ -75,46 +75,23 @@ repeat(15, RIGHT)
 repeat(22, LEFT)
 LEFT # Uncaught
 ] Next level is 3, your points: 16
-DOWN
-repeat(24, RIGHT)
-repeat(25, DOWN)
-repeat(25, UP)
-repeat(57, DOWN)
-repeat(32, UP)
-repeat(52, DOWN)
-repeat(25, RIGHT)
-repeat(29, UP)
-repeat(29, DOWN)
-repeat(54, UP)
-repeat(25, DOWN)
-repeat(41, UP)
-repeat(16, DOWN)
-repeat(23, UP)
-repeat(25, RIGHT)
-repeat(18, DOWN)
-repeat(18, UP)
-repeat(21, DOWN)
-repeat(3, UP)
-repeat(25, DOWN)
-repeat(22, UP)
-repeat(45, DOWN)
-repeat(23, UP)
-repeat(30, DOWN)
-repeat(7, UP)
-repeat(11, DOWN)
-repeat(24, RIGHT)
 > Untouched till this line
-repeat(26, UP)
-> Upped
-repeat(eval(1*25), LEFT,RIGHT,LEFT)
-repeat(eval(1*25), LEFT)
-repeat(eval(1*25), LEFT,RIGHT,LEFT)
-> Left done
-repeat(20, UP)
-> Upper
-repeat(eval(2*25), RIGHT)
-repeat(25, RIGHT, LEFT, RIGHT)
-> Right done
-repeat(20, UP)
-> More upper
-repeat(eval(3*25), LEFT)
+DOWN
+r(50)
+repeat(14, DOWN,UP,DOWN)
+UP
+repeat(eval(77-14+1), DOWN,UP,DOWN)
+r(48)
+u(39)
+repeat(eval(97-25), LEFT,RIGHT,LEFT)
+repeat(25, LEFT)
+u(19)
+repeat(49, RIGHT)
+LEFT
+repeat(50, RIGHT,LEFT,RIGHT)
+l(24)
+d(19)
+repeat(19, DOWN,UP,DOWN)
+repeat(25, LEFT,RIGHT,LEFT)
+u(eval(3*20))
+> Finished
