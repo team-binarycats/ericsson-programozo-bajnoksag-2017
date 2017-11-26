@@ -88,7 +88,7 @@ clean: clean-out
 clean-out:
 	-rm -f $(OUTDIR)/*
 
-PROGRAM = shapes
+PROGRAM = scripted
 PROGRAM_NAME = $(PROGRAM)
 PROGRAMS = $(notdir $(filter-out $(basename $(wildcard $(INCDIR)/*.h)),$(basename $(wildcard $(SRCDIR)/*.cpp)))) #Files which have headers are not programs
 .PHONY: programs
@@ -167,13 +167,18 @@ TEAM_USERNAME = binary_cats
 TEAM_HASH = qh8irf7ivs5ik1ex0i6i6ckypxxekiv
 RUN_CAT_OPTIONS = 
 RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
+SCRIPTS_DIR = scripts
+SCRIPT = $(SCRIPTS_DIR)/$$(LANG=us date +%A | tr "[:upper:]" "[:lower:]" | tr -d "\n").m4
+M4_EXAMPLES_DIR = /usr/share/doc/m4-1.4.17/examples
+M4_ARGS = -I $(SCRIPTS_DIR) -I $(M4_EXAMPLES_DIR)
+RUN_SCRIPTING_REDIRECT = 5< <(m4 $(M4_ARGS) $(SCRIPT))
 RUN_REDIRECTS = 
 RUN_SOCKET_REDIRECTS = 3<&$$socket 4>&$$socket
 RUN_PREPEND = 
 
 .PHONY: run
 run: $(EXECUTABLE)
-	bash -c 'exec {socket}<>"$(RUN_SOCKET)" $(RUN_SOCKET_REDIRECTS); $(RUN_PREPEND) $< $(RUN_PARAMETERS) $(RUN_REDIRECTS)'
+	bash -c 'exec {socket}<>"$(RUN_SOCKET)" $(RUN_SOCKET_REDIRECTS); $(RUN_PREPEND) $< $(RUN_PARAMETERS) $(RUN_SCRIPTING_REDIRECT) $(RUN_REDIRECTS)'
 
 ###############
 # Misc commands
