@@ -243,5 +243,4 @@ r(eval((100-4)/4))
 repeat(eval(80-4+1), DOWN,UP,DOWN)
 r(eval((100-4)/4))
 # End of expansion
-divide_u(4)
 > Finished
