@@ -243,4 +243,29 @@ r(eval((100-4)/4))
 repeat(eval(80-4+1), DOWN,UP,DOWN)
 r(eval((100-4)/4))
 # End of expansion
-> Finished
+# The rest is generated using keyboard
+> Not tested
+RIGHT #NOOP
+] Not sent any command at tick 798.
+* Setting up for level 7
+repeat(10, LEFT)
+repeat(11, UP)
+repeat(15, LEFT)
+repeat(26, UP)
+repeat(74, LEFT)
+RIGHT
+repeat(13, UP)
+repeat(24, RIGHT)
+* Unit died :(
+RIGHT
+repeat(8, DOWN)
+LEFT
+repeat(5, RIGHT)
+repeat(4, LEFT)
+repeat(48, RIGHT)
+repeat(14, DOWN)
+repeat(17, LEFT)
+] You run out of ticks: 1070. You reached 7. level, and got 66 points. Status: Sent moves, 0 to LEFT
+*terminate called after throwing an instance of 'kj::ExceptionImpl'
+*what():  kj/io.c++:48: failed: expected n >= minBytes; Premature EOF
+*stack: 0x7ff4138897f8 0x7ff41388b44b 0x7ff41388b4ec 0x4065c2 0x407f67 0x4090ec 0x40977c 0x407d4f 0x407f0a 0x408bbc 0x407085 0x40665e 0x407f67 0x4090ec 0x40977c 0x407d4f 0x407f0a 0x408bbc 0x407085 0x40665e 0x407f67 0x4090ec 0x40977c 0x407d4f 0x407f0a 0x408bbc 0x407085 0x40665e 0x407f67 0x4090ec 0x40977c
