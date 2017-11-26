@@ -103,19 +103,18 @@ repeat(30, DOWN)
 repeat(7, UP)
 repeat(11, DOWN)
 repeat(24, RIGHT)
-repeat(59, UP)
-repeat(9, LEFT)
-repeat(9, RIGHT)
-repeat(18, LEFT)
-repeat(9, RIGHT)
-repeat(34, LEFT)
-repeat(19, RIGHT)
-repeat(38, LEFT)
-repeat(13, RIGHT)
 > Untouched till this line
-repeat(26, LEFT)
-> Now comes our trick
-repeat(20, DOWN)
-repeat(eval(3*25), RIGHT)
-repeat(20, DOWN)
+repeat(26, UP)
+> Upped
+repeat(eval(1*25), LEFT,RIGHT,LEFT)
+repeat(eval(1*25), LEFT)
+repeat(eval(1*25), LEFT,RIGHT,LEFT)
+> Left done
+repeat(20, UP)
+> Upper
+repeat(eval(2*25), RIGHT)
+repeat(25, RIGHT, LEFT, RIGHT)
+> Right done
+repeat(20, UP)
+> More upper
 repeat(eval(3*25), LEFT)
