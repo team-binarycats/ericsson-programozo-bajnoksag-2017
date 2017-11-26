@@ -229,4 +229,10 @@ repeat(11, DOWN)
 repeat(12, LEFT)
 LEFT # Uncaught
 ] Next level is 7, your points: 24
-> Not written yet
+> Next level
+DOWN
+RIGHT
+#RIGHT # Why isn't it required??
+divide_r(4)
+divide_u(4)
+> Finished
