@@ -112,9 +112,10 @@ repeat(34, LEFT)
 repeat(19, RIGHT)
 repeat(38, LEFT)
 repeat(13, RIGHT)
-repeat(29, LEFT)
-repeat(19, DOWN, LEFT) # Diagonal
-DOWN
-repeat(24, RIGHT)
-RIGHT # Uncaught
-] You run out of ticks: 1030. You reached 3. level, and got 56 points. Status: Sent moves, 0 to RIGHT
+> Untouched till this line
+repeat(26, LEFT)
+> Now comes our trick
+repeat(20, DOWN)
+repeat(eval(3*25), RIGHT)
+repeat(20, DOWN)
+repeat(eval(3*25), LEFT)
