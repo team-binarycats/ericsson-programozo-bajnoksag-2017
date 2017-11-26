@@ -31,8 +31,7 @@ simplify(){
 
 generate(){
 	echo "include(\`library.m4')dnl"
-	grep '^]' \
-		| sed -s 's/^] Sent moves, 0 to \(.*\)$/\1/' \
+	sed -s 's/^] Sent moves, 0 to \(.*\)$/\1/' \
 		| simplify
 }
 
