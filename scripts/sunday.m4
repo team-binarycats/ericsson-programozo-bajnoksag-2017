@@ -77,21 +77,8 @@ LEFT # Uncaught
 ] Next level is 3, your points: 16
 > Untouched till this line
 DOWN
-r(50)
-repeat(14, DOWN,UP,DOWN)
-UP
-repeat(eval(77-14+1), DOWN,UP,DOWN)
-r(48)
-u(39)
-repeat(eval(97-25), LEFT,RIGHT,LEFT)
-repeat(25, LEFT)
-u(19)
-repeat(49, RIGHT)
-LEFT
-repeat(50, RIGHT,LEFT,RIGHT)
-l(24)
-d(19)
-repeat(19, DOWN,UP,DOWN)
-repeat(25, LEFT,RIGHT,LEFT)
-u(eval(3*20))
+RIGHT
+RIGHT
+divide_r(4)
+divide_u(4)
 > Finished
