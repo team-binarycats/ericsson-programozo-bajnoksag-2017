@@ -1,7 +1,7 @@
 #include "messaging.h"
 
 #include <capnp/message.h>
-#include <capnp/serialize.h>
+#include <capnp/serialize-packed.h>
 
 #include <limits>
 
@@ -14,14 +14,14 @@ void login(std::function<void(Command::Commands::Login::Builder)> login_handler)
 
 	if (login_handler != nullptr) login_handler(commands.initLogin());
 
-	::capnp::writeMessageToFd(send_fd, message);
+	::capnp::writePackedMessageToFd(send_fd, message);
 }
 
 void response(std::function<void(const Response::Reader&)> response_handler, std::function<void(const ::capnp::Text::Reader&)> status_handler) {
 	::capnp::ReaderOptions readerOptions;
 	readerOptions.traversalLimitInWords = std::numeric_limits<uint64_t>::max();
 
-	::capnp::StreamFdMessageReader msg(receive_fd, readerOptions);
+	::capnp::PackedFdMessageReader msg(receive_fd, readerOptions);
 	Response::Reader resp = msg.getRoot<Response>();
 	
 	if (status_handler != nullptr) status_handler(resp.getStatus());
@@ -39,7 +39,7 @@ void request(std::function<void(Move::Builder&)> move_handler) {
 		move_handler(move);
 	}
 
-	::capnp::writeMessageToFd(send_fd, message);
+	::capnp::writePackedMessageToFd(send_fd, message);
 }
 
 }} // Namespaces

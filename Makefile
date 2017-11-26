@@ -88,7 +88,7 @@ clean: clean-out
 clean-out:
 	-rm -f $(OUTDIR)/*
 
-PROGRAM = sequential
+PROGRAM = shapes
 PROGRAM_NAME = $(PROGRAM)
 PROGRAMS = $(notdir $(filter-out $(basename $(wildcard $(INCDIR)/*.h)),$(basename $(wildcard $(SRCDIR)/*.cpp)))) #Files which have headers are not programs
 .PHONY: programs
@@ -159,7 +159,7 @@ clean-executable:
 ###################
 # Running a program
 
-SERVER_HOST = ecovpn.dyndns.org
+SERVER_HOST = epb2017.dyndns.org
 SERVER_PORT = 11224
 RUN_SOCKET = /dev/tcp/$(SERVER_HOST)/$(SERVER_PORT)
 
@@ -186,3 +186,24 @@ print_var:
 
 %: $(SRCDIR)/%.cpp
 	$(MAKE) PROGRAM="$*"
+
+DOCKER_IMAGE_NAME = ericssonprogb2017
+DOCKER_IMAGE_TAG = $(shell git rev-parse --abbrev-ref HEAD)
+DOCKER_IMAGE = $(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_TAG)
+
+.PHONY: dockerized_build
+dockerized_build:
+	docker build . -t "$(DOCKER_IMAGE)"
+
+.PHONY: dockerized_run
+dockerized_run: dockerized_build
+	docker run -it --rm "$(DOCKER_IMAGE)"
+
+.PHONY: dockerized_artifact
+dockerized_artifact: dockerized_build
+	container=`docker create $(DOCKER_IMAGE)` \
+		&& docker cp $$container:/src/$(EXECUTABLE) $(EXECUTABLE) \
+		&& docker rm -f $$container >/dev/null
+
+.PHONY: dockerized
+dockerized: dockerized_build dockerized_run
