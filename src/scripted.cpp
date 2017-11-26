@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <stdio.h>
+#include <unistd.h>
 
 using namespace ericsson2017::protocol;
 
@@ -47,7 +48,10 @@ _MAIN_LOOP {
 			continue;
 		}
 		else if ( cmd[0] == '\0' ) continue;
-		else if ( strcmp(cmd, "NOOP"	) == 0 ) break;
+		else if ( strcmp(cmd, "NOOP"	) == 0 ) {
+			sleep(5); // OK, I know, this isn't the best solution
+			continue;
+		}
 		else if ( strcmp(cmd, "LEFT"	) == 0 ) move.setDirection(Direction::LEFT	);
 		else if ( strcmp(cmd, "RIGHT"	) == 0 ) move.setDirection(Direction::RIGHT	);
 		else if ( strcmp(cmd, "UP"	) == 0 ) move.setDirection(Direction::UP	);
