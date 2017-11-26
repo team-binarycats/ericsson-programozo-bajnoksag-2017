@@ -87,3 +87,9 @@ repeat(48, RIGHT)
 u(19)
 repeat(48, LEFT)
 ] Level3 finished, next should be level4
+> This level is not tested working yet
+DOWN
+RIGHT
+RIGHT
+divide_r(4)
+divide_u(4)
