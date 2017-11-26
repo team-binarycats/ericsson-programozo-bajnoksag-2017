@@ -177,7 +177,6 @@ repeat(6, LEFT)
 repeat(4, RIGHT)
 repeat(8, LEFT)
 repeat(5, RIGHT)
-> Get ready
 repeat(25, LEFT)
 ] Next level is 6, your points: 24
 > Not tested yet
@@ -185,4 +184,49 @@ DOWN
 RIGHT
 r(eval((100-4)/4))
 repeat(eval(80-4), DOWN,UP,DOWN)
-> Finished
+# Finished manually
+DOWN #NOOP
+] Not sent any command at tick 255.
+DOWN
+repeat(42, UP)
+repeat(12, RIGHT)
+repeat(12, LEFT)
+repeat(16, RIGHT)
+repeat(11, DOWN)
+repeat(16, LEFT)
+repeat(39, RIGHT)
+repeat(10, UP)
+repeat(34, RIGHT)
+repeat(34, LEFT)
+repeat(41, DOWN)
+repeat(23, UP)
+repeat(34, RIGHT)
+repeat(17, LEFT)
+repeat(2, DOWN)
+repeat(5, UP)
+repeat(10, DOWN)
+repeat(6, UP)
+repeat(13, DOWN)
+repeat(7, UP)
+repeat(10, DOWN)
+repeat(6, UP)
+repeat(12, DOWN)
+repeat(11, UP)
+repeat(13, LEFT)
+* Unit died :(
+LEFT
+repeat(14, RIGHT)
+repeat(2, DOWN)
+repeat(2, UP)
+repeat(4, DOWN)
+repeat(4, UP)
+repeat(5, DOWN)
+repeat(4, UP)
+repeat(6, DOWN)
+repeat(5, UP)
+repeat(8, DOWN)
+repeat(5, UP)
+repeat(11, DOWN)
+repeat(12, LEFT)
+] Next level is 7, your points: 24
+> Not written yet
