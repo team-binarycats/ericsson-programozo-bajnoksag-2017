@@ -87,7 +87,6 @@ repeat(48, RIGHT)
 u(19)
 repeat(24, LEFT) # We finish earlyer
 ] Level3 finished, next should be level4
-> Not tested
 # This level is done by keyboard
 NOOP
 ] Not sent any command at tick 1.
