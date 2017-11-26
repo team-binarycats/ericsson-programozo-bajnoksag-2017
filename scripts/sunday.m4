@@ -12,7 +12,7 @@ repeat(36, UP)
 repeat(56, DOWN)
 repeat(20, UP)
 repeat(40, DOWN)
-DOWN
+DOWN # Uncaught
 ] Next level is 1, your points: 3
 repeat(24, RIGHT)
 repeat(77, DOWN)
@@ -41,7 +41,7 @@ repeat(18, RIGHT)
 repeat(21, LEFT)
 repeat(3, RIGHT)
 repeat(31, LEFT)
-LEFT
+LEFT # Uncaught
 ] Next level is 2, your points: 6
 DOWN
 repeat(24, RIGHT)
@@ -73,7 +73,7 @@ repeat(17, RIGHT)
 repeat(89, LEFT)
 repeat(15, RIGHT)
 repeat(22, LEFT)
-LEFT
+LEFT # Uncaught
 ] Next level is 3, your points: 16
 DOWN
 repeat(24, RIGHT)
@@ -153,5 +153,5 @@ DOWN
 LEFT
 DOWN
 repeat(24, RIGHT)
-RIGHT
+RIGHT # Uncaught
 ] You run out of ticks: 1030. You reached 3. level, and got 56 points. Status: Sent moves, 0 to RIGHT
