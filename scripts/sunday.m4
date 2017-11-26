@@ -151,10 +151,8 @@ repeat(6, DOWN)
 repeat(7, UP)
 repeat(25, DOWN)
 repeat(12, UP)
-> Get ready
 repeat(40, LEFT)
 ] Next level is 5, your points: 22
-> Not tested yet
 DOWN
 RIGHT
 divide_r(3)
@@ -179,6 +177,12 @@ repeat(6, LEFT)
 repeat(4, RIGHT)
 repeat(8, LEFT)
 repeat(5, RIGHT)
+> Get ready
 repeat(25, LEFT)
 ] Next level is 6, your points: 24
-> Not written yet
+> Not tested yet
+DOWN
+RIGHT
+divide_r(4)
+divide_u(4)
+> Finished
