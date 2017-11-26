@@ -1,16 +1,21 @@
 #include "main.h"
 #include "interface.h"
 
+#include <unistd.h>
 #include <ncurses.h>
 #include <cstdlib>
 
 using namespace ericsson2017::protocol;
 
+useconds_t usec;
+
 _SETUP {
+	usec = 1000000;
 	initscr();
 }
 
 _MAIN_LOOP {
+	usleep(usec);
 	move.setUnit(0);
 	switch(getch()) {
 		case KEY_UP:
@@ -40,6 +45,10 @@ _MAIN_LOOP {
 			exit(0);
 			break;
 
+		case '+':
+			usec = usec*4;
+		case '-':
+			usec = usec/2;
 		default:
 			auto dir = response.getUnits()[0].getDirection();
 			auto x = response.getUnits()[0].getPosition().getX();
