@@ -158,4 +158,27 @@ repeat(40, LEFT)
 DOWN
 RIGHT
 divide_r(3)
-> Finished
+# The rest is done by keyboard
+RIGHT
+repeat(16, LEFT)
+repeat(27, DOWN)
+repeat(20, LEFT)
+repeat(20, RIGHT)
+repeat(5, DOWN)
+repeat(5, UP)
+repeat(6, DOWN)
+repeat(3, RIGHT)
+repeat(3, LEFT)
+repeat(3, UP)
+repeat(16, RIGHT)
+repeat(69, LEFT)
+repeat(5, RIGHT)
+repeat(7, LEFT)
+repeat(4, RIGHT)
+repeat(6, LEFT)
+repeat(4, RIGHT)
+repeat(8, LEFT)
+repeat(5, RIGHT)
+repeat(25, LEFT)
+] Next level is 6, your points: 24
+> Not written yet
