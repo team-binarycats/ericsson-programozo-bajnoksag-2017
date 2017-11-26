@@ -19,8 +19,12 @@ make run
 _or_
 - Make
 	- `sudo apt install make`
+- GNU C++ compiler
+	- `sudo apt install g++`
 - Cap'n Proto and its libraries
 	- `sudo apt install capnproto libcapnp-dev`
+- ncurses libraries with wide character support
+	- `sudo apt install libncursesw5-dev`
 
 # Files
 - `Makefile`, `Dockerfile`: Files for the build system...
