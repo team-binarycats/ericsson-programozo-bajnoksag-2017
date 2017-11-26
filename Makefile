@@ -169,7 +169,7 @@ RUN_CAT_OPTIONS =
 RUN_PARAMETERS = "$(TEAM_USERNAME)" "$(TEAM_HASH)"
 SCRIPTS_DIR = scripts
 SCRIPT = $(SCRIPTS_DIR)/$$(LANG=us date +%A | tr "[:upper:]" "[:lower:]" | tr -d "\n").m4
-M4_EXAMPLES_DIR = /usr/share/doc/m4-1.4.17/examples
+M4_EXAMPLES_DIR = scripts/m4_examples
 M4_ARGS = -I $(SCRIPTS_DIR) -I $(M4_EXAMPLES_DIR)
 RUN_SCRIPTING_REDIRECT = 5< <(m4 $(M4_ARGS) $(SCRIPT))
 RUN_REDIRECTS = 
