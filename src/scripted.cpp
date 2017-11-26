@@ -34,7 +34,12 @@ _MAIN_LOOP {
 	move.setUnit(0);
 	
 	while (true) {
-		if ( getline(&cmd, &len, cs) == -1 ) throw std::length_error("Unable to read next command");
+		if ( getline(&cmd, &len, cs) == -1 ) {
+			log("End of input, switching to manual control");
+			endiface();
+			std::system("bin/keyboard");
+			exit(0);
+		}
 		trim(cmd);
 
 		if ( cmd[0]==']' || cmd[0]=='>' || cmd[0]==':' ) {
