@@ -85,9 +85,9 @@ repeat(24, LEFT,RIGHT,LEFT)
 u(19)
 repeat(48, RIGHT)
 u(19)
-repeat(48, LEFT)
+repeat(24, LEFT) # We finish earlyer
 ] Level3 finished, next should be level4
-> This level is not tested working yet
+> This level is not tested yet
 DOWN
 RIGHT
 RIGHT
