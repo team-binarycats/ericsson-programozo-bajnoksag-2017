@@ -75,10 +75,15 @@ repeat(15, RIGHT)
 repeat(22, LEFT)
 LEFT # Uncaught
 ] Next level is 3, your points: 16
-> Untouched till this line
 DOWN
 RIGHT
 RIGHT
 divide_r(4)
-divide_u(4)
-> Finished
+u(19)
+repeat(24, LEFT)
+repeat(24, LEFT,RIGHT,LEFT)
+u(19)
+repeat(48, RIGHT)
+u(19)
+repeat(48, LEFT)
+] Level3 finished, next should be level4
