@@ -161,32 +161,6 @@ void reset_checkpoint(){
 	checkpoint=0;
 	log("Checkpoint reseted");
 }
-unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
-	switch (direction) {
-		case Direction::DOWN:	return x-1;	break;
-		case Direction::RIGHT:	return y-1;	break;
-		case Direction::UP:	return 78-x;	break;
-		case Direction::LEFT:	return 98-x;	break;
-	}
-	throw domain_error("Bad direction");
-}
-size_t calc_side_offset(){
-	return size_at(side_direction)/split*col-1;
-}
-size_t calc_cp_x(){
-	if (vertical) {
-		return start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1);
-	} else {
-		return extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
-	}
-}
-size_t calc_cp_y(){
-	if (!vertical) {
-		return start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1);
-	} else {
-		return extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
-	}
-}
 
 Direction direction;
 void reset_direction(){
@@ -243,6 +217,33 @@ void next_col(){
 unsigned cnt, maxcnt;
 void reset_cnt(){
 	maxcnt=cnt=0;
+}
+
+unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
+	switch (direction) {
+		case Direction::DOWN:	return x-1;	break;
+		case Direction::RIGHT:	return y-1;	break;
+		case Direction::UP:	return 78-x;	break;
+		case Direction::LEFT:	return 98-x;	break;
+	}
+	throw domain_error("Bad direction");
+}
+size_t calc_side_offset(){
+	return size_at(side_direction)/split*col-1;
+}
+size_t calc_cp_x(){
+	if (vertical) {
+		return start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1);
+	} else {
+		return extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+	}
+}
+size_t calc_cp_y(){
+	if (!vertical) {
+		return start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1);
+	} else {
+		return extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+	}
 }
 
 _SETUP {
