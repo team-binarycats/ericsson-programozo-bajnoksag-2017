@@ -1153,6 +1153,6 @@ LEFT # uncaught
 > Watch out
 DOWN
 RIGHT
-RIGHT
 divide_r(3)
+RIGHT
 divide_d(3)
