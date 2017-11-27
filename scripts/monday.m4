@@ -1154,5 +1154,7 @@ LEFT # uncaught
 DOWN
 RIGHT
 divide_r(3)
+> Get ready
 RIGHT
-divide_d(3)
+UP
+> EOS
