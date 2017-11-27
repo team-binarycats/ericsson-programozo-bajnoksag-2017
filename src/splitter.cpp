@@ -357,6 +357,18 @@ bool allmy(const Response::Reader& response) { // Checks wether I own all cells 
 	return true;
 }
 
+void fix_cp(const Response::Reader& response) {
+	for (
+		size_t x=calc_cp_x(), y=calc_cp_y();
+		vertical ? x != end_x(direction)+extract_x(direction) : y != end_y(direction)+extract_y(direction);
+		x+=extract_x(direction), y+=extract_y(direction)
+	) {
+		if ( owns(response, x, y) ) {
+			checkpoint = calc_cp(x, y, direction);
+		} else break;
+	}
+}
+
 _MAIN_LOOP {
 	Unit::Reader unit = response.getUnits()[0];
 	Cell::Reader cell = response.getCells()[unit.getPosition().getX()][unit.getPosition().getY()];
@@ -385,6 +397,7 @@ _MAIN_LOOP {
 	while ( allmy(response) ) {
 		log("I own everything here, economic row skip");
 		next_col();
+		fix_cp(response);
 	}
 
 	if ( stage == doit ) {
