@@ -373,24 +373,15 @@ _MAIN_LOOP {
 	switch (stage) {
 		case move_to:
 			{
-				size_t target_x, target_y;
-				if (vertical) {
-					target_y = (size_t)100/split*col-1;
-				} else {
-					target_x = (size_t)80/split*col-1;
-				}
-
-				switch (direction) {
-					case Direction::DOWN:	target_x = 1 + checkpoint;	break;
-					case Direction::RIGHT:	target_y = 1 + checkpoint;	break;
-					case Direction::UP:	target_x = 78 - checkpoint;	break;
-					case Direction::LEFT:	target_y = 98 - checkpoint;	break;
-				}
+				size_t side_offset = size_at(side_direction)/split*col-1;
+				//TODO prettify
+				size_t target_x =  vertical ? ( start_x(direction) + extract_x(direction) * (checkpoint-1) ) : ( extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset );
+				size_t target_y = !vertical ? ( start_y(direction) + extract_y(direction) * (checkpoint-1) ) : ( extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset );
 
 				signed v_diff = target_x - unit.getPosition().getX();
 				signed h_diff = target_y - unit.getPosition().getY();
 
-				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction));
+				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction)+(string)" ("+to_string(side_direction)+(string)") offset"+to_string(side_offset));
 
 				if ( (abs(v_diff)>0) && (unit.getPosition().getY()<2 || unit.getPosition().getY()>97) ) {
 					if ( v_diff > 0 ) {
