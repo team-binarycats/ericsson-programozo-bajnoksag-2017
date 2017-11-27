@@ -220,13 +220,16 @@ void reset_cnt(){
 }
 
 unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
+	log(to_string(x)+(string)" ccp  "+to_string(y));
 	switch (direction) {
-		case Direction::DOWN:	return x-1;	break;
-		case Direction::RIGHT:	return y-1;	break;
-		case Direction::UP:	return 78-x;	break;
-		case Direction::LEFT:	return 98-x;	break;
+		case Direction::DOWN:
+		case Direction::UP:
+			return extract_x(direction) * ( x-start_x(direction) ) + 1;
+
+		case Direction::RIGHT:
+		case Direction::LEFT:
+			return extract_y(direction) * ( y-start_y(direction) ) + 1;
 	}
-	throw domain_error("Bad direction");
 }
 size_t calc_side_offset(){
 	return size_at(side_direction)/split*col-1;
