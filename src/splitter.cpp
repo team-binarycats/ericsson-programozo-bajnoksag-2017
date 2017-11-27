@@ -378,7 +378,7 @@ _MAIN_LOOP {
 		auto cp = calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction);
 		if  (cp>checkpoint) {
 			checkpoint=cp;
-			log("Checkpoint saved");
+			log((string)"Checkpoint saved: "+to_string(checkpoint));
 		}
 	}
 
