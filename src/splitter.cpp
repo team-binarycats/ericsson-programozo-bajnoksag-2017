@@ -183,7 +183,7 @@ void reset_side_direction(){
 
 unsigned split;
 void reset_split(){
-	split=3;
+	split=4;
 }
 void next_split(){
 	log("Next split");
