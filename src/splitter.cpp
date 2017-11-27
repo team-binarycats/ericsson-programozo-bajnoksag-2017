@@ -235,14 +235,14 @@ size_t calc_cp_x(){
 	if (vertical) {
 		return start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1);
 	} else {
-		return extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+		return extract_x(side_direction)>0 ? calc_side_offset() : size_at(side_direction)-calc_side_offset()-1;
 	}
 }
 size_t calc_cp_y(){
 	if (!vertical) {
 		return start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1);
 	} else {
-		return extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+		return extract_y(side_direction)>0 ? calc_side_offset() : size_at(side_direction)-calc_side_offset()-1;
 	}
 }
 
