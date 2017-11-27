@@ -159,7 +159,6 @@ enum {
 unsigned checkpoint; // last safe x (or y) in current col
 void reset_checkpoint(){
 	checkpoint=0;
-	log("Checkpoint reseted");
 }
 
 Direction direction;
@@ -220,7 +219,6 @@ void reset_cnt(){
 }
 
 unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
-	log(to_string(x)+(string)" ccp  "+to_string(y));
 	switch (direction) {
 		case Direction::DOWN:
 		case Direction::UP:
@@ -329,7 +327,6 @@ bool freetil(const Response::Reader& response, vector<E> es, const unsigned& tim
 }
 
 bool safe(const Response::Reader& response, const size_t& x, const size_t& y, const size_t& time) {
-	log((string)"Checking ("+to_string(x)+(string)","+to_string(y)+(string)") for safety");
 	vector<E> es;
 	for (auto enemy : response.getEnemies()) {
 		es.push_back(E(enemy));
@@ -390,7 +387,6 @@ _MAIN_LOOP {
 		auto cp = calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction);
 		if  (cp>checkpoint) {
 			checkpoint=cp;
-			log((string)"Checkpoint saved: "+to_string(checkpoint));
 		}
 	}
 
@@ -412,8 +408,6 @@ _MAIN_LOOP {
 
 				signed v_diff = target_x - unit.getPosition().getX();
 				signed h_diff = target_y - unit.getPosition().getY();
-
-				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction)+(string)" ("+to_string(side_direction)+(string)")");
 
 				if ( (abs(v_diff)>0) && (unit.getPosition().getY()<2 || unit.getPosition().getY()>97) ) {
 					if ( v_diff > 0 ) {
@@ -451,7 +445,6 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
-			log((string)"cnt="+to_string(cnt)+(string)"\tmaxcnt="+to_string(maxcnt));
 			if ( maxcnt==cnt
 					&& ( ( safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
 						unit.getPosition().getX(),
@@ -469,7 +462,6 @@ _MAIN_LOOP {
 				move.setDirection(direction);
 				cnt++;
 			} else {
-				log("Ouch, unsafe!");
 				move.setDirection(opposite(direction));
 				cnt--;
 			}
