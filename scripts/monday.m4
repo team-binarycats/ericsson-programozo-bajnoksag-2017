@@ -1178,8 +1178,12 @@ repeat(17, UP)
 UP #uncaught
 ] Next level is 6, your points: 16
 > Next level, watch out!
-DOWN
+#DOWN #Why isn't it here???
 RIGHT
 RIGHT
-divide_r(4)
+r(eval((100-4)/3))
+repeat(eval(80-4+1), DOWN,UP,DOWN)
+r(eval((100-4)/3))
+repeat(eval(80-4+1), UP,DOWN,UP)
+LEFT
 > EOS
