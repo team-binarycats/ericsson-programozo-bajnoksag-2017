@@ -1122,7 +1122,6 @@ repeat(24, RIGHT)
 repeat(17, UP)
 * Last move
 UP
-> Not tested yet
 #rest by hand
 UP
 repeat(5, UP)
@@ -1149,4 +1148,5 @@ repeat(6, RIGHT)
 repeat(10, LEFT)
 repeat(4, RIGHT)
 repeat(11, LEFT)
+LEFT # uncaught
 ] Next level is 5, your points: 15
