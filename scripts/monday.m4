@@ -1150,11 +1150,31 @@ repeat(4, RIGHT)
 repeat(11, LEFT)
 LEFT # uncaught
 ] Next level is 5, your points: 15
-> Watch out
+> Not tested yet
 DOWN
 RIGHT
 divide_r(3)
-> Get ready
 RIGHT
 UP
-> EOS
+UP #NOOP
+] Not sent any command at tick 563.
+DOWN
+* Unit died :(
+repeat(38, DOWN)
+repeat(97, RIGHT)
+repeat(19, UP)
+repeat(38, LEFT)
+repeat(7, RIGHT)
+repeat(40, LEFT)
+repeat(6, RIGHT)
+repeat(33, LEFT)
+repeat(3, RIGHT)
+repeat(37, DOWN)
+repeat(3, LEFT)
+repeat(9, RIGHT)
+repeat(7, LEFT)
+repeat(35, RIGHT)
+repeat(19, LEFT)
+repeat(17, UP)
+UP #uncaught
+] Next level is 6, your points: 16
