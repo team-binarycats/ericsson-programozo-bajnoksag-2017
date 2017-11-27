@@ -346,7 +346,7 @@ bool safe(const Response::Reader& response, const unsigned& before, const unsign
 
 bool allmy(const Response::Reader& response) { // Checks wether I own all cells in the specified row (or column)
 	for (
-		size_t x = vertical ? start_x(direction) : 80/split*col-1, y = vertical ? 100/split*col-1 : start_y(direction);
+		size_t x=calc_cp_x(), y=calc_cp_y();
 		vertical ? x != end_x(direction)+extract_x(direction) : y != end_y(direction)+extract_y(direction);
 		x+=extract_x(direction), y+=extract_y(direction)
 	) {
