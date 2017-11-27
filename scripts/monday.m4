@@ -1,10 +1,5 @@
 include(`library.m4')dnl
-* Using username binary_cats
-* Using hash qh8irf7ivs5ik1ex0i6i6ckypxxekiv
-* Sending login information...
 ] Next level is 0, your points: 0
-* Setting up for level 0
-* Reset completed
 DOWN
 repeat(23, RIGHT)
 * Last move
@@ -165,10 +160,8 @@ repeat(2, DOWN)
 UP
 repeat(2, DOWN)
 UP
-repeat(32, DOWN)
+repeat(33, DOWN)
 ] Next level is 1, your points: 3
-* Level up, good job!
-* Reset completed
 DOWN
 repeat(23, RIGHT)
 * Last move
@@ -392,10 +385,8 @@ repeat(2, LEFT)
 RIGHT
 repeat(2, LEFT)
 RIGHT
-repeat(14, LEFT)
+repeat(15, LEFT)
 ] Next level is 2, your points: 7
-* Level up, good job!
-* Reset completed
 DOWN
 repeat(22, RIGHT)
 * Last move
@@ -538,10 +529,8 @@ repeat(2, DOWN)
 UP
 repeat(2, DOWN)
 UP
-repeat(40, DOWN)
+repeat(41, DOWN)
 ] Next level is 3, your points: 9
-* Level up, good job!
-* Reset completed
 DOWN
 repeat(22, RIGHT)
 * Last move
@@ -826,10 +815,8 @@ repeat(46, RIGHT)
 repeat(19, UP)
 * Last move
 UP
-repeat(47, LEFT)
+repeat(48, LEFT)
 ] Next level is 4, your points: 13
-* Level up, good job!
-* Reset completed
 DOWN
 repeat(22, RIGHT)
 * Last move
@@ -1226,7 +1213,4 @@ repeat(17, LEFT)
 * Next side
 * Next split
 repeat(2, UP)
-] You run out of ticks: 1040. You reached 4. level, and got 78 points. Status: Sent moves, 0 to UP
-terminate called after throwing an instance of 'kj::ExceptionImpl'
-what():  kj/io.c++:48: failed: expected n >= minBytes; Premature EOF
-stack: 0x7f1ad38887f8 0x7f1ad388a44b 0x7f1ad388a4ec 0x409f5c 0x40b901 0x40ca86 0x40d104 0x40b6e9 0x40b8a4 0x40c556 0x40aa1f 0x409ff8 0x40b901 0x40ca86 0x40d104 0x40b6e9 0x40b8a4 0x40c556 0x40aa1f 0x409ff8 0x40b901 0x40ca86 0x40d104 0x40b6e9 0x40b8a4 0x40c556 0x40aa1f 0x409ff8 0x40b901 0x40ca86 0x40d104
+> Not written yet
