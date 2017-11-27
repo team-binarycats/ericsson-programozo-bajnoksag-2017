@@ -1150,3 +1150,9 @@ repeat(4, RIGHT)
 repeat(11, LEFT)
 LEFT # uncaught
 ] Next level is 5, your points: 15
+> Watch out
+DOWN
+RIGHT
+RIGHT
+divide_r(3)
+divide_d(3)
