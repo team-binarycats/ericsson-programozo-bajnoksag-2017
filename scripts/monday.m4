@@ -1178,3 +1178,9 @@ repeat(19, LEFT)
 repeat(17, UP)
 UP #uncaught
 ] Next level is 6, your points: 16
+> Next level, watch out!
+DOWN
+RIGHT
+RIGHT
+divide_r(4)
+> EOS
