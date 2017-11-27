@@ -1122,4 +1122,31 @@ repeat(24, RIGHT)
 repeat(17, UP)
 * Last move
 UP
-> Not written yet
+> Not tested yet
+#rest by hand
+UP
+repeat(5, UP)
+repeat(74, LEFT)
+repeat(7, UP)
+repeat(6, LEFT)
+repeat(8, RIGHT)
+repeat(26, LEFT)
+repeat(21, UP)
+repeat(7, RIGHT)
+repeat(7, LEFT)
+repeat(3, RIGHT)
+repeat(3, LEFT)
+repeat(6, RIGHT)
+repeat(3, LEFT)
+repeat(8, RIGHT)
+repeat(5, LEFT)
+repeat(93, RIGHT)
+repeat(11, DOWN)
+repeat(8, LEFT)
+repeat(7, RIGHT)
+repeat(12, LEFT)
+repeat(6, RIGHT)
+repeat(10, LEFT)
+repeat(4, RIGHT)
+repeat(11, LEFT)
+] Next level is 5, your points: 15
