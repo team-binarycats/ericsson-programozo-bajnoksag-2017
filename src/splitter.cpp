@@ -170,6 +170,23 @@ unsigned calc_cp(const size_t& x, const size_t& y, const Direction& direction) {
 	}
 	throw domain_error("Bad direction");
 }
+size_t calc_side_offset(){
+	return size_at(side_direction)/split*col-1;
+}
+size_t calc_cp_x(){
+	if (vertical) {
+		return start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1);
+	} else {
+		return extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+	}
+}
+size_t calc_cp_y(){
+	if (!vertical) {
+		return start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1);
+	} else {
+		return extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1;
+	}
+}
 
 Direction direction;
 void reset_direction(){
@@ -373,15 +390,13 @@ _MAIN_LOOP {
 	switch (stage) {
 		case move_to:
 			{
-				size_t side_offset = size_at(side_direction)/split*col-1;
-				//TODO prettify
-				size_t target_x =  vertical ? ( start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1) ) : ( extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1 );
-				size_t target_y = !vertical ? ( start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1) ) : ( extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1 );
+				size_t target_x = calc_cp_x();
+				size_t target_y = calc_cp_y();
 
 				signed v_diff = target_x - unit.getPosition().getX();
 				signed h_diff = target_y - unit.getPosition().getY();
 
-				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction)+(string)" ("+to_string(side_direction)+(string)") offset"+to_string(side_offset));
+				log((string)"Target: ("+to_string(target_x)+(string)","+to_string(target_y)+(string)") s"+to_string(split)+(string)" c"+to_string(col)+" cp"+to_string(checkpoint)+(string)(vertical?" vertical ":" horizontal ")+to_string(direction)+(string)" ("+to_string(side_direction)+(string)")");
 
 				if ( (abs(v_diff)>0) && (unit.getPosition().getY()<2 || unit.getPosition().getY()>97) ) {
 					if ( v_diff > 0 ) {
