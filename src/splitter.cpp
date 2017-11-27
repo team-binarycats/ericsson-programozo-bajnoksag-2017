@@ -445,20 +445,15 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
-			if ( maxcnt==cnt
-					&& ( ( safe(response, cnt, max(maxcnt-cnt, (unsigned)1),
+			if ( owns(response, unit.getPosition().getX(), unit.getPosition().getY()) ) {
+				move.setDirection(direction);
+				cnt++;
+			} else if ( safe(response, cnt, size_at(direction)-calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction)-5,
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
 						extract_x(direction),
 						extract_y(direction),
-						cnt+2*(maxcnt-cnt)+2)
-					) || safe(response, cnt, size_at(direction)-calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction)-5,
-						unit.getPosition().getX(),
-						unit.getPosition().getY(),
-						extract_x(direction),
-						extract_y(direction),
-						size_at(direction)-4-cnt)
-			) ) {
+						size_at(direction)-4-checkpoint-cnt) ) {
 				move.setDirection(direction);
 				cnt++;
 			} else {
