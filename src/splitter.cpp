@@ -354,6 +354,18 @@ bool allmy(const Response::Reader& response) { // Checks wether I own all cells 
 	return true;
 }
 
+unsigned next_cp(const Response::Reader& response, Direction direction) {
+	for (size_t x=response.getUnits()[0].getPosition().getX(), y=response.getUnits()[0].getPosition().getY(), cnt=0;
+			(x>=0)&&(y>=0)&&(x<=79)&&(y<=99);
+			x+=extract_x(direction), y+=extract_y(direction), cnt++
+	    ) {
+		if ( owns(response, x, y) ) {
+			return cnt;
+		}
+	}
+	throw logic_error("End of board reached");
+}
+
 void fix_cp(const Response::Reader& response) {
 	for (
 		size_t x=calc_cp_x(), y=calc_cp_y();
@@ -448,12 +460,12 @@ _MAIN_LOOP {
 			if ( owns(response, unit.getPosition().getX(), unit.getPosition().getY()) ) {
 				move.setDirection(direction);
 				cnt++;
-			} else if ( safe(response, cnt, size_at(direction)-calc_cp(unit.getPosition().getX(), unit.getPosition().getY(), direction)-5,
+			} else if ( safe(response, cnt, next_cp(response, direction),
 						unit.getPosition().getX(),
 						unit.getPosition().getY(),
 						extract_x(direction),
 						extract_y(direction),
-						size_at(direction)-4-checkpoint-cnt) ) {
+						next_cp(response, direction)) ) {
 				move.setDirection(direction);
 				cnt++;
 			} else {
