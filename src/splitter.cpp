@@ -375,8 +375,8 @@ _MAIN_LOOP {
 			{
 				size_t side_offset = size_at(side_direction)/split*col-1;
 				//TODO prettify
-				size_t target_x =  vertical ? ( start_x(direction) + extract_x(direction) * (checkpoint-1) ) : ( extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset );
-				size_t target_y = !vertical ? ( start_y(direction) + extract_y(direction) * (checkpoint-1) ) : ( extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset );
+				size_t target_x =  vertical ? ( start_x(direction) + (signed) extract_x(direction) * ((signed)checkpoint-1) ) : ( extract_x(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1 );
+				size_t target_y = !vertical ? ( start_y(direction) + (signed) extract_y(direction) * ((signed)checkpoint-1) ) : ( extract_y(side_direction)>0 ? side_offset : size_at(side_direction)-side_offset-1 );
 
 				signed v_diff = target_x - unit.getPosition().getX();
 				signed h_diff = target_y - unit.getPosition().getY();
@@ -412,6 +412,7 @@ _MAIN_LOOP {
 				}
 
 				if ( abs(v_diff)+abs(h_diff) == 1 ) {
+					log("Last move");
 					stage = doit;
 				}
 			}
