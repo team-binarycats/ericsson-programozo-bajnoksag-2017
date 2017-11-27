@@ -1150,7 +1150,6 @@ repeat(4, RIGHT)
 repeat(11, LEFT)
 LEFT # uncaught
 ] Next level is 5, your points: 15
-> Not tested yet
 DOWN
 RIGHT
 divide_r(3)
