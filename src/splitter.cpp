@@ -457,6 +457,17 @@ _MAIN_LOOP {
 			break;
 
 		case doit:
+			if ( !safe(response, cnt, 1,
+						unit.getPosition().getX(),
+						unit.getPosition().getY(),
+						extract_x(direction),
+						extract_y(direction),
+						2) ) {
+				move.setDirection(opposite(direction));
+				cnt--;
+				break;
+			}
+
 			if ( owns(response, unit.getPosition().getX(), unit.getPosition().getY()) ) {
 				move.setDirection(direction);
 				cnt++;
